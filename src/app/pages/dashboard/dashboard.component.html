@@ -1,0 +1,96 @@
+<div class="layout-geral">
+    <app-sidebar></app-sidebar>
+
+    <main class="main-content">
+        <app-top-header></app-top-header>
+
+        <section class="page-title">
+            <span class="date">{{ dataAtual | date: "EEEE, dd 'DE' MMMM" | uppercase }}</span>
+            <div class="page-title-row">
+                <div>
+                    <h1>Visão geral</h1>
+                    <p class="subtitle">Acompanhe os resultados comerciais e a operação da NC Tintas.</p>
+                </div>
+                <button class="new-order-button" routerLink="/cadastro-pedido">+ <span>Novo pedido</span></button>
+            </div>
+        </section>
+
+        <section class="metrics-grid">
+            <article class="metric-card">
+                <div class="metric-heading"><span class="metric-icon"><img src="assets/totalPedidosIcon.svg" alt="Icone total de pedidos"></span><span>Total de Pedidos</span></div>
+                <strong>{{ ((totalPedidos$ | async) || 2486) | number }}</strong>
+                <div class="metric-footer positive"><span>↗ +8,2%</span><small>Em comparação ao último mês</small></div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-heading"><span class="metric-icon"><img src="assets/novosPedidosIcon.svg" alt="Icone de novos pedidos"></span><span>Novos Pedidos</span></div>
+                <strong>{{ ((novosPedidos$ | async) || 132) | number }}</strong>
+                <div class="metric-footer positive"><span>↗ +4,7%</span><small>Em comparação ao último mês</small></div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-heading"><span class="metric-icon"><img src="assets/loadingIcon.svg" alt="Icone de pedidos em processamento"></span><span>Em Processamento</span></div>
+                <strong>{{ ((emProcessamento$ | async) || 96) | number }}</strong>
+                <div class="metric-footer negative"><span>↘ -7,5%</span><small>Em comparação ao último mês</small></div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-heading"><span class="metric-icon"><img src="assets/completeIcon.svg" alt="Icone de pedidos completos"></span><span>Completos</span></div>
+                <strong>{{ ((completos$ | async) || 1214) | number }}</strong>
+                <div class="metric-footer positive"><span>↗ +9,8%</span><small>Em comparação ao último mês</small></div>
+            </article>
+        </section>
+
+        <div class="dashboard-grid">
+        <div class="dashboard-main-column">
+            <section class="sales-card">
+            <div class="card-heading">
+                <div>
+                    <h2>Evolução de vendas</h2>
+                    <small>Referente aos últimos seis meses.</small>
+                </div>
+                <div class="sales-total">
+                    <strong>{{ valorTotalPeriodo$ | async | currency: 'BRL' }}</strong>
+                    <span>↗ +18,6%</span>
+                </div>
+            </div>
+            <div class="chart" aria-label="Gráfico de evolução de vendas">
+                <div class="chart-lines"><span></span><span></span><span></span><span></span></div>
+                <svg class="sales-line" viewBox="0 0 744 180" role="img" aria-label="Evolução de vendas">
+                    <polyline points="0,165 90,137 180,143 270,112 360,122 450,83 540,89 630,48 690,58 744,10"
+                        fill="none" stroke="#153860" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <div class="chart-labels"><span>Abr</span><span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span></div>
+            </div>
+            </section>
+
+            <section class="pedidos-card">
+            <div class="card-header">
+                <div>
+                    <h2>Pedidos recentes</h2>
+                    <small>Últimas movimentações.</small>
+                </div>
+                <button class="btn-text" routerLink="/pedidos">Ver todos</button>
+            </div>
+            <table class="tabela-pedidos">
+                <thead><tr><th>PEDIDO</th><th>CLIENTE</th><th>VALOR</th><th>STATUS</th></tr></thead>
+                <tbody>
+                    @for (pedido of pedidosRecentes$ | async; track pedido.id) {
+                        <tr>
+                            <td><strong>#{{ pedido.id }}</strong></td>
+                            <td>Cliente ID: {{ pedido.clienteId }}</td>
+                            <td>{{ pedido.valorTotal | currency:'BRL' }}</td>
+                            <td><span class="status-tag" [ngClass]="pedido.status.toLowerCase()">{{ pedido.status }}</span></td>
+                        </tr>
+                    } @empty {
+                        <tr><td colspan="4" class="empty-message">Nenhum pedido registrado até ao momento.</td></tr>
+                    }
+                </tbody>
+            </table>
+            </section>
+        </div>
+
+        <aside class="dashboard-side">
+            <app-controle-entregas></app-controle-entregas>
+            <app-proximas-entregas></app-proximas-entregas>
+        </aside>
+        </div>
+    </main>
+</div>

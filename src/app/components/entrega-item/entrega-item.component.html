@@ -1,0 +1,16 @@
+<article class="entrega-item">
+    <time>{{ entrega.horario }}</time>
+
+    <div class="timeline">
+        <span class="timeline-dot" [class]="entrega.cor"></span>
+    </div>
+
+    <div class="entrega-info">
+        <strong>{{ entrega.cliente }}</strong>
+        <small>{{ entrega.endereco }}</small>
+    </div>
+
+    <span class="status" [class]="entrega.cor">
+        {{ entrega.status }}
+    </span>
+</article>

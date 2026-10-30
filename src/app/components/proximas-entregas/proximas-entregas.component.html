@@ -1,0 +1,8 @@
+<section class="proximas-entregas">
+    <h2>Próximas entregas</h2>
+    <p>Agenda e situação das próximas rotas</p>
+
+    @for (entrega of entregas; track entrega.horario) {
+        <app-entrega-item [entrega]="entrega"></app-entrega-item>
+    } 
+</section>

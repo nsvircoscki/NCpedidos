@@ -35,7 +35,7 @@ export class PedidoService {
         : 1;
 
         if (!pedidoProcessado.dataCriacao) {
-            pedidoProcessado.dataCriacao = new Date().toISOString;
+            pedidoProcessado.dataCriacao = new Date().toISOString();
         }
         //salva no array local
         this.pedidos.push(pedidoProcessado);
@@ -58,7 +58,7 @@ export class PedidoService {
         let valorTotal = 0;
 
         // Adiciona o subtotal a cada item do pedido
-        const itensComSubtotal = ItemPedido[] = pedido.itens.map(item => {
+        const itensComSubtotal: ItemPedido[] = pedido.itens.map(item => {
             const subtotal = item.quantidade * item.precoUnitario;
             valorTotal += subtotal;
             return { ...item, subtotal};

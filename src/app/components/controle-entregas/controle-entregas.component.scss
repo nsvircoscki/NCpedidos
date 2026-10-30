@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.controle-card {
+  min-height: 250px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 4px rgb(0 0 0 / 2%);
+}
+
+h2 {
+  margin: 0 0 4px;
+  color: #08111c;
+  font-size: 13px;
+}
+
+small {
+  color: #64748b;
+  font-size: 8px;
+}
+
+.controle-resumo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.controle-resumo div {
+  display: flex;
+  min-height: 48px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #edf3f7;
+}
+
+.controle-resumo div:nth-child(2) {
+  background: #effdf4;
+}
+
+.controle-resumo div:nth-child(3) {
+  background: #fef2f2;
+}
+
+.controle-resumo strong {
+  color: #153860;
+  font-size: 16px;
+}
+
+.controle-resumo span,
+.controle-progresso {
+  color: #64748b;
+  font-size: 8px;
+}
+
+.controle-progresso {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.progresso-barra {
+  height: 6px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #e2e8f0;
+}
+
+.progresso-barra span {
+  display: block;
+  width: 72%;
+  height: 100%;
+  border-radius: inherit;
+  background: #153860;
+}
