@@ -1,0 +1,102 @@
+<div class="flex min-h-screen bg-[#f6f9fc]">
+  <app-sidebar></app-sidebar>
+
+  <main
+    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
+    [class.ml-[265px]]="!sidebarMinimizada"
+    [class.ml-[88px]]="sidebarMinimizada">
+    <app-top-header></app-top-header>
+
+    <div class="mx-auto w-full max-w-[1440px]">
+      <section class="pt-4">
+        <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">ADMINISTRAÇÃO</span>
+        <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Configurações</h1>
+        <p class="m-0 text-[13px] text-slate-400">Gerencie dados da empresa, usuários e regras comerciais.</p>
+      </section>
+
+      <div class="mt-8 grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <nav class="rounded-2xl bg-white p-4 shadow-sm" aria-label="Seções de configurações">
+          <div class="flex gap-2 overflow-x-auto lg:block">
+            @for (section of sections; track section.name) {
+              <button
+                type="button"
+                (click)="selectSection(section.name)"
+                class="flex min-w-[190px] items-center gap-3 rounded-xl px-3 py-3 text-left text-slate-600 transition hover:bg-slate-50 lg:w-full"
+                [class.bg-[#eef3f8]]="activeSection === section.name"
+                [class.text-[#153860]]="activeSection === section.name">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-[10px] font-extrabold" [class.bg-[#dce8f4]]="activeSection === section.name">{{ section.initials }}</span>
+                <span class="min-w-0">
+                  <strong class="block truncate text-xs">{{ section.name }}</strong>
+                  <small class="mt-1 block truncate text-[10px] text-slate-400">{{ section.description }}</small>
+                </span>
+              </button>
+            }
+          </div>
+        </nav>
+
+        <section class="min-w-0 rounded-2xl bg-white p-6 shadow-sm sm:p-9">
+          @if (activeSection === 'Geral') {
+            <div class="border-b border-slate-200 pb-5">
+              <h2 class="text-xl font-bold text-[#20242a]">Dados da empresa</h2>
+              <p class="mt-1 text-xs text-slate-400">Mantenha os dados institucionais atualizados.</p>
+            </div>
+            <div class="mt-6 grid gap-5 sm:grid-cols-2">
+              <label class="block sm:col-span-2"><span class="settings-label">Razão social</span><input [(ngModel)]="company.companyName" class="settings-input" type="text"></label>
+              <label class="block"><span class="settings-label">Nome fantasia</span><input [(ngModel)]="company.tradeName" class="settings-input" type="text"></label>
+              <label class="block"><span class="settings-label">CNPJ</span><input [(ngModel)]="company.document" class="settings-input" type="text"></label>
+              <label class="block"><span class="settings-label">Inscrição estadual</span><input [(ngModel)]="company.stateRegistration" class="settings-input" type="text"></label>
+              <label class="block"><span class="settings-label">E-mail</span><input [(ngModel)]="company.email" class="settings-input" type="email"></label>
+              <label class="block"><span class="settings-label">Telefone</span><input [(ngModel)]="company.phone" class="settings-input" type="tel"></label>
+              <label class="block sm:col-span-2"><span class="settings-label">Endereço</span><input [(ngModel)]="company.address" class="settings-input" type="text"></label>
+              <label class="block"><span class="settings-label">Cidade</span><input [(ngModel)]="company.city" class="settings-input" type="text"></label>
+              <label class="block"><span class="settings-label">UF</span><input [(ngModel)]="company.state" class="settings-input" type="text"></label>
+              <label class="block"><span class="settings-label">CEP</span><input [(ngModel)]="company.zipCode" class="settings-input" type="text"></label>
+            </div>
+          } @else {
+            @if (currentConfiguration; as configuration) {
+              <div class="border-b border-slate-200 pb-5">
+                <h2 class="text-xl font-bold text-[#20242a]">{{ activeSection }}</h2>
+                <p class="mt-1 text-xs text-slate-400">{{ configuration.description }}</p>
+              </div>
+              <div class="mt-6 space-y-3">
+                @for (option of configuration.options; track option.id) {
+                  <div class="flex items-start justify-between gap-4 rounded-xl border border-slate-200 p-4 transition hover:border-slate-300">
+                    <span class="min-w-0"><strong class="block text-xs font-bold text-[#20242a]">{{ option.title }}</strong><small class="mt-1 block text-[11px] leading-5 text-slate-400">{{ option.description }}</small></span>
+                    <button
+                      type="button"
+                      role="switch"
+                      [attr.aria-checked]="option.enabled"
+                      [attr.aria-label]="option.title"
+                      (click)="toggleOption(option)"
+                      class="relative mt-1 h-6 w-11 shrink-0 rounded-full transition"
+                      [class.bg-[#153860]]="option.enabled"
+                      [class.bg-slate-300]="!option.enabled">
+                      <span
+                        class="absolute top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-[left]"
+                        [class.left-6]="option.enabled"
+                        [class.left-1]="!option.enabled"></span>
+                    </button>
+                  </div>
+                }
+              </div>
+              @if (configuration.selects.length) {
+                <div class="mt-7 border-t border-slate-200 pt-6">
+                  <h3 class="text-sm font-bold text-[#20242a]">Preferências</h3>
+                  <div class="mt-4 grid gap-5 sm:grid-cols-2">
+                    @for (select of configuration.selects; track select.id) {
+                      <label class="block"><span class="settings-label">{{ select.label }}</span><select [(ngModel)]="select.value" class="settings-input">@for (option of select.options; track option) {<option [value]="option">{{ option }}</option>}</select></label>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          }
+          <div class="mt-8 flex items-center justify-end gap-3 border-t border-slate-200 pt-5">
+            @if (saved) { <span class="text-xs font-semibold text-emerald-700">Alterações salvas</span> }
+            <button type="button" (click)="save()" class="rounded-xl bg-[#153860] px-5 py-3 text-xs font-bold text-white transition hover:bg-[#0e2947]">Salvar alterações</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>

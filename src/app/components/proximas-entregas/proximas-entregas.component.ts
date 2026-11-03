@@ -6,7 +6,6 @@ import { EntregaItem } from '../entrega-item/entrega-item.component';
   imports: [EntregaItem],
   selector: 'app-proximas-entregas',
   standalone: true,
-  styleUrl: './proximas-entregas.component.scss',
   templateUrl: './proximas-entregas.component.html',
 })
 export class ProximasEntregas {

@@ -1,6 +1,17 @@
-<header class="top-header">
-    <div class="search-bar">
-        <img src="assets/img/searchIcon.svg" alt="" aria-hidden="true">
-        <input type="search" placeholder="Pesquisar">
+<header class="relative flex min-h-[70px] w-full items-center justify-center overflow-hidden rounded-[15px] bg-white px-8 py-[15px]">
+    <div class="flex h-10 w-[400px] max-w-full items-center gap-2 overflow-hidden rounded-[40px] bg-[#f6f9fc] px-4">
+            <img class="h-4 w-4 shrink-0" src="assets/img/searchIcon.svg" alt="" aria-hidden="true">
+            <input class="h-10 min-w-0 w-full border-0 bg-transparent text-[13px] text-slate-800 outline-none placeholder:text-slate-400" type="search" placeholder="Pesquisar">
     </div>
+
+    <a
+        routerLink="/notificacoes"
+        routerLinkActive="bg-[#e8eef5] text-[#153860]"
+        aria-label="Notificações"
+        class="absolute right-8 grid h-10 w-10 place-items-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-700">
+        <img
+            class="h-6 w-6 object-contain"
+            src="assets/notificationIcon.svg"
+            alt="Ícone de Notificações">
+    </a>
 </header>

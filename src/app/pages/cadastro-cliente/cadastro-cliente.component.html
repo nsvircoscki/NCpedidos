@@ -1,0 +1,98 @@
+<div class="flex min-h-screen bg-[#f6f9fc]">
+  <app-sidebar></app-sidebar>
+
+  <main
+    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
+    [class.ml-[265px]]="!sidebarMinimizada"
+    [class.ml-[88px]]="sidebarMinimizada">
+
+    <app-top-header></app-top-header>
+
+    <section class="ml-2 pt-4">
+      <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
+        CLIENTES
+      </span>
+
+      <h1 class="my-1 text-[32px] font-bold text-[#08111c]">
+        Pré-cadastrar cliente
+      </h1>
+
+      <p class="m-0 text-[13px] text-slate-400">
+        Envie os dados iniciais para análise do time administrativo.
+      </p>
+    </section>
+
+    <div class="flex items-center justify-center bg-[#F6F9FC] px-6 py-3">
+      <div class="flex w-full max-w-[650px] items-center justify-center">
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-medium transition-colors duration-300"
+            [class.bg-[#1A3A68]]="etapaAtual >= 1"
+            [class.text-white]="etapaAtual >= 1"
+            [class.border]="etapaAtual < 1"
+            [class.border-[#B0C0D0]]="etapaAtual < 1"
+            [class.text-[#152536]]="etapaAtual < 1">
+            1
+          </div>
+          <div>
+            <h3 class="text-base font-bold leading-tight text-[#152536]">Dados</h3>
+            <p class="mt-1 text-xs text-slate-500">Empresa e contato</p>
+          </div>
+        </div>
+
+        <div
+          class="mx-4 h-px min-w-16 flex-1 transition-colors duration-300"
+          [class.bg-[#1A3A68]]="etapaAtual >= 2"
+          [class.bg-[#B0C0D0]]="etapaAtual < 2">
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-medium transition-colors duration-300"
+            [class.bg-[#1A3A68]]="etapaAtual >= 2"
+            [class.text-white]="etapaAtual >= 2"
+            [class.border]="etapaAtual < 2"
+            [class.border-[#B0C0D0]]="etapaAtual < 2"
+            [class.text-[#152536]]="etapaAtual < 2">
+            @if (etapaAtual >= 2) {
+              <svg
+                aria-hidden="true"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m6 12 4 4 8-8" />
+              </svg>
+            } @else {
+              2
+            }
+          </div>
+          <div>
+            <h3 class="text-base font-bold leading-tight text-[#152536]">Observações</h3>
+            <p class="mt-1 text-xs text-slate-500">Perfil comercial</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (etapaAtual === 1) {
+      <app-cadastro-cliente
+        [cliente]="cliente"
+        (proximo)="irParaProximaEtapa()"
+        (cancelar)="cancelar()">
+      </app-cadastro-cliente>
+    }
+
+    @if (etapaAtual === 2) {
+      <app-perfil-cliente
+        [perfil]="cliente.perfil"
+        [cliente]="cliente"
+        (voltar)="voltarEtapa()"
+        (salvar)="salvarCadastro()"
+        (cancelar)="cancelar()">
+      </app-perfil-cliente>
+    }
+
+  </main>
+</div>

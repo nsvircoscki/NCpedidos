@@ -1,54 +1,79 @@
-<aside class="sidebar">
-    <div class="logo">
-        <div class="logo-image">
-            <img src="assets/img/Logo.svg" alt="Logo NC Tintas">
-        </div>
+<aside
+  class="fixed left-0 top-0 z-10 flex h-dvh flex-col border-r border-slate-200 bg-white p-6 transition-[width,padding-left,padding-right] duration-300"
+  [class.w-[265px]]="!minimizada"
+  [class.w-[88px]]="minimizada"
+  [class.px-3]="minimizada"
+  [class.px-6]="!minimizada">
+    <div class="-mx-6 mb-2 flex min-h-[120px] w-[calc(100%+48px)] items-center justify-center px-6 py-6">
+        <button
+          type="button"
+          (click)="alternarSidebar()"
+          [attr.aria-label]="minimizada ? 'Expandir menu' : 'Minimizar menu'"
+          class="relative flex h-16 w-full items-center justify-center overflow-hidden rounded-xl">
+            <img
+              class="absolute h-auto w-[220px] object-contain"
+              [class.scale-95]="minimizada"
+              [class.opacity-0]="minimizada"
+              [class.scale-100]="!minimizada"
+              [class.opacity-100]="!minimizada"
+              src="assets/img/logo.svg"
+              alt="Logo NC Tintas">
+            <img
+              class="absolute h-auto w-[42px] object-contain"
+              [class.scale-100]="minimizada"
+              [class.opacity-100]="minimizada"
+              [class.scale-75]="!minimizada"
+              [class.opacity-0]="!minimizada"
+              src="assets/logo-minimizada.svg"
+              alt=""
+              aria-hidden="true">
+        </button>
     </div>
 
-    <nav class="menu">
-        <div class="menu-group">
-            <a class="menu-item" routerLink="/dashboard" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/dashboardIcon.svg" alt="Icone de Dashboard"></span>
-                <span>Dashboard</span>
+
+    <nav class="my-0 -mx-6 flex flex-col gap-6">
+        <div class="flex flex-col gap-1 px-6">
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/dashboard" routerLinkActive="active">
+                <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/dashboardIcon.svg" alt="Ícone de Dashboard"></span>
+                <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Visão geral</span>
             </a>
-            <a class="menu-item" routerLink="/produtos" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/productIcon.svg" alt="Icone de Produto"></span>
-                <span>Produtos</span>
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/produtos" routerLinkActive="active">
+                <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/productIcon.svg" alt="Ícone de Produto"></span>
+                <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Produtos</span>
             </a>
-            <a class="menu-item has-notification" routerLink="/calendario" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/dateIcon.svg" alt="Icone de Calendário"></span>
+            <!--<a class="relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:bg-[#e8eef5] [&.active]:text-[#153860]" routerLink="/calendario" routerLinkActive="active">
+                <span class="grid h-5 w-5 shrink-0 place-items-center"><img src="assets/dateIcon.svg" alt="Ícone de Calendário"></span>
                 <span>Calendário</span>
+            </a> -->
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/clientes" routerLinkActive="active">
+                <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/clientIcon.svg" alt="Ícone de Clientes"></span>
+                <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Clientes</span>
             </a>
-            <a class="menu-item has-notification" routerLink="/clientes" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/clientIcon.svg" alt="Icone de Clientes"></span>
-                <span>Clientes</span>
+            <!--<a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/entregas" routerLinkActive="active">
+                <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/deliveryIcon.svg" alt="Ícone de Entregas"></span>
+                <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Entregas</span>
             </a>
-            <a class="menu-item" routerLink="/entregas" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/deliveryIcon.svg" alt="Icone de Entregas"></span>
-                <span>Entregas</span>
-            </a>
-            <a class="menu-item" routerLink="/relatorios" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/reportIcon.svg" alt="Icone de Relatórios"></span>
-                <span>Relatórios</span>
-            </a>
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/relatorios" routerLinkActive="active">
+                <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/reportIcon.svg" alt="Ícone de Relatórios"></span>
+                <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Relatórios</span>
+            </a> -->
         </div>
 
-        <div class="menu-divider"></div>
+        <div class="mx-6 h-px bg-slate-200"></div>
 
-        <div class="menu-group">
-            <a class="menu-item has-notification" routerLink="/notificacoes" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/notificationIcon.svg" alt="Icone de Notificações"></span>
-                <span>Notificações</span>
-            </a>
-            <a class="menu-item" routerLink="/configuracoes" routerLinkActive="active">
-                <span class="menu-icon"><img src="assets/configurationIcon.svg" alt="Icone de Configurações"></span>
-                <span>Configurações</span>
-            </a>
-        </div>
     </nav>
 
-    <div class="user-profile">
-        <div class="avatar">U</div>
-        <span>Usuário Teste</span>
+    <div class="mt-auto">
+        <div class="flex flex-col gap-1 px-0">
+            <a class="sidebar-link relative mb-3 flex h-9 items-center gap-2.5 rounded-full px-0 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/configuracoes" routerLinkActive="active">
+                <span class="grid h-9 w-9 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/configurationIcon.svg" alt="Ícone de Configurações"></span>
+                <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Configurações</span>
+            </a>
+        </div>
+
+        <div class="flex items-center gap-2.5 text-sm font-extrabold text-slate-600" [class.justify-center]="minimizada">
+            <div class="grid h-9 w-9 place-items-center rounded-full bg-blue-600 font-bold text-white">U</div>
+            <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.opacity-100]="!minimizada">Usuário Teste</span>
+        </div>
     </div>
 </aside>

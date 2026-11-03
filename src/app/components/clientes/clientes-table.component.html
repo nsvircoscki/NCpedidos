@@ -1,0 +1,330 @@
+<div class="w-full">
+  <!-- Busca e filtros -->
+  <div class="mb-6 flex flex-wrap items-center gap-3 px-4">
+    <div class="relative min-w-[220px] flex-1">
+      <svg
+        aria-hidden="true"
+        class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.8">
+        <circle cx="11" cy="11" r="7" />
+        <path stroke-linecap="round" d="m20 20-4-4" />
+      </svg>
+
+      <input
+        type="search"
+        [(ngModel)]="termoBusca"
+        (ngModelChange)="paginaAtual = 1"
+        placeholder="Pesquisar por nome, CPF/CNPJ ou e-mail"
+        class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400"
+      />
+    </div>
+
+    <!-- Filtro de Tipo (Pessoa Física / Jurídica / Pintor / Revenda) -->
+    <div class="relative">
+      <button
+        type="button"
+        (click)="alternarDropdown('tipo')"
+        class="flex h-12 min-w-[190px] items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860]">
+        <span class="flex items-center gap-2">
+          <svg aria-hidden="true" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          {{ valorSelecionado('tipo') || 'Todos os tipos' }}
+        </span>
+
+        <svg
+          class="h-4 w-4 transition-transform duration-150"
+          [class.rotate-180]="dropdownAberto === 'tipo'"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      @if (dropdownAberto === 'tipo') {
+        <div class="absolute left-0 top-[calc(100%+6px)] z-20 w-full origin-top rounded-xl bg-white p-2 shadow-xl ring-1 ring-slate-100 animate-dropdown">
+          <button
+            type="button"
+            (click)="selecionarFiltro('tipo', '')"
+            class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
+            Todos os tipos
+          </button>
+
+          @for (tipo of tiposCliente; track tipo) {
+            <button
+              type="button"
+              (click)="selecionarFiltro('tipo', tipo)"
+              class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
+              {{ tipo }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Filtro de Status -->
+    <div class="relative">
+      <button
+        type="button"
+        (click)="alternarDropdown('status')"
+        class="flex h-12 min-w-[160px] items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860]">
+        <span class="flex items-center gap-2">
+          <svg aria-hidden="true" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="8" />
+            <path stroke-linecap="round" d="m9 12 2 2 4-4" />
+          </svg>
+          {{ textoStatus(valorSelecionado('status')) || 'Todos os status' }}
+        </span>
+
+        <svg
+          class="h-4 w-4 transition-transform duration-150"
+          [class.rotate-180]="dropdownAberto === 'status'"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      @if (dropdownAberto === 'status') {
+        <div class="absolute left-0 top-[calc(100%+6px)] z-20 w-full origin-top rounded-xl bg-white p-2 shadow-xl ring-1 ring-slate-100 animate-dropdown">
+          <button
+            type="button"
+            (click)="selecionarFiltro('status', '')"
+            class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
+            Todos os status
+          </button>
+
+          @for (statusCliente of status; track statusCliente) {
+            <button
+              type="button"
+              (click)="selecionarFiltro('status', statusCliente)"
+              class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
+              {{ textoStatus(statusCliente) }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Filtro de Cidade/Região -->
+    <div class="relative">
+      <button
+        type="button"
+        (click)="alternarDropdown('cidade')"
+        class="flex h-12 min-w-[160px] items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860]">
+        <span class="flex items-center gap-2">
+          <svg aria-hidden="true" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          {{ valorSelecionado('cidade') || 'Todas as cidades' }}
+        </span>
+
+        <svg
+          class="h-4 w-4 transition-transform duration-150"
+          [class.rotate-180]="dropdownAberto === 'cidade'"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      @if (dropdownAberto === 'cidade') {
+        <div class="absolute right-0 top-[calc(100%+6px)] z-20 w-full origin-top rounded-xl bg-white p-2 shadow-xl ring-1 ring-slate-100 animate-dropdown">
+          <button
+            type="button"
+            (click)="selecionarFiltro('cidade', '')"
+            class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
+            Todas as cidades
+          </button>
+
+          @for (cidade of cidades; track cidade) {
+            <button
+              type="button"
+              (click)="selecionarFiltro('cidade', cidade)"
+              class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
+              {{ cidade }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    @if (possuiFiltrosAtivos) {
+      <button
+        type="button"
+        (click)="limparFiltros()"
+        aria-label="Limpar filtros"
+        title="Limpar filtros"
+        class="p-1 text-slate-400 transition hover:text-slate-600">
+        <svg aria-hidden="true" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    }
+  </div>
+
+  <!-- Resumo da lista -->
+  <div class="mb-3 flex items-center justify-between px-4">
+    <span class="text-[10px] text-slate-500">
+      {{ clientesFiltrados.length }} cliente(s) encontrado(s)
+    </span>
+
+    @if (clientesSelecionados.size > 0) {
+      <span class="text-[10px] font-bold text-[#153860]">
+        {{ clientesSelecionados.size }} selecionado(s)
+      </span>
+    }
+  </div>
+
+  <!-- Tabela de Clientes -->
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[1050px] border-collapse text-left">
+      <thead>
+        <tr class="bg-slate-50 text-[10px] font-bold leading-none text-slate-400">
+          <th class="w-12 px-4 py-4 uppercase">
+            <span class="sr-only">Selecionar</span>
+          </th>
+          <th class="px-4 py-4 font-bold uppercase">Cliente</th>
+          <th class="px-4 py-4 font-bold uppercase">Telefone / E-mail</th>
+          <th class="px-4 py-4 font-bold uppercase">Cidade / UF</th>
+          <th class="px-4 py-4 font-bold uppercase">Tipo</th>
+          <th class="px-4 py-4 font-bold uppercase">Total Comprado</th>
+          <th class="px-4 py-4 font-bold uppercase">Última Compra</th>
+          <th class="px-4 py-4 font-bold uppercase">Status</th>
+          <th class="px-4 py-4 font-bold uppercase">Ações</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-slate-100">
+        @for (cliente of clientesDaPagina; track cliente.id) {
+          <tr
+            class="cursor-pointer transition hover:bg-slate-50"
+            (click)="abrirCliente(cliente)">
+            <!-- Checkbox -->
+            <td class="px-4 py-4">
+              <input
+                type="checkbox"
+                [checked]="clienteEstaSelecionado(cliente)"
+                (click)="$event.stopPropagation()"
+                (change)="alternarSelecao(cliente)"
+                class="h-4 w-4 cursor-pointer accent-[#2D486F]"
+                [attr.aria-label]="'Selecionar ' + cliente.nome"
+              />
+            </td>
+
+            <!-- Nome / Iniciais e Documento -->
+            <td class="px-4 py-4">
+              <div class="flex items-center gap-3">
+                <!-- Avatar com Iniciais do Nome -->
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F0F4F8] text-xs font-bold text-[#153860]">
+                  {{ obterIniciais(cliente.nome) }}
+                </div>
+
+                <div>
+                  <div class="text-[13px] font-bold text-slate-800">
+                    {{ cliente.nome }}
+                  </div>
+                  <div class="mt-0.5 text-[10px] text-slate-500">
+                    {{ cliente.cpfcnpj }} <!-- CPF ou CNPJ -->
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Contato -->
+            <td class="px-4 py-4">
+              <div class="text-xs font-medium text-slate-700">{{ cliente.telefone }}</div>
+              <div class="text-[10px] text-slate-400">{{ cliente.email }}</div>
+            </td>
+
+            <!-- Cidade / UF -->
+            <td class="px-4 py-4 text-xs text-slate-700">
+              {{ cliente.cidade }} / {{ cliente.uf }}
+            </td>
+
+            <!-- Tipo de Cliente -->
+            <td class="px-4 py-4 text-xs text-slate-700">
+              <span class="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-600">
+                {{ cliente.tipo }}
+              </span>
+            </td>
+
+            <!-- Total Comprado -->
+            <td class="px-4 py-4 text-sm font-bold text-[#153860]">
+              {{ cliente.totalComprado | currency: 'BRL' }}
+            </td>
+
+            <!-- Data da Última Compra -->
+            <td class="px-4 py-4 text-xs text-slate-700">
+              {{ cliente.ultimaCompra ? (cliente.ultimaCompra | date: 'dd/MM/yyyy') : 'Nunca comprou' }}
+            </td>
+
+            <!-- Status -->
+            <td class="px-4 py-4">
+              @if (cliente.status === 'ATIVO') {
+                <span class="rounded-xl bg-[#ECF8F2] px-3 py-1.5 text-[10px] font-bold text-[#267253]">
+                  Ativo
+                </span>
+              } @else {
+                <span class="rounded-xl bg-red-50 px-3 py-1.5 text-[10px] font-bold text-red-600">
+                  Inativo
+                </span>
+              }
+            </td>
+
+            <!-- Ações -->
+            <td class="px-4 py-4">
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  class="rounded-lg px-2 py-2 text-sm font-bold text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                  (click)="$event.stopPropagation()"
+                  [attr.aria-label]="'Mais ações para ' + cliente.nome">
+                  ⋯
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="9" class="px-4 py-12 text-center text-sm text-slate-400">
+              Nenhum cliente encontrado.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginação -->
+  <div class="mt-6 flex items-center justify-between border-t border-slate-100 px-4 pt-4">
+    <span class="text-xs text-slate-500">
+      Página {{ paginaAtual }} de {{ totalPaginas }}
+    </span>
+
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        (click)="paginaAnterior()"
+        [disabled]="paginaAtual === 1"
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40">
+        Anterior
+      </button>
+
+      <button
+        type="button"
+        (click)="proximaPagina()"
+        [disabled]="paginaAtual === totalPaginas"
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40">
+        Próxima
+      </button>
+    </div>
+  </div>
+</div>

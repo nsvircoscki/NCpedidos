@@ -1,0 +1,29 @@
+<div class="flex min-h-screen bg-[#f6f9fc]">
+  <app-sidebar></app-sidebar>
+
+  <main
+    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
+    [class.ml-[265px]]="!sidebarMinimizada"
+    [class.ml-[88px]]="sidebarMinimizada">
+    
+    <app-top-header></app-top-header>
+
+    <section class="ml-2 pt-4">
+        <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
+            PRODUTOS
+        </span>
+
+        <h1 class="my-1 text-[32px] font-bold text-[#08111c]">
+            Produtos e preços
+        </h1>
+
+        <p class="m-0 text-[13px] text-slate-400">
+            Acompanhe os produtos e preços cadastrados na NC Tintas.
+        </p>
+    </section>
+
+    <section class="rounded-xl bg-white py-4 shadow-sm">
+        <app-produtos [produtos]="produtos"></app-produtos>
+    </section>
+  </main>
+</div>

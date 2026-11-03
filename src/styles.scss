@@ -1,7 +1,48 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+
+@keyframes dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@utility animate-dropdown {
+  animation: dropdown-enter 150ms ease-out;
+}
 
 * {
     box-sizing: border-box;
+}
+
+.settings-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #475569;
+    font-size: 0.625rem;
+    font-weight: 600;
+}
+
+.settings-input {
+    height: 2.75rem;
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.625rem;
+    background: white;
+    padding: 0 0.75rem;
+    color: #20242a;
+    font-size: 0.75rem;
+    outline: none;
+}
+
+.settings-input:focus {
+    border-color: #153860;
 }
 
 html,
@@ -9,6 +50,10 @@ body {
     margin: 0;
     min-height: 100%;
     font-family: 'Manrope', Arial, sans-serif;
+}
+
+.sidebar-link.active img {
+    filter: brightness(0) saturate(100%) invert(20%) sepia(24%) saturate(1160%) hue-rotate(174deg) brightness(88%) contrast(93%);
 }
 
 button,

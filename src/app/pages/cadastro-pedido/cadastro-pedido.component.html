@@ -1,1 +1,115 @@
-<p>cadastro-pedido works!</p>
+<div class="flex min-h-screen bg-[#f6f9fc]">
+  <app-sidebar></app-sidebar>
+
+  <main
+    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
+    [class.ml-[265px]]="!sidebarMinimizada"
+    [class.ml-[88px]]="sidebarMinimizada">
+    <app-top-header></app-top-header>
+
+    <section class="ml-2 pt-4">
+      <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">PEDIDOS</span>
+      <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Novo pedido</h1>
+      <p class="m-0 text-[13px] text-slate-400">Monte o pedido e confira as condições antes de enviar.</p>
+    </section>
+
+    <form class="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1.8fr)_minmax(300px,1fr)]" (ngSubmit)="submitOrder()">
+      <div class="space-y-4">
+        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+          <div class="mb-3 flex items-center justify-between gap-4">
+            <h2 class="text-xl font-bold text-[#20242a]">Cliente</h2>
+            <button type="button" class="text-xs font-bold text-[#153860]">Alterar cliente</button>
+          </div>
+          <button type="button" class="grid w-full grid-cols-[3.25rem_minmax(0,1fr)_1rem] items-center gap-3 rounded-full border border-slate-200 p-3 text-left transition hover:border-slate-300">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-[#edf6f3] text-xs font-bold text-[#153860]">CA</span>
+            <span class="flex min-w-0 flex-col">
+              <strong class="truncate text-sm">Casa Almeida Materiais</strong>
+              <small class="mt-1 text-[10px] text-slate-500">CNPJ 12.345.678/0001-90</small>
+              <span class="mt-2 w-fit rounded-md bg-[#edf6f3] px-2 py-1 text-[9px] font-semibold text-emerald-700">●&nbsp; Limite disponível: R$ 8.450,00</span>
+            </span>
+            <span class="text-2xl text-slate-400" aria-hidden="true">›</span>
+          </button>
+        </section>
+
+        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+          <div class="mb-3 flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-[#20242a]">Itens do pedido</h2>
+              <p class="mt-1 text-[10px] text-slate-400">{{ itemCount }} unidades selecionadas</p>
+            </div>
+            <button type="button" class="text-xs font-bold text-[#153860]">+ Adicionar</button>
+          </div>
+
+          <div class="overflow-hidden rounded-xl border border-slate-200">
+            @for (product of products; track product.id) {
+              <article class="grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-slate-200 p-3 last:border-b-0">
+                <div class="relative flex h-14 items-center justify-center rounded-lg bg-slate-50">
+                  <div class="relative h-10 w-8">
+                    <span class="absolute left-1/2 top-0 h-4 w-6 -translate-x-1/2 rounded-t-full border-2 border-b-0 border-slate-300"></span>
+                    <span class="absolute left-0 top-2 h-2 w-8 rounded-full border border-slate-300 bg-slate-200"></span>
+                    <span class="absolute left-0.5 top-3 h-7 w-7 rounded-b-md border border-slate-300 bg-white">
+                      <span class="mt-2 block h-2 w-full" [style.background-color]="product.color"></span>
+                      <span class="block text-center text-[6px] font-extrabold">CORA</span>
+                    </span>
+                  </div>
+                  <span class="absolute bottom-1 right-1 rounded bg-white px-1 py-0.5 text-[7px] text-slate-500 shadow-sm">{{ product.unit }}</span>
+                </div>
+                <div class="flex min-w-0 flex-col">
+                  <strong class="truncate text-xs font-bold">{{ product.name }}</strong>
+                  <small class="mt-1 truncate text-[10px] text-slate-500">{{ product.description }}</small>
+                  <strong class="mt-2 text-xs text-[#153860]">{{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong>
+                </div>
+                <div class="grid h-8 grid-cols-[1.75rem_2rem_1.75rem] overflow-hidden rounded-lg border border-slate-200">
+                  <button type="button" class="grid place-items-center text-sm text-slate-500 transition hover:bg-slate-50" (click)="changeQuantity(product.id, -1)">−</button>
+                  <output class="grid place-items-center border-x border-slate-200 text-[10px] font-bold">{{ quantities[product.id] }}</output>
+                  <button type="button" class="grid place-items-center bg-[#153860] text-sm text-white transition hover:bg-[#0e2947]" (click)="changeQuantity(product.id, 1)">+</button>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+          <h2 class="text-xl font-bold text-[#20242a]">Condições comerciais</h2>
+          <fieldset class="mt-4">
+            <legend class="mb-2 text-[10px] font-semibold text-slate-600">Condição de pagamento</legend>
+            <div class="grid grid-cols-3 gap-2">
+              @for (option of paymentOptions; track option) {
+                <button type="button" class="min-h-10 rounded border px-2 text-[10px] font-bold transition" [class.border-[#153860]]="payment === option" [class.bg-[#153860]]="payment === option" [class.text-white]="payment === option" [class.border-slate-200]="payment !== option" [class.bg-white]="payment !== option" [class.text-slate-600]="payment !== option" (click)="selectPayment(option)">{{ option }}</button>
+              }
+            </div>
+          </fieldset>
+          <label class="mt-5 block">
+            <span class="mb-2 block text-[10px] font-semibold text-slate-600">Previsão de entrega</span>
+            <input type="date" name="deliveryDate" [(ngModel)]="deliveryDate" class="h-11 w-full rounded-lg border border-slate-200 bg-transparent px-3 text-xs outline-none focus:border-[#153860]">
+          </label>
+          <label class="mt-5 block">
+            <span class="mb-2 block text-[10px] font-semibold text-slate-600">Observação para o faturamento</span>
+            <textarea name="notes" [(ngModel)]="notes" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860]"></textarea>
+          </label>
+        </section>
+      </div>
+
+      <aside class="lg:sticky lg:top-6">
+        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-[#20242a]">Resumo do pedido</h2>
+            <span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-[#153860]">{{ itemCount }} un.</span>
+          </div>
+          <dl class="mt-4">
+            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Subtotal</dt><dd class="font-semibold">{{ subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
+            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Desconto comercial</dt><dd class="font-semibold text-emerald-700">− {{ discount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
+            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Frete</dt><dd class="font-semibold">Grátis</dd></div>
+            <div class="flex min-h-20 items-center justify-between"><dt class="flex flex-col"><strong class="text-sm">Total</strong><span class="mt-1 text-[9px] text-slate-400">Faturado em {{ payment | lowercase }}</span></dt><dd class="text-xl font-extrabold">{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
+          </dl>
+          <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500"><input type="checkbox" name="confirmed" [(ngModel)]="confirmed" class="mt-0.5 h-4 w-4 accent-[#153860]"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
+          <button type="submit" [disabled]="!confirmed" class="mt-4 flex min-h-12 w-full items-center justify-between rounded-lg bg-[#153860] px-4 text-xs font-bold text-white shadow-lg transition hover:bg-[#0e2947] disabled:cursor-not-allowed disabled:opacity-50"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
+          @if (submitted) {
+            <div role="status" class="mt-4 flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3"><span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span><strong class="text-xs text-emerald-800">Pedido enviado com sucesso</strong></div>
+          }
+        </section>
+        <p class="mx-auto mt-4 max-w-sm text-center text-[9px] leading-4 text-slate-400">✓&nbsp; Os preços e o estoque serão validados antes do faturamento.</p>
+      </aside>
+    </form>
+  </main>
+</div>
