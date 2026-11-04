@@ -1,238 +1,239 @@
-<div class="flex flex-col bg-white">
-	<div class="flex flex-col items-start self-stretch bg-white pt-[29px] overflow-hidden rounded-xl shadow-[0px_8px_4px_#00000003]">
-		<div class="flex items-center mb-[34px] ml-11 gap-[11px]">
-			<div class="bg-[#183869] w-[29px] h-[27px] rounded-[91px]">
-			</div>
-			<div class="flex flex-col shrink-0 items-center">
-				<div class="flex flex-col items-start pr-[1px]">
-					<span class="text-slate-900 text-2xl font-bold" >
-						Dados do cliente
-					</span>
-					<span class="text-[#A0ADC0] text-sm font-bold ml-[1px]" >
-						Escolha o tipo de cadastro antes de preencher os dados.
-					</span>
-				</div>
-			</div>
-		</div>
-		<div class="flex items-center self-stretch mb-[22px] mx-[29px]">
-			<div class="flex flex-1 items-center py-[29px] mr-[67px] rounded-[50px] border border-solid border-[#2B5D8E]">
-				<button class="flex flex-col shrink-0 items-start bg-[#183869] text-left py-2 px-3 ml-8 mr-4 rounded-[91px] border-0"
-					(click)="onPress()">
-					<span class="text-white text-xl font-bold" >
-						PJ
-					</span>
-				</button>
-				<div class="flex flex-col shrink-0 items-center">
-					<div class="flex flex-col items-start">
-						<span class="text-black text-xl font-bold" >
-							Pessoa jurídica
-						</span>
-						<span class="text-[#A0ADC0] text-sm font-bold mr-4" >
-							Empresa com CNPJ
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class="flex flex-1 items-center py-[29px] rounded-[50px] border border-solid border-[#B5B5B5]">
-				<button class="flex flex-col shrink-0 items-start bg-[#C1C1C1] text-left py-2 px-3 ml-8 mr-4 rounded-[91px] border-0"
-					(click)="onPress()">
-					<span class="text-white text-xl font-bold" >
-						PF
-					</span>
-				</button>
-				<div class="flex flex-col shrink-0 items-center">
-					<div class="flex flex-col items-start">
-						<span class="text-black text-xl font-bold mr-4" >
-							Pessoa física
-						</span>
-						<span class="text-[#A0ADC0] text-sm font-bold" >
-							Profissional com CPF
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<span class="text-[#404750] text-base font-bold mb-[5px] ml-11" >
-			CNPJ
-		</span>
-		<div class="flex flex-col items-start self-stretch pr-[5px] mb-7 mx-[29px]">
-			<div class="flex items-center self-stretch mb-[22px] ml-[5px]">
-				<input
-					placeholder="Digite o CNPJ"
-					(input)="onInput1($event)"
-					class="flex-1 self-stretch text-slate-400 bg-white text-base py-[23px] px-[25px] mr-[66px] rounded-[41px] border border-solid border-slate-200"
-				/>
-				<button class="flex flex-col shrink-0 items-start bg-[#F5F9FF] text-left py-5 px-11 rounded-[41px] border border-solid border-slate-200"
-					(click)="onPress()">
-					<span class="text-black text-xl font-bold" >
-						Consultar CNPJ
-					</span>
-				</button>
-			</div>
-			<span class="text-[#404750] text-base font-bold mb-[5px] ml-[15px]" >
-				Razão social
-			</span>
-			<input
-				placeholder="Nome empresarial"
-				(input)="onInput2($event)"
-				class="self-stretch text-slate-400 bg-white text-base py-[23px] px-[35px] mb-3.5 rounded-[41px] border border-solid border-slate-200"
-			/>
-			<div class="grid w-full grid-cols-2 items-center mb-[5px] ml-[5px] gap-5">
-				<span class="text-[#404750] text-base font-bold">
-					Nome fantasia
-				</span>
-				<span class="text-[#404750] text-base font-bold">
-					Segmento
-				</span>
-			</div>
-			<div class="grid grid-cols-2 items-center self-stretch ml-[5px] gap-5">
-				<input
-					placeholder="Como a empresa é conhecida"
-					(input)="onInput3($event)"
-					class="flex-1 self-stretch text-slate-400 bg-white text-base py-[23px] px-[25px] rounded-[41px] border border-solid border-slate-200"
-				/>
-				<div class="flex flex-1 justify-between items-start bg-white px-6 rounded-[41px] border border-solid border-slate-200">
-					<span class="text-[#414750] text-base my-[23px]" >
-						Selecione
-					</span>
-					<span class="text-slate-400 text-2xl mt-3" >
-						⌄
-					</span>
-				</div>
-			</div>
-		</div>
-		<div class="flex flex-col items-start self-stretch mb-[18px] mx-[29px]">
-			<div class="flex items-center mb-[18px] ml-[15px] gap-[11px]">
-				<div class="bg-[#183869] w-[29px] h-[27px] rounded-[91px]">
-				</div>
-				<div class="flex flex-col shrink-0 items-center">
-					<div class="flex flex-col items-start pr-[1px]">
-						<span class="text-slate-900 text-2xl font-bold" >
-							Contato
-						</span>
-						<span class="text-[#A0ADC0] text-sm font-bold ml-[1px]" >
-							Contato comercial da empresa.
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid w-full grid-cols-2 gap-5 mb-[3px] mx-[5px]">
-				<span class="text-[#404750] text-base font-bold">
-					Nome do responsável
-				</span>
-				<span class="text-[#404750] text-base font-bold">
-					Telefone ou WhatsApp
-				</span>
-			</div>
-			<div class="grid grid-cols-2 items-center self-stretch mb-[18px] mx-[5px] gap-5">
-				<input
-					placeholder="Nome completo"
-					(input)="onInput4($event)"
-					class="flex-1 self-stretch text-slate-400 bg-white text-base py-[23px] px-[25px] rounded-[41px] border border-solid border-slate-200"
-				/>
-				<input
-					placeholder="(00) 00000-0000"
-					(input)="onInput5($event)"
-					class="flex-1 self-stretch text-slate-400 bg-white text-base py-[23px] px-6 rounded-[41px] border border-solid border-slate-200"
-				/>
-			</div>
-			<span class="text-[#404750] text-base font-bold mb-[5px] ml-[15px]" >
-				E-mail
-			</span>
-			<input
-				placeholder="contato@empresa,com.br"
-				(input)="onInput6($event)"
-				class="self-stretch text-slate-400 bg-white text-base py-[23px] px-[35px] rounded-[41px] border border-solid border-slate-200"
-			/>
-		</div>
-		<div class="flex flex-col items-start self-stretch pr-[179px] mb-[77px] ml-11 mr-[29px]">
-			<div class="flex items-center mb-[18px] gap-[11px]">
-				<div class="bg-[#183869] w-[29px] h-[27px] rounded-[91px]">
-				</div>
-				<div class="flex flex-col shrink-0 items-center">
-					<div class="flex flex-col items-start pr-[1px]">
-						<span class="text-slate-900 text-2xl font-bold" >
-							Localização
-						</span>
-						<span class="text-[#A0ADC0] text-sm font-bold ml-[1px]" >
-							Dados sobre a localização.
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid grid-cols-[1fr_2fr_1fr] items-center self-stretch mb-[3px] ml-[5px] gap-5">
-				<span class="text-[#404750] text-base font-bold mr-[204px]" >
-					CEP
-				</span>
-				<span class="text-[#404750] text-base font-bold" >
-					Endereço
-				</span>
-				<span class="text-[#404750] text-base font-bold" >
-					Bairro
-				</span>
-			</div>
-			<div class="grid grid-cols-[1fr_2fr_1fr] items-center self-stretch mb-[9px] ml-[5px] gap-5">
-				<div class="flex min-w-0 items-center bg-white px-6 py-[23px] rounded-[41px] border border-solid border-slate-200">
-					<span class="text-slate-400 text-base" >
-						00000-000
-					</span>
-				</div>
-				<input
-					placeholder="Rua, avenida e número"
-					(input)="onInput7($event)"
-					class="min-w-0 w-full self-stretch text-slate-400 bg-white text-base py-[23px] px-6 rounded-[41px] border border-solid border-slate-200"
-				/>
-				<div class="flex min-w-0 items-center bg-white px-6 py-[23px] rounded-[41px] border border-solid border-slate-200">
-					<span class="text-slate-400 text-base" >
-						Digite o bairro
-					</span>
-				</div>
-			</div>
-			<div class="grid w-full grid-cols-[2fr_1fr] items-center mb-[5px] ml-[5px] gap-5">
-				<span class="text-[#404750] text-base font-bold">
-					Cidade
-				</span>
-				<span class="text-[#404750] text-base font-bold">
-					UF
-				</span>
-			</div>
-			<div class="grid grid-cols-[2fr_1fr] items-center self-stretch ml-[5px] gap-5">
-				<div class="flex min-w-0 w-full items-center justify-between bg-white px-6 py-[23px] rounded-[41px] border border-solid border-slate-200">
-					<span class="text-slate-400 text-base">
-						Cidade
-					</span>
-					<span class="text-slate-400 text-2xl leading-none">
-						⌄
-					</span>
-				</div>
-				<div class="flex min-w-0 w-full items-center justify-between bg-white px-6 py-[23px] rounded-[41px] border border-solid border-slate-200">
-					<span class="text-slate-400 text-base">
-						Selecione
-					</span>
-					<span class="text-slate-400 text-2xl leading-none">
-						⌄
-					</span>
-				</div>
-			</div>
-		</div>
-		<div class="flex justify-between items-center self-stretch mb-12 mx-16">
-			<button
-                type="button"
-                (click)="cancelarCadastro()"
-                class="rounded-[41px] border border-[#B5B5B5] bg-transparent px-10 py-4 text-base font-bold text-black transition hover:bg-slate-50">
-                Cancelar
-            </button>
-			<button
-				type="button"
-				(click)="irParaProximaEtapa()"
-				class="flex shrink-0 items-center bg-[#153860] py-2.5 rounded-[41px] transition hover:bg-[#2d486f]">
-				<span class="text-white text-base font-bold ml-[77px] mr-[37px]" >
-					Continuar para observações
-				</span>
-				<span class="text-white text-[32px] mr-10" >
-					›
-				</span>
-			</button>
-		</div>
-	</div>
-</div>
+<section class="w-full overflow-hidden bg-transparent lg:rounded-xl lg:bg-white lg:shadow-[0_8px_4px_rgba(0,0,0,0.02)]">
+  <div class="px-4 pb-8 pt-7 lg:px-7 lg:pb-10 lg:pt-7">
+    <header class="mb-[34px] hidden items-center gap-3 lg:flex">
+      <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
+      <div>
+        <h2 class="text-2xl font-extrabold leading-none text-[#0f172a]">Dados do cliente</h2>
+        <p class="mt-1 text-sm font-semibold text-[#a0adc0]">
+          Escolha o tipo de cadastro antes de preencher os dados.
+        </p>
+      </div>
+    </header>
+
+    <div class="mb-[18px] grid grid-cols-2 gap-0 rounded-[10px] border border-[#e2e8f0] bg-white p-1 lg:grid-cols-2 lg:gap-5 lg:border-0 lg:bg-transparent lg:p-0">
+      <button
+        type="button"
+        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left"
+        [class.border-[#2c5d8f]]="tipoCadastro === 'PJ'"
+        [class.border-[#b5b5b5]]="tipoCadastro !== 'PJ'"
+        (click)="selecionarTipo('PJ')">
+        <span
+          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold text-white lg:flex"
+          [class.bg-[#183869]]="tipoCadastro === 'PJ'"
+          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PJ'">PJ</span>
+        <span class="ml-0 lg:ml-4">
+          <strong class="block text-[10px] font-semibold lg:text-xl">Pessoa jurídica</strong>
+          <small class="hidden text-sm font-semibold text-[#a0adc0] lg:block">Empresa com CNPJ</small>
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left"
+        [class.border-[#2c5d8f]]="tipoCadastro === 'PF'"
+        [class.border-[#b5b5b5]]="tipoCadastro !== 'PF'"
+        (click)="selecionarTipo('PF')">
+        <span
+          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold text-white lg:flex"
+          [class.bg-[#183869]]="tipoCadastro === 'PF'"
+          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PF'">PF</span>
+        <span class="ml-0 lg:ml-4">
+          <strong class="block text-[10px] font-semibold text-black lg:text-xl">Pessoa física</strong>
+          <small class="hidden text-sm font-semibold text-[#a0adc0] lg:block">Profissional com CPF</small>
+        </span>
+      </button>
+    </div>
+
+    @if (tipoCadastro === 'PF') {
+    <div class="mb-[22px]">
+      <label class="mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="cpf">CPF *</label>
+      <input id="cpf" placeholder="000.000.000-00" (input)="onInput1($event)"
+        class="h-12 w-full max-w-[761px] rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+    </div>
+
+    <div class="mb-[38px]">
+      <label class="mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="nomeCompleto">Nome completo</label>
+      <input id="nomeCompleto" placeholder="Nome completo do cliente" (input)="onInput2($event)"
+        class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-7 lg:text-base" />
+    </div>
+    } @else {
+    <div class="mb-[22px]">
+      <label class="mb-1 block text-base font-semibold text-[#414750]" for="cnpj">CNPJ</label>
+      <div class="flex flex-col gap-3 lg:flex-row">
+        <input id="cnpj" placeholder="Digite o CNPJ" (input)="onPjInput1($event)"
+          class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+        <button type="button"
+          class="h-12 shrink-0 rounded-[10px] border border-[#e2e8f0] bg-[#f5f9ff] px-4 text-[11px] font-bold text-black lg:h-[68px] lg:rounded-[41px] lg:px-10 lg:text-base">
+          Consultar CNPJ
+        </button>
+      </div>
+    </div>
+    <div class="mb-[14px]">
+      <label class="mb-1 block text-base font-semibold text-[#414750]" for="razaoSocial">Razão social</label>
+      <input id="razaoSocial" placeholder="Nome empresarial" (input)="onPjInput2($event)"
+        class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+    </div>
+    <div class="mb-[38px] grid gap-5 lg:grid-cols-2">
+      <div>
+        <label class="mb-1 block text-base font-semibold text-[#414750]" for="nomeFantasia">Nome fantasia</label>
+        <input id="nomeFantasia" placeholder="Como a empresa é conhecida" (input)="onPjInput3($event)"
+          class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+      </div>
+      <div>
+        <label class="mb-1 block text-base font-semibold text-[#414750]" for="segmento">Segmento</label>
+        <select id="segmento" (change)="onPjInput4($event)"
+          class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base">
+          <option value="">Selecione</option>
+        </select>
+      </div>
+    </div>
+    }
+
+    <section class="mb-[18px] lg:mb-[18px]">
+      <header class="mb-[18px] flex items-center gap-3">
+        <span class="h-[27px] w-[29px] rounded-full bg-[#183869]"></span>
+        <div>
+          <h2 class="text-[14px] font-semibold text-[#0f172a] lg:text-2xl lg:font-extrabold">Contato Principal</h2>
+          <p class="mt-1 text-[10px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0]">Pessoa responsável pelas compras e aprovações.</p>
+        </div>
+      </header>
+
+      <div class="grid grid-cols-2 gap-4 lg:gap-5">
+        <div>
+          <label class="mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="nomeResponsavel">Nome do contato *</label>
+          <input id="nomeResponsavel" placeholder="Nome completo" (input)="onInput4($event)"
+            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+        </div>
+        <div>
+          <label class="mb-1 block text-base font-semibold text-[#414750]" for="telefone">Telefone ou Whatsapp</label>
+          <input id="telefone" placeholder="(00) 00000-0000" (input)="onInput5($event)"
+            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+        </div>
+      </div>
+      <label class="mb-1 mt-[18px] block text-base font-semibold text-[#414750]" for="email">E-mail</label>
+      <input id="email" placeholder="contato@empresa,com.br" (input)="onInput6($event)"
+          class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+    </section>
+
+    <section class="mb-[77px] hidden lg:block">
+      <header class="mb-[18px] flex items-center gap-3">
+        <span class="h-[27px] w-[29px] rounded-full bg-[#183869]"></span>
+        <div>
+          <h2 class="text-2xl font-extrabold leading-none text-[#0f172a]">Localização e potencial</h2>
+          <p class="mt-1 text-sm font-semibold text-[#a0adc0]">Dados sobre a localização e potencial de compra.</p>
+        </div>
+      </header>
+
+      <div class="grid gap-5 lg:grid-cols-[1fr_2fr_1fr]">
+        <div>
+          <label class="mb-1 block text-base font-semibold text-[#414750]" for="cep">CEP</label>
+          <input id="cep" placeholder="00000-000" (input)="onInput7($event)"
+            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]" />
+        </div>
+        <div>
+          <label class="mb-1 block text-base font-semibold text-[#414750]" for="endereco">Endereço</label>
+          <input id="endereco" placeholder="Rua, avenida e número" (input)="onInput8($event)"
+            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]" />
+        </div>
+        <div>
+          <label class="mb-1 block text-base font-semibold text-[#414750]" for="bairro">Bairro</label>
+          <input id="bairro" placeholder="Digite o bairro" (input)="onInput9($event)"
+            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]" />
+        </div>
+      </div>
+      <div class="mt-[9px] grid gap-5 lg:grid-cols-2">
+        <div>
+          <label class="mb-1 block text-base font-semibold text-[#414750]" for="cidade">Cidade</label>
+          <select id="cidade" (change)="onInput10($event)"
+            class="h-[68px] w-full appearance-none rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]">
+            <option value="">Cidade</option>
+          </select>
+        </div>
+        <div>
+          <label class="mb-1 block text-base font-semibold text-[#414750]" for="uf">UF</label>
+          <select id="uf" (change)="onInput11($event)"
+            class="h-[68px] w-full appearance-none rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]">
+            <option value="">Selecione</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-8 lg:hidden">
+      <header class="mb-[18px] flex items-center gap-3">
+        <span class="h-[27px] w-[29px] rounded-full bg-[#183869]"></span>
+        <div>
+          <h2 class="text-[14px] font-semibold text-[#0f172a]">Endereço</h2>
+          <p class="mt-1 text-[10px] text-[#64748b]">Informe o endereço principal do cliente.</p>
+        </div>
+      </header>
+
+      <div class="grid gap-4">
+        <div>
+          <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="cepMobile">CEP</label>
+          <input id="cepMobile" placeholder="00000-000" (input)="onInput7($event)"
+            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+        </div>
+
+        <div>
+          <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="enderecoMobile">Logradouro</label>
+          <input id="enderecoMobile" placeholder="Rua, avenida e número" (input)="onInput8($event)"
+            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="bairroMobile">Bairro</label>
+            <input id="bairroMobile" placeholder="Bairro" (input)="onInput9($event)"
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+          </div>
+          <div>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="numeroMobile">Número</label>
+            <input id="numeroMobile" placeholder="Nº"
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-[1fr_88px] gap-3">
+          <div>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="cidadeMobile">Cidade</label>
+            <input id="cidadeMobile" placeholder="Cidade" (input)="onInput10($event)"
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+          </div>
+          <div>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="ufMobile">UF</label>
+            <input id="ufMobile" maxlength="2" placeholder="UF" (input)="onInput11($event)"
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#183869]" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="hidden items-center justify-between gap-5 px-7 lg:flex">
+      <button type="button" (click)="cancelarCadastro()"
+        class="h-[67px] w-full max-w-[380px] rounded-[41px] border-[1.5px] border-[#b5b5b5] text-base font-bold text-black transition hover:bg-slate-50">
+        Cancelar
+      </button>
+      <button type="button" (click)="irParaProximaEtapa()"
+        class="flex h-[67px] w-full max-w-[380px] items-center justify-center gap-5 rounded-[41px] bg-[#153860] text-base font-bold text-white transition hover:bg-[#244d7c]">
+        Continuar para observações
+        <span class="text-3xl leading-none">›</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer class="mt-8 flex gap-3 border-t border-[#e2e8f0] bg-white px-4 py-4 lg:hidden">
+  <button
+    type="button"
+    class="h-12 flex-1 rounded-[10px] border border-[#dbe4ed] bg-white text-[10px] font-semibold text-[#153860]">
+    Salvar rascunho
+  </button>
+
+  <button
+    type="button"
+    (click)="irParaProximaEtapa()"
+    class="h-12 flex-[2] rounded-[10px] bg-[#153860] text-[10px] font-semibold text-white">
+    Cadastrar cliente ›
+  </button>
+</footer>

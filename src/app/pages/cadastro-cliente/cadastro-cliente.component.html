@@ -2,13 +2,14 @@
   <app-sidebar></app-sidebar>
 
   <main
-    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
-    [class.ml-[265px]]="!sidebarMinimizada"
-    [class.ml-[88px]]="sidebarMinimizada">
+    class="flex min-w-0 flex-1 flex-col gap-0 pb-8 transition-[margin-left] duration-300 lg:ml-[265px] lg:gap-6 lg:px-8"
+    [class.lg:ml-[88px]]="sidebarMinimizada">
 
-    <app-top-header></app-top-header>
+    <div class="hidden lg:block">
+      <app-top-header></app-top-header>
+    </div>  
 
-    <section class="ml-2 pt-4">
+    <section class="hidden ml-2 pt-4 lg:block">
       <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
         CLIENTES
       </span>
@@ -22,7 +23,7 @@
       </p>
     </section>
 
-    <div class="flex items-center justify-center bg-[#F6F9FC] px-6 py-3">
+    <div class="hidden items-center justify-center bg-[#F6F9FC] px-6 py-3 lg:flex">
       <div class="flex w-full max-w-[650px] items-center justify-center">
         <div class="flex items-center gap-3">
           <div
@@ -77,21 +78,125 @@
     </div>
 
     @if (etapaAtual === 1) {
+    <div class="hidden lg:block"> 
       <app-cadastro-cliente
         [cliente]="cliente"
+        (valorAlterado)="atualizarCliente($event)"
         (proximo)="irParaProximaEtapa()"
         (cancelar)="cancelar()">
       </app-cadastro-cliente>
+    </div>
     }
 
     @if (etapaAtual === 2) {
-      <app-perfil-cliente
-        [perfil]="cliente.perfil"
+      <div class="hidden lg:block">
+        <app-observacoes-cliente
+          [observacoes]="cliente.observacoes"
+          [perfil]="cliente.perfil"
+          (voltar)="voltarEtapa()"
+          (salvar)="salvarCadastro()"
+          (cancelar)="cancelar()">
+        </app-observacoes-cliente>
+      </div>
+    }
+
+    @if (etapaAtual === 1) {
+    <section class="lg:hidden">
+      <header class="flex h-[76px] items-center border-b border-[#e2e8f0] bg-white px-4">
+        <button type="button" (click)="cancelar()" aria-label="Voltar" class="grid h-10 w-10 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl text-[#153860]">
+         ‹ 
+        </button>
+
+        <div class="ml-3">
+          <h1 class="text-[18px] font-semibold leading-none text-[#0f172a]">
+            Novo cliente
+          </h1>
+
+          <p class="mt-1 text-[10px] text-[#64748b]">
+            Pré-cadastro comercial
+          </p>
+        </div>
+
+        <span class="ml-auto rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">
+          RASCUNHO
+        </span>
+      </header>
+
+      <div class="flex items-center justify-between px-4 pt-5">
+        <span class="rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">
+          PRÉ-CADASTRO
+        </span>
+
+        <span class="text-[9px] font-semibold text-[#64748b]">
+          ETAPA 1 DE 2
+        </span>
+      </div>
+
+      <nav class="mx-4 mt-4 grid h-12 grid-cols-2 rounded-[12px] border border-[#e2e8f0] bg-white p-1">
+        <button
+          type="button"
+          class="rounded-[9px] bg-[#edf3f7] text-[10px] font-semibold text-[#153860]">
+          Dados
+        </button>
+
+        <button
+          type="button"
+          disabled 
+          class="text-[10px] font-semibold text-[#64748b]">
+          Observações
+        </button>
+      </nav>
+
+
+      <div class="px-4 pt-6">
+        <h2 class="text-[17px] font-semibold text-[#0f172a]">
+          Dados do cliente
+        </h2>
+
+        <p class="mt-1 text-[10px] text-[#64748b]">
+          Preencha os dados iniciais para análise do time administrativo.
+        </p>
+      </div>
+
+      <app-cadastro-cliente
         [cliente]="cliente"
+        (valorAlterado)="atualizarCliente($event)"
+        (proximo)="irParaProximaEtapa()"
+        (cancelar)="cancelar()">
+      </app-cadastro-cliente>
+    </section>
+    }
+
+    @if (etapaAtual === 2) {
+    <section class="lg:hidden">
+      <header class="flex h-[76px] items-center border-b border-[#e2e8f0] bg-white px-4">
+        <button type="button" (click)="voltarEtapa()" aria-label="Voltar"
+          class="grid h-10 w-10 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl text-[#153860]">‹</button>
+        <div class="ml-3">
+          <h1 class="text-[18px] font-semibold leading-none text-[#0f172a]">Novo cliente</h1>
+          <p class="mt-1 text-[10px] text-[#64748b]">Pré-cadastro comercial</p>
+        </div>
+        <span class="ml-auto rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">RASCUNHO</span>
+      </header>
+
+      <div class="flex items-center justify-between px-4 pt-5">
+        <span class="rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">PRÉ-CADASTRO</span>
+        <span class="text-[9px] font-semibold text-[#64748b]">ETAPA 2 DE 2</span>
+      </div>
+
+      <nav class="mx-4 mt-4 grid h-12 grid-cols-2 rounded-[12px] border border-[#e2e8f0] bg-white p-1">
+        <button type="button" (click)="voltarEtapa()" class="text-[10px] font-semibold text-[#64748b]">Dados</button>
+        <button type="button" class="rounded-[9px] bg-[#edf3f7] text-[10px] font-semibold text-[#153860]">Observações</button>
+      </nav>
+
+      <app-observacoes-cliente
+        [observacoes]="cliente.observacoes"
+        [perfil]="cliente.perfil"
         (voltar)="voltarEtapa()"
         (salvar)="salvarCadastro()"
         (cancelar)="cancelar()">
-      </app-perfil-cliente>
+      </app-observacoes-cliente>
+    </section>
     }
 
   </main>

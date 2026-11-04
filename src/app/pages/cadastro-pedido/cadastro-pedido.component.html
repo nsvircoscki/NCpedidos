@@ -1,26 +1,52 @@
-<div class="flex min-h-screen bg-[#f6f9fc]">
+<div class="flex min-h-screen w-full max-w-full overflow-x-hidden bg-[#f6f9fc]">
   <app-sidebar></app-sidebar>
 
   <main
-    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
-    [class.ml-[265px]]="!sidebarMinimizada"
-    [class.ml-[88px]]="sidebarMinimizada">
-    <app-top-header></app-top-header>
+    class="min-h-screen min-w-0 w-full max-w-full bg-[#f8fafc] pb-6 lg:ml-[265px] lg:px-8 lg:pb-8"
+    >
+    
+    <header class="flex h-[72px] min-w-0 items-center justify-between border-b border-[#e2e8f0] bg-white px-4 sm:px-5 lg:hidden">
+      <button
+       type="button"
+       (click)="fechar()"
+       aria-label="Fechar pedido"
+       class="grid h-[38px] w-[38px] place-items-center rounded-[10px] bg-[#edf3f7] text-lg text-[#153860]">
+       ×
+      </button>
 
-    <section class="ml-2 pt-4">
-      <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">PEDIDOS</span>
-      <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Novo pedido</h1>
-      <p class="m-0 text-[13px] text-slate-400">Monte o pedido e confira as condições antes de enviar.</p>
+      <div class="mr-auto ml-3 min-w-0 sm:ml-4">
+        <h1 class="truncate text-[16px] font-bold leading-tight text-[#0f172a]">Novo pedido</h1>
+        <p class="text-[10px] text-[#64748b]">Rascunho salvo</p>
+      </div>
+
+      <div class="text-right">
+        <p class="text-[9px] text-[#64748b]">Pedido</p>
+        <strong class="text-[13px] text-[#153860]">#1048</strong>
+      </div>
+    </header>
+
+    <div class="hidden lg:block">
+      <app-top-header></app-top-header>
+    </div>
+
+    <section class="ml-2 hidden pt-4 lg:block">
+      <section class="ml-2 pt-4">
+        <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">PEDIDOS</span>
+        <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Novo pedido</h1>
+        <p class="m-0 text-[13px] text-slate-400">Monte o pedido e confira as condições antes de enviar.</p>
+      </section>
     </section>
 
-    <form class="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1.8fr)_minmax(300px,1fr)]" (ngSubmit)="submitOrder()">
-      <div class="space-y-4">
-        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+    <form (ngSubmit)="submitOrder()" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0
+                 lg:max-w-6xl lg:gap-4
+                 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
+      <div class="min-w-0 space-y-4">
+        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
           <div class="mb-3 flex items-center justify-between gap-4">
             <h2 class="text-xl font-bold text-[#20242a]">Cliente</h2>
             <button type="button" class="text-xs font-bold text-[#153860]">Alterar cliente</button>
           </div>
-          <button type="button" class="grid w-full grid-cols-[3.25rem_minmax(0,1fr)_1rem] items-center gap-3 rounded-full border border-slate-200 p-3 text-left transition hover:border-slate-300">
+          <button type="button" class="grid min-w-0 w-full grid-cols-[3.25rem_minmax(0,1fr)_1rem] items-center gap-3 rounded-[14px] border border-slate-200 p-3 text-left transition hover:border-slate-300">
             <span class="grid h-12 w-12 place-items-center rounded-full bg-[#edf6f3] text-xs font-bold text-[#153860]">CA</span>
             <span class="flex min-w-0 flex-col">
               <strong class="truncate text-sm">Casa Almeida Materiais</strong>
@@ -31,7 +57,7 @@
           </button>
         </section>
 
-        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+        <section class="border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
           <div class="mb-3 flex items-start justify-between gap-4">
             <div>
               <h2 class="text-xl font-bold text-[#20242a]">Itens do pedido</h2>
@@ -40,9 +66,9 @@
             <button type="button" class="text-xs font-bold text-[#153860]">+ Adicionar</button>
           </div>
 
-          <div class="overflow-hidden rounded-xl border border-slate-200">
+          <div class="space-y-1">
             @for (product of products; track product.id) {
-              <article class="grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-slate-200 p-3 last:border-b-0">
+              <article class="grid min-w-0 grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-2 rounded-[12px] border border-[#e2e8f0] bg-white p-2.5 sm:gap-3 sm:p-3">
                 <div class="relative flex h-14 items-center justify-center rounded-lg bg-slate-50">
                   <div class="relative h-10 w-8">
                     <span class="absolute left-1/2 top-0 h-4 w-6 -translate-x-1/2 rounded-t-full border-2 border-b-0 border-slate-300"></span>
@@ -54,12 +80,12 @@
                   </div>
                   <span class="absolute bottom-1 right-1 rounded bg-white px-1 py-0.5 text-[7px] text-slate-500 shadow-sm">{{ product.unit }}</span>
                 </div>
-                <div class="flex min-w-0 flex-col">
+                <div class="min-w-0 flex flex-col overflow-hidden">
                   <strong class="truncate text-xs font-bold">{{ product.name }}</strong>
                   <small class="mt-1 truncate text-[10px] text-slate-500">{{ product.description }}</small>
                   <strong class="mt-2 text-xs text-[#153860]">{{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong>
                 </div>
-                <div class="grid h-8 grid-cols-[1.75rem_2rem_1.75rem] overflow-hidden rounded-lg border border-slate-200">
+                <div class="grid h-8 w-[6.25rem] shrink-0 grid-cols-[1.75rem_2rem_1.75rem] overflow-hidden rounded-lg border border-slate-200">
                   <button type="button" class="grid place-items-center text-sm text-slate-500 transition hover:bg-slate-50" (click)="changeQuantity(product.id, -1)">−</button>
                   <output class="grid place-items-center border-x border-slate-200 text-[10px] font-bold">{{ quantities[product.id] }}</output>
                   <button type="button" class="grid place-items-center bg-[#153860] text-sm text-white transition hover:bg-[#0e2947]" (click)="changeQuantity(product.id, 1)">+</button>
@@ -69,11 +95,11 @@
           </div>
         </section>
 
-        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-5 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
           <h2 class="text-xl font-bold text-[#20242a]">Condições comerciais</h2>
           <fieldset class="mt-4">
             <legend class="mb-2 text-[10px] font-semibold text-slate-600">Condição de pagamento</legend>
-            <div class="grid grid-cols-3 gap-2">
+            <div class="grid min-w-0 grid-cols-3 gap-2">
               @for (option of paymentOptions; track option) {
                 <button type="button" class="min-h-10 rounded border px-2 text-[10px] font-bold transition" [class.border-[#153860]]="payment === option" [class.bg-[#153860]]="payment === option" [class.text-white]="payment === option" [class.border-slate-200]="payment !== option" [class.bg-white]="payment !== option" [class.text-slate-600]="payment !== option" (click)="selectPayment(option)">{{ option }}</button>
               }
@@ -81,7 +107,13 @@
           </fieldset>
           <label class="mt-5 block">
             <span class="mb-2 block text-[10px] font-semibold text-slate-600">Previsão de entrega</span>
-            <input type="date" name="deliveryDate" [(ngModel)]="deliveryDate" class="h-11 w-full rounded-lg border border-slate-200 bg-transparent px-3 text-xs outline-none focus:border-[#153860]">
+            <div class="relative">
+              <button type="button" class="flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 px-3 text-left text-xs text-slate-700">
+                <span>{{ deliveryDate || 'Informado pela empresa.' }}</span>
+                <span class="text-xl text-slate-400">›</span>
+              </button>
+              <input type="date" name="deliveryDate" [(ngModel)]="deliveryDate" aria-label="Previsão de entrega" class="sr-only">
+            </div>
           </label>
           <label class="mt-5 block">
             <span class="mb-2 block text-[10px] font-semibold text-slate-600">Observação para o faturamento</span>
@@ -90,8 +122,8 @@
         </section>
       </div>
 
-      <aside class="lg:sticky lg:top-6">
-        <section class="rounded-2xl bg-white px-5 py-5 shadow-sm">
+      <aside class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0">
+        <section class="bg-transparent lg:rounded-2xl lg:bg-white lg:px-5 lg:py-5 lg:shadow-sm">
           <div class="flex items-center justify-between">
             <h2 class="text-xl font-bold text-[#20242a]">Resumo do pedido</h2>
             <span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-[#153860]">{{ itemCount }} un.</span>

@@ -14,9 +14,6 @@ export class CadastroClienteComponent {
 
   tipoCadastro: 'PJ' | 'PF' = 'PJ';
 
-  onPress(): void {
-  }
-
   irParaProximaEtapa(): void {
     this.proximo.emit();
   }
@@ -30,19 +27,19 @@ export class CadastroClienteComponent {
   }
 
   onInput1(event: Event): void {
-    this.emitirValor('cnpj', event);
+    this.emitirValor('cpf', event);
   }
 
   onInput2(event: Event): void {
-    this.emitirValor('razaoSocial', event);
+    this.emitirValor('nomeCompleto', event);
   }
 
   onInput3(event: Event): void {
-    this.emitirValor('nomeFantasia', event);
+    this.emitirValor('atuacao', event);
   }
 
   onInput4(event: Event): void {
-    this.emitirValor('responsavel', event);
+    this.emitirValor('nomeResponsavel', event);
   }
 
   onInput5(event: Event): void {
@@ -54,7 +51,39 @@ export class CadastroClienteComponent {
   }
 
   onInput7(event: Event): void {
+    this.emitirValor('cep', event);
+  }
+
+  onInput8(event: Event): void {
     this.emitirValor('endereco', event);
+  }
+
+  onInput9(event: Event): void {
+    this.emitirValor('bairro', event);
+  }
+
+  onInput10(event: Event): void {
+    this.emitirValor('cidade', event);
+  }
+
+  onInput11(event: Event): void {
+    this.emitirValor('uf', event);
+  }
+
+  onPjInput1(event: Event): void {
+    this.emitirValor('cnpj', event);
+  }
+
+  onPjInput2(event: Event): void {
+    this.emitirValor('razaoSocial', event);
+  }
+
+  onPjInput3(event: Event): void {
+    this.emitirValor('nomeFantasia', event);
+  }
+
+  onPjInput4(event: Event): void {
+    this.emitirValor('segmento', event);
   }
 
   private emitirValor(campo: string, event: Event): void {

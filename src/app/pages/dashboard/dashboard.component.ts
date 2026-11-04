@@ -9,14 +9,18 @@ import { TopHeaderComponent } from '../../components/top-header/top-header.compo
 import { ProximasEntregas } from '../../components/proximas-entregas/proximas-entregas.component';
 import { ControleEntregas } from '../../components/controle-entregas/controle-entregas.component';
 import { SidebarService } from '../../services/sidebar';
+import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-dashboard',
     standalone:true,
-    imports: [CommonModule, RouterModule, SidebarComponent, TopHeaderComponent, ProximasEntregas, ControleEntregas],
+    imports: [CommonModule, RouterModule, SidebarComponent, MobileNavigationComponent, TopHeaderComponent, ProximasEntregas, ControleEntregas, DragDropModule],
     templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
+    widgets = ['total', 'novos', 'processamento', 'completos'];
+
     private sidebarService = inject(SidebarService);
     sidebarMinimizada = false;
 
@@ -36,7 +40,10 @@ export class DashboardComponent {
     valorTotalPeriodo$!: Observable<number>;
     dataAtual = new Date();
 
-    
+    reorganizarWidgets(evento: CdkDragDrop<string[]>): void {
+        moveItemInArray(this.widgets, evento.previousIndex, evento.currentIndex);
+    }
+
 
     ngOnInit(): void {
         this.pedidosRecentes$ = this.pedidoService.pedidos$.pipe(

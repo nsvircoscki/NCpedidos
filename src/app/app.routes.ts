@@ -6,6 +6,7 @@ import { CadastroClientePageComponent } from './pages/cadastro-cliente/cadastro-
 import { CadastroPedidoPageComponent } from './pages/cadastro-pedido/cadastro-pedido.component';
 import { AnaliseClientePageComponent } from './pages/analise-cliente/analise-cliente.component';
 import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.component';
+import { TabelaPrecosPageComponent } from './pages/tabela-precos/tabela-precos.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -14,6 +15,7 @@ export const routes: Routes = [
     { path: 'clientes', component: ClientesPageComponent },
     { path: 'clientes/novo', component: CadastroClientePageComponent },
     { path: 'clientes/analise', component: AnaliseClientePageComponent },
+    { path: 'clientes/:id/tabela-precos', component: TabelaPrecosPageComponent },
     { path: 'clientes/:id', component: CadastroClientePageComponent },
     { path: 'cadastro-pedido', component: CadastroPedidoPageComponent },
     { path: 'configuracoes', component: ConfiguracoesComponent },

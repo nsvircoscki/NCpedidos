@@ -15,12 +15,18 @@ export class PerfilClienteComponent {
         cnpj?: string;
         cidade?: string;
         responsavel?: string;
+        cep?: string;
+        endereco?: string;
+        numero?: string;
+        bairro?: string;
+        uf?: string;
     };
 
     @Input() perfil!: PerfilCliente;
 
     @Output() voltar = new EventEmitter<void>();
     @Output() salvar = new EventEmitter<void>();
+    @Output() proximo = new EventEmitter<void>();
     @Output() cancelar = new EventEmitter<void>();
 
     voltarEtapa(): void {
@@ -28,7 +34,7 @@ export class PerfilClienteComponent {
     }
 
     salvarPerfil(): void {
-        this.salvar.emit();
+        this.proximo.emit();
     }
 
     cancelarCadastro(): void {

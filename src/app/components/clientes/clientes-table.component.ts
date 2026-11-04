@@ -137,7 +137,7 @@ export class ClientesTableComponent {
   }
 
   abrirCliente(cliente:Cliente): void { 
-    this.router.navigate(['/clientes', cliente.id]);
+    this.router.navigate(['/clientes', cliente.id, 'tabela-precos']);
   }
 
   clienteEstaSelecionado(cliente: Cliente): boolean {

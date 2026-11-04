@@ -4,7 +4,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopHeaderComponent } from '../../components/top-header/top-header.component';
 import { SidebarService } from '../../services/sidebar';
 import { CadastroClienteComponent } from '../../components/cadastro-cliente/cadastro-cliente.component';
-import { PerfilClienteComponent } from '../../components/cadastro-cliente/perfil-cliente/perfil-cliente.component';
+import { ObservacoesClienteComponent, ObservacoesCliente } from '../../components/cadastro-cliente/observacoes-cliente/observacoes-cliente.component';
 
 @Component({
     selector: 'app-cadastro-cliente-page',
@@ -13,7 +13,7 @@ import { PerfilClienteComponent } from '../../components/cadastro-cliente/perfil
         SidebarComponent,
         TopHeaderComponent,
         CadastroClienteComponent,
-        PerfilClienteComponent
+        ObservacoesClienteComponent
     ],
     templateUrl: './cadastro-cliente.component.html',
 })
@@ -26,7 +26,10 @@ export class CadastroClientePageComponent {
     etapaAtual = 1;
 
     cliente = {
-        tipo: 'PJ' as 'PJ' | 'PF',
+        cpf: '',
+        nomeCompleto: '',
+        autacao: '',
+        segmento: '',
         cnpj: '',
         razaoSocial: '',
         nomeFantasia: '',
@@ -34,6 +37,7 @@ export class CadastroClientePageComponent {
         telefone: '',
         email: '',
         endereco: '',
+        numero: '',
         bairro: '',
         cidade: '',
         uf: '',
@@ -46,7 +50,12 @@ export class CadastroClientePageComponent {
             novoEmpredimento: false,
             resumoComercial: '',
             melhorHorario: ''
-        }
+        },
+        observacoes: {
+            texto: '',
+            categoria: 'Perfil comercial',
+            destacar: false
+        } satisfies ObservacoesCliente
     };
 
      constructor() {
@@ -64,6 +73,11 @@ export class CadastroClientePageComponent {
         this.etapaAtual = 1;
     }
 
+    irParaObservacoes(): void {
+        this.etapaAtual = 2;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     cancelar(): void {
         this.router.navigate(['/clientes']);
     }
@@ -71,5 +85,12 @@ export class CadastroClientePageComponent {
     salvarCadastro(): void {
         console.log('Cadastro completo:', this.cliente);
         this.router.navigate(['/clientes']);
+    }
+
+    atualizarCliente(evento: { campo: string; valor: string }): void {
+    this.cliente = {
+      ...this.cliente,
+      [evento.campo]: evento.valor
+     };
     }
 }

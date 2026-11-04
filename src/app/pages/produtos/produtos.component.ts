@@ -1,6 +1,9 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopHeaderComponent } from '../../components/top-header/top-header.component';
+import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
 import { ProdutosComponent } from '../../components/produtos/produtos-table.component';
 import { Produto } from '../../models/produto.model';
 import { SidebarService } from '../../services/sidebar';
@@ -8,7 +11,7 @@ import { SidebarService } from '../../services/sidebar';
 @Component({
     selector: 'app-produtos-page',
     standalone: true,
-    imports: [SidebarComponent, TopHeaderComponent, ProdutosComponent],
+    imports: [CommonModule, FormsModule, SidebarComponent, TopHeaderComponent, ProdutosComponent, MobileNavigationComponent],
     templateUrl: './produtos.component.html',
 })
 export class ProdutosPageComponent { 
@@ -20,6 +23,19 @@ export class ProdutosPageComponent {
             this.sidebarMinimizada = estado;
         });
     }
+
+    termoBuscaMobile = '';
+
+    get produtosMobile(): Produto[] {
+      const termo = this.termoBuscaMobile.trim().toLowerCase();
+
+      return this.produtos.filter(produto =>
+        !termo ||
+        produto.nome.toLowerCase().includes(termo) ||
+        produto.codigoSKU.toLowerCase().includes(termo)
+      );
+    }
+
     produtos: Produto[] = [
   {
     id: 1,

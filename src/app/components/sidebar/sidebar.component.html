@@ -1,9 +1,15 @@
 <aside
-  class="fixed left-0 top-0 z-10 flex h-dvh flex-col border-r border-slate-200 bg-white p-6 transition-[width,padding-left,padding-right] duration-300"
-  [class.w-[265px]]="!minimizada"
-  [class.w-[88px]]="minimizada"
+  ngmMotion
+  [initial]="{ width: 265 }"
+  [animate]="minimizada ? { width: 88 } : { width: 265 }"
+  [transition]="sidebarAnimation"
+  class="fixed left-0 top-0 z-10 hidden h-dvh flex-col
+         border-r border-slate-200 bg-white p-6
+         transition-[padding] duration-300 ease-in-out
+         lg:flex"
   [class.px-3]="minimizada"
-  [class.px-6]="!minimizada">
+  [class.px-6]="!minimizada"
+  >
     <div class="-mx-6 mb-2 flex min-h-[120px] w-[calc(100%+48px)] items-center justify-center px-6 py-6">
         <button
           type="button"
@@ -11,11 +17,12 @@
           [attr.aria-label]="minimizada ? 'Expandir menu' : 'Minimizar menu'"
           class="relative flex h-16 w-full items-center justify-center overflow-hidden rounded-xl">
             <img
+              ngmMotion
+              [animate]="minimizada
+                ? { scale: 0.75, opacity: 0 }
+                : { scale: 1, opacity: 1 }"
+              [transition]="sidebarAnimation"
               class="absolute h-auto w-[220px] object-contain"
-              [class.scale-95]="minimizada"
-              [class.opacity-0]="minimizada"
-              [class.scale-100]="!minimizada"
-              [class.opacity-100]="!minimizada"
               src="assets/img/logo.svg"
               alt="Logo NC Tintas">
             <img

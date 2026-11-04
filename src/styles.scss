@@ -1,5 +1,23 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+.dashboard-widget {
+  transition: box-shadow 180ms ease, opacity 180ms ease;
+}
+
+.dashboard-widget.cdk-drag-preview {
+  opacity: 0.9;
+  box-shadow: 0 18px 35px rgb(21 56 96 / 18%);
+}
+
+.dashboard-widget.cdk-drag-placeholder {
+  opacity: 0.35;
+  background: #e8eef5;
+}
+
+.cdk-drop-list-dragging .dashboard-widget:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0.2, 0, 0, 1);
+}
 
 @keyframes dropdown-enter {
   from {

@@ -1,136 +1,79 @@
-<section class="flex flex-col overflow-hidden rounded-xl bg-white shadow-[0px_8px_4px_#00000003]">
-  <div class="flex flex-col gap-8 px-6 py-8 md:px-11">
+<section class="flex flex-col overflow-hidden bg-transparent lg:rounded-xl lg:bg-white lg:shadow-[0px_8px_4px_#00000003]">
+  <div class="flex flex-col gap-6 px-4 py-6 lg:gap-8 lg:px-11 lg:py-8">
     <header class="flex items-center gap-3">
       <div class="h-7 w-7 shrink-0 rounded-full bg-[#183869]"></div>
       <div>
-        <h2 class="text-2xl font-bold text-slate-900">Perfil do cliente</h2>
-        <p class="text-sm font-bold text-[#A0ADC0]">
-          Marque o que foi identificado durante a visita.
+        <h2 class="text-[17px] font-semibold text-slate-900 lg:text-2xl lg:font-bold">Endereço do cliente</h2>
+        <p class="text-[10px] text-[#64748b] lg:text-sm lg:font-bold lg:text-[#A0ADC0]">
+          Informe o endereço principal para entregas e atendimento.
         </p>
       </div>
     </header>
 
-    <div class="grid gap-6 md:grid-cols-2">
-      <label class="flex min-h-16 cursor-pointer items-center rounded-[41px] border border-slate-200 px-6 text-lg text-[#595C61]">
+    <div class="grid gap-4 lg:grid-cols-[1fr_2fr_1fr] lg:gap-5">
+      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        CEP
         <input
-          type="checkbox"
-          name="trabalhaComOutrasMarcas"
-          [(ngModel)]="perfil.trabalhaComOutrasMarcas"
-          class="mr-3 h-5 w-5 accent-[#183869]">
-        <span>Já trabalha com outras marcas</span>
+          name="cep"
+          [(ngModel)]="cliente.cep"
+          placeholder="00000-000"
+          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
 
-      <label class="flex min-h-16 cursor-pointer items-center rounded-[41px] border border-slate-200 px-6 text-lg text-[#595C61]">
+      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        Logradouro
         <input
-          type="checkbox"
-          name="buscaMelhoresCondicoes"
-          [(ngModel)]="perfil.buscaMelhoresCondicoes"
-          class="mr-3 h-5 w-5 accent-[#183869]">
-        <span>Busca melhores condições comerciais</span>
+          name="endereco"
+          [(ngModel)]="cliente.endereco"
+          placeholder="Rua, avenida e número"
+          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+      </label>
+
+      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        Número
+        <input
+          name="numero"
+          [(ngModel)]="cliente.numero"
+          placeholder="Nº"
+          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
     </div>
 
-    <div class="grid gap-6 md:grid-cols-2">
-      <label class="flex min-h-16 cursor-pointer items-center rounded-[41px] border border-slate-200 px-6 text-lg text-[#595C61]">
+    <div class="grid gap-4 lg:grid-cols-3 lg:gap-5">
+      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        Bairro
         <input
-          type="checkbox"
-          name="entregaRecorrente"
-          [(ngModel)]="perfil.entregaRecorrente"
-          class="mr-3 h-5 w-5 accent-[#183869]">
-        <span>Precisa de entrega recorrente</span>
+          name="bairro"
+          [(ngModel)]="cliente.bairro"
+          placeholder="Digite o bairro"
+          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
 
-      <label class="flex min-h-16 cursor-pointer items-center rounded-[41px] border border-slate-200 px-6 text-lg text-[#595C61]">
+      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        Cidade
         <input
-          type="checkbox"
-          name="interessePreparacao"
-          [(ngModel)]="perfil.interessePreparacao"
-          class="mr-3 h-5 w-5 accent-[#183869]">
-        <span>Interesse em materiais de preparação</span>
+          name="cidade"
+          [(ngModel)]="cliente.cidade"
+          placeholder="Cidade"
+          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+      </label>
+
+      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        UF
+        <input
+          name="uf"
+          maxlength="2"
+          [(ngModel)]="cliente.uf"
+          placeholder="UF"
+          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
     </div>
 
-    <label class="flex min-h-16 cursor-pointer items-center rounded-[41px] border border-slate-200 px-6 text-lg text-[#595C61]">
-      <input
-        type="checkbox"
-        name="novoEmpredimento"
-        [(ngModel)]="perfil.novoEmpredimento"
-        class="mr-3 h-5 w-5 accent-[#183869]">
-      <span>Está abrindo um novo empreendimento</span>
-    </label>
-
-    <div class="flex flex-col gap-5">
-      <header class="flex items-center gap-3">
-        <div class="h-7 w-7 shrink-0 rounded-full bg-[#183869]"></div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-900">Observações da visita</h2>
-          <p class="text-sm font-bold text-[#A0ADC0]">
-            Registre os interesses e próximos passos combinados.
-          </p>
-        </div>
-      </header>
-
-      <label for="resumoComercial" class="text-base font-bold text-[#404750]">
-        Resumo comercial
-      </label>
-
-      <textarea
-        id="resumoComercial"
-        name="resumoComercial"
-        [(ngModel)]="perfil.resumoComercial"
-        placeholder="Conte como foi o contato e quais produtos interessaram ao cliente..."
-        class="min-h-56 w-full resize-y rounded-[32px] border border-slate-200 p-6 text-base text-[#595C61] outline-none transition focus:border-[#2d5d8e]"></textarea>
-    </div>
-
-    <label class="flex max-w-md flex-col gap-3 text-base font-bold text-[#404750]">
-      Melhor horário para contato
-      <select
-        name="melhorHorario"
-        [(ngModel)]="perfil.melhorHorario"
-        class="h-16 w-full rounded-[41px] border border-slate-200 bg-white px-6 font-normal text-slate-400 outline-none focus:border-[#2d5d8e]">
-        <option value="">Selecione</option>
-        <option value="Manhã">Manhã</option>
-        <option value="Tarde">Tarde</option>
-        <option value="Noite">Noite</option>
-      </select>
-    </label>
-
-    <section class="rounded-xl bg-[#153860] px-8 py-6 text-white shadow-[0px_8px_4px_#00000003]">
-      <span class="text-[15px] font-bold text-[#ADC7E5]">RESUMO DO PRÉ-CADASTRO</span>
-      <h3 class="mt-3 text-2xl font-bold">
-        {{ cliente.nome || 'Nome do cliente' }}
-      </h3>
-      <p class="text-[13px] text-[#ADC7E5]">
-        {{ cliente.razaoSocial || 'Razão social não informada' }}
-      </p>
-
-      <div class="mt-8 grid grid-cols-2 gap-5 text-sm md:grid-cols-4">
-        <div>
-          <span class="text-[#ADC7E5]">CNPJ</span>
-          <strong class="mt-1 block text-[13px]">{{ cliente.cnpj || '--' }}</strong>
-        </div>
-        <div>
-          <span class="text-[#ADC7E5]">Localização</span>
-          <strong class="mt-1 block text-[13px]">{{ cliente.cidade || '--' }}</strong>
-        </div>
-        <div>
-          <span class="text-[#ADC7E5]">Responsável</span>
-          <strong class="mt-1 block text-[13px]">{{ cliente.responsavel || '--' }}</strong>
-        </div>
-        <div>
-          <span class="text-[#ADC7E5]">Potencial</span>
-          <strong class="mt-1 block text-[13px]">
-            {{ perfil.buscaMelhoresCondicoes || '--' }}
-          </strong>
-        </div>
-      </div>
-    </section>
-
-    <div class="flex flex-col-reverse justify-between gap-4 sm:flex-row">
+    <div class="flex flex-col-reverse justify-between gap-3 sm:flex-row">
       <button
         type="button"
         (click)="cancelarCadastro()"
-        class="rounded-[41px] border border-[#B5B5B5] bg-transparent px-10 py-4 text-base font-bold text-black transition hover:bg-slate-50">
+        class="rounded-[10px] border border-[#B5B5B5] bg-transparent px-5 py-3 text-[11px] font-bold text-black transition hover:bg-slate-50 lg:rounded-[41px] lg:px-10 lg:py-4 lg:text-base">
         Cancelar
       </button>
 
@@ -138,24 +81,16 @@
         <button
           type="button"
           (click)="voltarEtapa()"
-          class="rounded-[41px] border border-[#B5B5B5] px-8 py-4 text-base font-bold text-slate-700 transition hover:bg-slate-50">
+          class="rounded-[10px] border border-[#B5B5B5] px-5 py-3 text-[11px] font-bold text-slate-700 transition hover:bg-slate-50 lg:rounded-[41px] lg:px-8 lg:py-4 lg:text-base">
           Voltar
         </button>
 
         <button
           type="button"
           (click)="salvarPerfil()"
-          class="flex items-center justify-center gap-4 rounded-[41px] bg-[#153860] px-8 py-4 text-base font-bold text-white transition hover:bg-[#2d486f]">
-          <span class="font-bold">Salvar cadastro</span>
-          <svg
-            aria-hidden="true"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m6 12 4 4 8-8" />
-          </svg>
+          class="flex items-center justify-center gap-2 rounded-[10px] bg-[#153860] px-5 py-3 text-[11px] font-bold text-white transition hover:bg-[#2d486f] lg:rounded-[41px] lg:px-8 lg:py-4 lg:text-base">
+          Continuar
+          <span class="text-xl leading-none">›</span>
         </button>
       </div>
     </div>

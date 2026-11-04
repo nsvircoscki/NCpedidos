@@ -1,19 +1,25 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopHeaderComponent } from '../../components/top-header/top-header.component';
 import { ClientesTableComponent } from '../../components/clientes/clientes-table.component';
 import { Cliente } from '../../models/cliente.model';
 import { SidebarService } from '../../services/sidebar';
+import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
 
 @Component({
   selector: 'app-clientes-page',
   standalone: true,
   imports: [
+    CommonModule,
+    FormsModule,
     SidebarComponent,
     TopHeaderComponent,
     ClientesTableComponent,
-    RouterModule
+    RouterModule,
+    MobileNavigationComponent
   ],
   templateUrl: './clientes.component.html'
 })
@@ -78,4 +84,23 @@ export class ClientesPageComponent {
       status: 'INATIVO'
     }
   ];
+
+  termoBuscaMobile = '';
+
+  get clientesMobile(): Cliente[] {
+    const termo = this.termoBuscaMobile.trim().toLowerCase();
+
+    return this.clientes.filter(cliente =>
+      !termo ||
+      cliente.nome.toLowerCase().includes(termo) ||
+      cliente.cpfcnpj.toLowerCase().includes(termo)
+    );
+  }
+
+  obterIniciais(nome: string): string {
+    const partes = nome.trim().split(/\s+/);
+    return partes.length === 1
+      ? partes[0].substring(0, 2).toUpperCase()
+      : (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+  }
 }

@@ -1,72 +1,105 @@
-<div class="flex min-h-screen bg-[#f6f9fc]">
+<div class="min-h-screen overflow-x-hidden bg-[#f8fafc]">
   <app-sidebar></app-sidebar>
 
   <main
-    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
-    [class.ml-[265px]]="!sidebarMinimizada"
-    [class.ml-[88px]]="sidebarMinimizada">
-    
-    <app-top-header></app-top-header>
+    class="min-w-0 pb-24 lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
+    [class.lg:ml-[88px]]="sidebarMinimizada">
+    <div class="hidden lg:block">
+      <app-top-header></app-top-header>
+    </div>
 
-    <section class="px-[17px] pt-4">
-        <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
-            CLIENTES
-        </span>
+    <section class="hidden lg:flex lg:items-end lg:justify-between lg:gap-4 lg:pt-4">
+        <div>
+            <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
+                CLIENTES
+            </span>
 
-        <div class="flex items-start justify-between gap-4 max-[700px]:flex-col">
-            <div>
-                <h1 class="my-1 text-[32px] font-bold text-[#08111c]">
-                    Clientes
-                </h1>
+            <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Clientes</h1>
 
-                <p class="m-0 text-[13px] text-slate-400">
-                    Consulte os clientes cadastrados e o histórico de compras.
-                </p>
-            </div>
+            <p class="text-[13px] text-slate-400">
+                Consulte os clientes cadastrados e o histórico de compras.
+            </p>
+        </div>
 
-            <div class="flex items-center gap-3 self-end max-[700px]:self-start max-[700px]:flex-wrap">
-                <button
-                    type="button"
-                    routerLink="/clientes/analise"
-                    class="flex items-center gap-2 rounded-xl border border-[#2d486f] bg-white px-4 py-2 text-[11px] font-semibold text-[#2d486f] transition hover:bg-blue-50">
-                    <svg
-                        aria-hidden="true"
-                        class="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M9 12.75 11.25 15 15 9.75M20.25 12A8.25 8.25 0 1 1 3.75 12a8.25 8.25 0 0 1 16.5 0Z" />
-                    </svg>
-                    <span class="text-[13px] font-semibold">Clientes em análise</span>
-                </button>
-                <button
-                    type="button"
-                    routerLink="/clientes/novo"
-                    class="flex items-center gap-2 rounded-xl border-0 bg-[#2d486f] px-4 py-2 text-[11px] font-semibold text-white transition hover:bg-[#153860]">
-                    <svg
-                        aria-hidden="true"
-                        class="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 5v14M5 12h14" />
-                    </svg>
-                    <span class="text-[14px] font-semibold text-white">Novo cliente</span>
-                </button>
-            </div>
+        <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <button type="button" routerLink="/clientes/analise" class="w-full rounded-xl border border-[#2d486f] bg-white px-4 py-3 text-sm font-semibold text-[#2d486f] sm:w-auto">
+                Clientes em análise
+            </button>
+            <button type="button" routerLink="/clientes/novo" class="w-xs rounded-xl bg-[#2d486f] px-4 py-3 text-sm font-semibold text-white sm:w-auto">
+                + Novo cliente
+            </button>
         </div>
     </section>
 
-    <section class="rounded-xl bg-white py-4 shadow-sm">
+    <section class="hidden min-w-0 overflow-hidden rounded-xl bg-white py-4 shadow-sm lg:block">
         <app-clientes-table [clientes]="clientes"></app-clientes-table>
     </section>
+
+    <section class="lg:hidden">
+      <header class="relative flex h-[72px] items-center border-b border-[#e2e8f0] bg-white px-4">
+        <img class="h-[54px] w-[136px] object-contain object-left" src="assets/img/logo.svg" alt="NC Tintas">
+
+        <div class="ml-auto flex items-center gap-2">
+          <button type="button" aria-label="Pesquisar" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] bg-white text-lg text-[#475569]">
+            ⌕
+          </button>
+          <button type="button" aria-label="Notificações" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] bg-white">
+            <img class="h-[22px] w-[22px]" src="assets/notificationIcon.svg" alt="">
+          </button>
+          <span class="grid h-[38px] w-[38px] place-items-center rounded-full bg-[#b9cde5] text-[11px] font-semibold text-[#153860]">CA</span>
+        </div>
+      </header>
+
+      <div class="px-4 pt-4">
+        <span class="text-[10px] font-semibold tracking-[0.05em] text-[#153860]">NC Tintas</span>
+        <h1 class="mt-1 text-[24px] font-semibold leading-none text-[#0f172a]">Clientes</h1>
+        <p class="mt-3 text-[12px] text-[#64748b]">Consulte os clientes cadastrados.</p>
+
+        <button
+          type="button"
+          routerLink="/clientes/novo"
+          class="mt-4 ml-auto flex h-11 w-fit items-center justify-center rounded-[11px] bg-[#153860] px-4 text-[12px] font-bold text-white">
+          + Cadastrar cliente
+        </button>
+
+        <label class="mt-5 flex h-[38px] items-center gap-2 rounded-full bg-[#f1f3f5] px-4">
+          <span class="text-lg leading-none text-[#94a3b8]">⌕</span>
+          <input
+            type="search"
+            [(ngModel)]="termoBuscaMobile"
+            class="min-w-0 flex-1 bg-transparent text-[12px] text-slate-700 outline-none placeholder:text-[#94a3b8]"
+            placeholder="Buscar nome, CPF ou CNPJ">
+        </label>
+      </div>
+
+      <div class="mx-4 mt-6 overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-white px-3">
+        @for (cliente of clientesMobile; track cliente.id) {
+          <button
+            type="button"
+            class="flex min-h-[76px] w-full items-center gap-3 border-b border-[#dbe4ed] text-left last:border-b-0"
+            [routerLink]="['/clientes', cliente.id, 'tabela-precos']">
+            <span
+              class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[11px] font-medium"
+              [ngClass]="cliente.id === 1 ? 'bg-[#edf3f7] text-[#153860]' : 'bg-[#fff0df] text-[#a75a15]'">
+              {{ obterIniciais(cliente.nome) }}
+            </span>
+
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[12px] font-semibold text-[#0f172a]">{{ cliente.nome }}</span>
+              <span class="mt-1 block text-[9px] text-[#64748b]">
+                <strong class="font-semibold text-[#153860]">#{{ cliente.id | number:'4.0-0' }}</strong>
+                · Cliente desde {{ cliente.dataCadastro | date:'dd/MM/yyyy' }}
+              </span>
+            </span>
+
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl leading-none text-[#153860]">›</span>
+          </button>
+        } @empty {
+          <p class="px-3 py-8 text-center text-xs text-[#64748b]">Nenhum cliente encontrado.</p>
+        }
+      </div>
+    </section>
   </main>
+
+  <app-mobile-navigation></app-mobile-navigation>
 </div>
