@@ -1,0 +1,148 @@
+<div class="min-h-screen bg-[#f8fafc] px-4 pb-8 pt-3 text-[#0f172a]">
+  <!-- Topo / Header -->
+  <header class="flex items-center justify-between pb-4 pt-2">
+    <button
+      type="button"
+      (click)="voltar.emit()"
+      aria-label="Voltar"
+      class="grid h-10 w-10 place-items-center rounded-xl bg-[#edf3f7] text-lg font-bold text-[#153860] transition-colors hover:bg-[#e2ecf3]"
+    >
+      ‹
+    </button>
+
+    <div class="ml-3 flex-1">
+      <h1 class="text-xl font-bold leading-tight text-[#0f172a]">Pedido enviado</h1>
+      <p class="text-xs text-[#64748b]">Resumo e acompanhamento</p>
+    </div>
+
+    <div class="text-right">
+      <span class="block text-[10px] text-[#64748b]">Pedido</span>
+      <strong class="text-base font-bold text-[#153860]">#1048</strong>
+    </div>
+  </header>
+
+  <!-- Card de Sucesso -->
+  <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#f1faf5] p-4">
+    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#26835a] text-base font-bold text-white">
+      ✓
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold text-[#1e5338]">Pedido enviado com sucesso</h2>
+      <p class="text-xs text-[#527965]">Enviado hoje, às 10:24 · Aguardando análise</p>
+    </div>
+  </div>
+
+  <!-- Abas (Resumo / Acompanhamento) -->
+  <div class="mt-4 rounded-xl flex bg-[#f1f5f9] p-1">
+  <!-- Botão Resumo -->
+  <button
+    type="button"
+    (click)="selecionarAba('resumo')"
+    class="flex-1 py-2 rounded-xl text-center text-xs transition-all"
+    [ngClass]="abaAtiva === 'resumo'
+      ? 'bg-[#153860] font-semibold text-white shadow-sm'
+      : 'font-medium text-[#64748b] hover:text-[#153860] hover:shadow-sm'"
+  >
+    Resumo
+  </button>
+  <!-- Botão Acompanhamento -->
+  <button
+    type="button"
+    (click)="selecionarAba('acompanhamento')"
+    class="flex-1 py-2 rounded-xl text-center text-xs transition-all"
+    [ngClass]="abaAtiva === 'acompanhamento'
+      ? 'bg-[#153860] font-semibold text-white shadow-sm'
+      : 'font-medium text-[#64748b] hover:text-[#153860] hover:shadow-sm'"
+  >
+    Acompanhamento
+  </button>
+</div>
+
+  <!-- Seção Cliente -->
+  <section class="mt-6">
+    <h3 class="mb-2 text-base font-bold text-[#0f172a]">Cliente</h3>
+    <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#fceee2] text-xs font-bold text-[#9c5421]">
+        CA
+      </div>
+      <div class="min-w-0 flex-1">
+        <h4 class="truncate text-sm font-semibold text-[#0f172a]">Casa Almeida Materiais</h4>
+        <p class="text-xs text-[#64748b]">CNPJ 12.345.678/0001-90</p>
+      </div>
+      <span class="text-lg text-slate-400">›</span>
+    </div>
+  </section>
+
+  <!-- Seção Itens do Pedido -->
+  <section class="mt-6">
+    <div class="mb-2 flex items-center justify-between">
+      <h3 class="text-base font-bold text-[#0f172a]">Itens do pedido</h3>
+      <span class="rounded-full bg-[#f1f5f9] px-2.5 py-0.5 text-xs font-semibold text-[#475569]">4 un.</span>
+    </div>
+
+    <div class="divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <!-- Item 1 -->
+      <div class="flex items-center justify-between p-3.5">
+        <div class="flex items-center gap-3">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-[#edf3f8] text-xs font-bold text-[#153860]">2×</span>
+          <span class="text-xs font-semibold text-[#0f172a]">Tinta Acrílica Premium</span>
+        </div>
+        <strong class="text-xs font-semibold text-[#0f172a]">R$ 579,80</strong>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="flex items-center justify-between p-3.5">
+        <div class="flex items-center gap-3">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-[#edf3f8] text-xs font-bold text-[#153860]">1×</span>
+          <span class="text-xs font-semibold text-[#0f172a]">Esmalte Sintético</span>
+        </div>
+        <strong class="text-xs font-semibold text-[#0f172a]">R$ 94,50</strong>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="flex items-center justify-between p-3.5">
+        <div class="flex items-center gap-3">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-[#edf3f8] text-xs font-bold text-[#153860]">1×</span>
+          <span class="text-xs font-semibold text-[#0f172a]">Massa Corrida PVA</span>
+        </div>
+        <strong class="text-xs font-semibold text-[#0f172a]">R$ 78,40</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Condições Comerciais -->
+  <section class="mt-6">
+    <h3 class="mb-2 text-base font-bold text-[#0f172a]">Condições comerciais</h3>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div class="flex items-center justify-between py-1">
+        <span class="text-xs text-[#64748b]">Pagamento</span>
+        <span class="text-xs font-semibold text-[#0f172a]">28 dias</span>
+      </div>
+      <div class="my-2 border-t border-slate-100"></div>
+      <div class="flex items-center justify-between py-1">
+        <span class="text-xs text-[#64748b]">Previsão de entrega</span>
+        <span class="text-xs font-semibold text-[#0f172a]">Informado pela empresa</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card Total do Pedido -->
+  <div class="mt-4 flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div>
+      <h4 class="text-xs font-bold text-[#0f172a]">Total do pedido</h4>
+      <span class="text-[11px] text-[#64748b]">Faturado em 28 dias</span>
+    </div>
+    <strong class="text-2xl font-bold text-[#0f172a]">R$ 715,06</strong>
+  </div>
+
+  <!-- Botão Inferior de Ação -->
+  <button
+    type="button"
+    (click)="verAcompanhamento.emit()"
+    class="mt-6 w-full rounded-xl bg-[#153860] py-3.5 text-center text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90 active:opacity-95"
+  >
+    Ver acompanhamento
+  </button>
+</div>

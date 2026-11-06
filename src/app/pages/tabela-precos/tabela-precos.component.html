@@ -1,11 +1,12 @@
 <div class="min-h-screen overflow-x-hidden bg-[#f8fafc]">
   <app-sidebar></app-sidebar>
-  <main class="min-w-0 pb-24 transition-[margin-left] duration-300 lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
+  <main class="min-w-0 pb-10 transition-[margin-left] duration-300 lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
     [class.lg:ml-[88px]]="sidebarMinimizada">
     <div class="hidden lg:block">
       <app-top-header></app-top-header>
     </div>
 
+    <!-- VERSÃO DESKTOP -->
     <section class="hidden pt-4 lg:block">
       <button type="button" (click)="voltar()" class="mb-4 text-sm font-semibold text-[#2d486f] hover:underline">
         ← Voltar para clientes
@@ -122,6 +123,7 @@
       </div>
     </section>
 
+    <!-- VERSÃO MOBILE -->
     <section class="lg:hidden">
       <header class="relative flex h-[72px] items-center border-b border-[#e2e8f0] bg-white px-4">
         <img class="h-[54px] w-[136px] object-contain object-left" src="assets/img/logo.svg" alt="NC Tintas">
@@ -134,14 +136,26 @@
         </div>
       </header>
 
+      <!-- Bloco de Título do Topo -->
       <div class="px-4 pt-4">
-        <button type="button" (click)="voltar()" class="mb-4 text-xs font-semibold text-[#2d486f]">← Voltar para clientes</button>
-        <span class="block text-[10px] font-semibold tracking-[0.05em] text-[#153860]">TABELA DE PREÇOS</span>
-        <h1 class="mt-1 text-[29px] font-semibold leading-tight text-[#0f172a]">Produtos e Preços</h1>
-        <p class="mt-1 text-[12px] text-[#64748b]">Valores exclusivos de {{ clienteNome }}.</p>
+        <!-- <button type="button" (click)="voltar()" class="mb-3 text-xs font-semibold text-[#2d486f]">←</button> -->
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <span class="block text-[10px] font-semibold tracking-[0.05em] text-[#153860]">TABELA DE PREÇOS</span>
+            <h1 class="mt-0.5 text-[26px] font-semibold leading-tight text-[#0f172a]">Produtos e Preços</h1>
+            <p class="mt-0.5 text-[12px] text-[#64748b]">Valores exclusivos de {{ clienteNome }}.</p>
+          </div>  
+          <button
+            type="button"
+            routerLink="/clientes/novo"
+            aria-label="Cadastrar cliente"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#153860] text-[18px] font-bold text-white transition-opacity hover:opacity-90">
+            +
+          </button>
+        </div>
       </div>
 
-      <div class="mt-14 px-4">
+      <div class="mt-4 px-4">
         <div class="flex items-end justify-between">
           <div>
             <h2 class="text-[16px] font-medium text-[#0f172a]">Todos os Produtos</h2>
@@ -176,7 +190,7 @@
 
               <div class="shrink-0 text-right">
                 <p class="text-[9px] text-[#94a3b8]">Preço Unitário</p>
-                <p class="text-[21px] font-medium leading-tight text-[#153860]">{{ item.preco | currency:'BRL' }}</p>
+                <p class="text-[13px] font-medium leading-tight text-[#153860]">{{ item.preco | currency:'BRL' }}</p>
               </div>
             </article>
           } @empty {

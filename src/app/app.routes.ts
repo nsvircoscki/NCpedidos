@@ -7,10 +7,14 @@ import { CadastroPedidoPageComponent } from './pages/cadastro-pedido/cadastro-pe
 import { AnaliseClientePageComponent } from './pages/analise-cliente/analise-cliente.component';
 import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.component';
 import { TabelaPrecosPageComponent } from './pages/tabela-precos/tabela-precos.component';
+import { PedidosComponent } from './pages/pedidos/pedidos.component';
+import { PedidoEnviadoComponent } from './components/pedido-enviado/pedido-enviado.component';
+import { PedidoAcompanhamentoComponent } from './components/pedido-enviado/pedido-acompanhamento.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     { path: 'dashboard', component: DashboardComponent},
+    { path: 'pedidos', component: PedidosComponent },
     { path: 'produtos', component: ProdutosPageComponent },
     { path: 'clientes', component: ClientesPageComponent },
     { path: 'clientes/novo', component: CadastroClientePageComponent },
@@ -19,5 +23,7 @@ export const routes: Routes = [
     { path: 'clientes/:id', component: CadastroClientePageComponent },
     { path: 'cadastro-pedido', component: CadastroPedidoPageComponent },
     { path: 'configuracoes', component: ConfiguracoesComponent },
+    { path: 'pedido-enviado', component: PedidoEnviadoComponent },
+    { path: 'pedido-acompanhamento', component: PedidoAcompanhamentoComponent },
     { path: '**', redirectTo: 'dashboard'},
 ];

@@ -1,0 +1,228 @@
+<div class="flex min-h-screen w-full max-w-full overflow-x-hidden bg-[#f8f8ff] text-[#0f172a]">
+  <app-sidebar></app-sidebar>
+
+  <main
+    class="min-w-0 pb-24 transition-[margin-left] duration-300 w-full bg-[#f8f8ff] lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
+    [class.lg:ml-[88px]]="sidebarMinimizada"
+  >
+    <div class="px-4 lg:px-0">
+      <app-mobile-header></app-mobile-header>
+    </div>
+
+    <div class="hidden lg:block">
+      <app-top-header></app-top-header>
+    </div>
+
+    <!-- SEÇÃO DESKTOP -->
+    <section class="hidden pt-4 lg:block">
+      <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
+        PEDIDOS
+      </span>
+      <div class="flex items-start justify-between gap-4 mt-1">
+        <div>
+          <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Pedidos</h1>
+          <p class="m-0 text-[13px] text-slate-400">Acompanhe os pedidos realizados e seus status.</p>
+        </div>
+        <button
+          class="flex items-center gap-2 self-end rounded-xl bg-[#153860] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f2947]"
+          type="button"
+          routerLink="/cadastro-pedido"
+        >
+          + Novo pedido
+        </button>
+      </div>
+    </section>
+
+    <section class="hidden bg-white py-4 shadow-sm lg:block">
+      <!-- Filtros desktop -->
+      <div class="mb-4 flex flex-wrap items-center gap-3 px-4">
+        <label class="relative min-w-[220px] flex-1">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[17px] text-[#64748b]">⌕</span>
+          <input
+            type="search"
+            [(ngModel)]="search"
+            placeholder="Buscar cliente ou número do pedido"
+            class="h-12 w-full rounded-full bg-[#F6F9FC] py-2.5 pl-10 pr-5 text-[13px] text-slate-700 outline-none placeholder:text-slate-400"
+          />
+        </label>
+        <div class="flex gap-2">
+          @for (filter of ["Todos", "Em análise", "Aprovado", "Faturado"]; track filter) {
+            <button
+              class="rounded-full border border-[#e2e8f0] px-4 py-2 text-[12px] font-medium text-[#64748b] transition-colors hover:bg-slate-50"
+              [class.!border-[#153860]]="statusFilter === filter"
+              [class.!bg-[#f0f4f8]]="statusFilter === filter"
+              [class.!text-[#153860]]="statusFilter === filter"
+              type="button"
+              (click)="statusFilter = filter"
+            >
+              {{ filter }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="mb-3 flex items-center justify-between px-4">
+        <span class="text-[10px] text-slate-500">{{ filteredOrders().length }} pedidos encontrados</span>
+        <button
+          class="text-[11px] font-semibold text-[#153860] hover:underline"
+          type="button"
+          (click)="search = ''; statusFilter = 'Todos'"
+        >
+          Limpar filtros
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[620px] border-collapse text-left">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] text-slate-400">
+              <th class="p-3 font-bold uppercase">Pedido</th>
+              <th class="p-3 font-bold uppercase">Cliente</th>
+              <th class="p-3 font-bold uppercase">Data</th>
+              <th class="p-3 font-bold uppercase">Volumes</th>
+              <th class="p-3 font-bold uppercase">Total</th>
+              <th class="p-3 font-bold uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (order of filteredOrders(); track order.id) {
+              <tr class="border-b border-slate-100 text-sm hover:bg-slate-50 transition-colors">
+                <td class="p-3"><strong class="text-[#153860]">#{{ order.id }}</strong></td>
+                <td class="p-3 font-medium text-[#0f172a]">{{ order.client }}</td>
+                <td class="p-3 text-slate-500 text-[12px]">{{ order.date }}</td>
+                <td class="p-3 text-slate-500 text-[12px]">{{ order.volumes }} vol.</td>
+                <td class="p-3 font-semibold text-[#153860]">{{ currency(order.total) }}</td>
+                <td class="p-3">
+                  <span class="status-pill text-[10px]" [attr.data-status]="order.status">{{ order.status }}</span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="p-8 text-center text-sm text-slate-400">Nenhum pedido encontrado.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO MOBILE -->
+    <section class="lg:hidden">
+
+      @if (sent()) {
+        <div class="mx-4 mt-4 flex items-center gap-3 rounded-[12px] border border-[#b9d8c8] bg-[#f1faf5] px-4 py-3 text-[12px] text-[#236746]">
+          <span class="grid size-6 place-items-center rounded-full bg-[#26835a] text-white">✓</span>
+          Pedido #1048 enviado com sucesso.
+        </div>
+      }
+
+      <div class="px-4 pt-4">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <span class="block text-[10px] font-semibold tracking-[0.5px] text-[#153860] uppercase">
+              TERÇA-FEIRA, 17 DE SETEMBRO
+            </span>
+            <h1 class="mt-0.5 text-[26px] font-semibold leading-tight text-[#0f172a]">Pedidos</h1>
+            <p class="mt-0.5 text-[12px] text-[#64748b]">Acompanhe os pedidos realizados e seus status.</p>
+          </div>
+          <a
+            routerLink="/pedido-acompanhamento"
+            aria-label="Novo pedido"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#153860] text-[18px] font-bold text-white transition-opacity hover:opacity-90"
+          >
+            +
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-4 px-4">
+        <label class="flex h-[44px] items-center gap-2 rounded-[12px] border border-[#e2e8f0] bg-white px-4 shadow-sm">
+          <span class="text-[17px] text-[#64748b]">⌕</span>
+          <input
+            class="w-full bg-transparent text-[12px] text-[#0f172a] placeholder:text-[#94a3b8] outline-none"
+            [(ngModel)]="search"
+            placeholder="Buscar cliente ou número do pedido"
+            aria-label="Buscar pedidos"
+          />
+        </label>
+
+        <div #filtersContainer class="mt-3 overflow-hidden pb-1 touch-pan-y">
+            <div 
+                #filtersTrack 
+                ngmMotion
+                drag="x"
+                [dragConstraints]="dragConstraints()"
+                [dragElastic]="0.2"
+                class="flex gap-2 will-change-transform cursor-grab active:cursor-grabbing select-none w-max"
+            >
+            @for (filter of ["Todos", "Em análise", "Aprovado", "Faturado"]; track filter) {
+                <button
+                class="rounded-full border border-[#e2e8f0] px-3 py-1 text-[11px] font-medium text-[#64748b] transition-colors hover:bg-slate-50 whitespace-nowrap shrink-0"
+                [class.!border-[#153860]]="statusFilter === filter"
+                [class.!bg-[#f0f4f8]]="statusFilter === filter"
+                [class.!text-[#153860]]="statusFilter === filter"
+                type="button"
+                (click)="statusFilter = filter"
+                >
+                {{ filter }}
+                </button>
+            }
+            </div>
+        </div>
+        <div class="mt-5 flex items-end justify-between">
+          <div>
+            <h2 class="text-[16px] font-medium text-[#0f172a]">Pedidos feitos</h2>
+            <p class="text-[10px] text-[#94a3b8]">{{ filteredOrders().length }} pedidos encontrados</p>
+          </div>
+          <button
+            class="text-[10px] font-semibold text-[#153860] transition-opacity hover:opacity-80"
+            type="button"
+            (click)="search = ''; statusFilter = 'Todos'"
+          >
+            Limpar filtros
+          </button>
+        </div>
+
+        <section class="mt-3 overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-white shadow-sm">
+          @for (order of filteredOrders(); track order.id; let last = $last) {
+            <button
+              class="flex w-full min-h-[76px] items-center gap-3 px-3 py-4 text-left transition-colors hover:bg-slate-50"
+              [class.border-b]="!last"
+              [class.border-[#dbe4ed]]="!last"
+              type="button"
+              routerLink="/pedido-acompanhamento"
+            >
+              <span
+                class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[11px] font-semibold"
+                [class.bg-[#dbe8f4]]="order.avatar === 'blue'"
+                [class.text-[#153860]]="order.avatar === 'blue'"
+                [class.bg-[#fce7d6]]="order.avatar === 'orange'"
+                [class.text-[#9a4a1a]]="order.avatar === 'orange'"
+              >
+                {{ order.initials }}
+              </span>
+              <span class="min-w-0 flex-1">
+                <strong class="block truncate text-[12px] font-semibold text-[#0f172a]">{{ order.client }}</strong>
+                <small class="mt-1 block text-[9px] text-[#64748b]">
+                  <strong class="font-semibold text-[#153860]">#{{ order.id }}</strong> · {{ order.date }} · {{ order.volumes }} volumes
+                </small>
+              </span>
+              <span class="flex shrink-0 flex-col items-end">
+                <strong class="text-[13px] font-semibold leading-tight text-[#153860]">{{ currency(order.total) }}</strong>
+                <span class="status-pill mt-1 text-[10px]" [attr.data-status]="order.status">{{ order.status }}</span>
+              </span>
+              <span class="ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-[22px] leading-none text-[#153860]">›</span>
+            </button>
+          } @empty {
+            <div class="px-6 py-14 text-center">
+              <p class="text-[14px] font-semibold text-[#0f172a]">Nenhum pedido encontrado</p>
+              <p class="mt-1 text-[11px] text-[#64748b]">Tente alterar os filtros de busca.</p>
+            </div>
+          }
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <app-mobile-navigation></app-mobile-navigation>
+</div>

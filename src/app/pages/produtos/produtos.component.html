@@ -1,92 +1,100 @@
-<div class="min-h-screen overflow-x-hidden bg-[#f8fafc]">
+<div class="min-h-screen overflow-x-hidden bg-[#F8F8FF]">
   <app-sidebar></app-sidebar>
 
   <main
-    class="min-w-0 pb-24 transition-[margin-left] duration-300 lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
+    class="min-w-0 pb-24 transition-[margin-left] duration-300 bg-[#F8F8FF] lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
     [class.lg:ml-[88px]]="sidebarMinimizada">
+
+    <div class="px-4 lg:px-0">
+      <app-mobile-header></app-mobile-header>
+    </div>
     
     <div class="hidden lg:block">
-        <app-top-header></app-top-header>
+      <app-top-header></app-top-header>
     </div>
 
+    <!-- SEÇÃO DESKTOP -->
     <section class="hidden pt-4 lg:block">
-        <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
-            PRODUTOS
-        </span>
+      <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
+        PRODUTOS
+      </span>
 
-        <h1 class="my-1 text-[32px] font-bold text-[#08111c]">
-            Produtos e preços
-        </h1>
+      <h1 class="my-1 text-[32px] font-bold text-[#08111c]">
+        Produtos e preços
+      </h1>
 
-        <p class="m-0 text-[13px] text-slate-400">
-            Acompanhe os produtos e preços cadastrados na NC Tintas.
-        </p>
+      <p class="m-0 text-[13px] text-slate-400">
+        Acompanhe os produtos e preços cadastrados na NC Tintas.
+      </p>
     </section>
 
     <section class="hidden rounded-xl bg-white py-4 shadow-sm lg:block">
-        <app-produtos [produtos]="produtos"></app-produtos>
+      <app-produtos [produtos]="produtos"></app-produtos>
     </section>
 
+    <!-- SEÇÃO MOBILE -->
     <section class="lg:hidden">
-        <header class="relative flex h-[72px] items-center border-b border-[#e2e8f0] bg-white px-4">
-            <img class="h-[54px] w-[136px] object-contain object-left" src="assets/img/logo.svg" alt="NC Tintas">
-            <div class="ml-auto flex items-center gap-2">
-                <button type="button" aria-label="Pesquisar" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] text-lg text-[#475569]">⌕</button>
-                <button type="button" aria-label="Notificações" class="grid h-[38px] w-[38px] place-items-center rounded-[10px]">
-                    <img class="h-[22px] w-[22px]" src="assets/notificationIcon.svg" alt="">
-                </button>
-                <span class="grid h-[38px] w-[38px] place-items-center rounded-full bg-[#b9cde5] text-[11px] font-semibold text-[#153860]">CA</span>
-            </div>
-        </header>
 
-        <div class="px-4 pt-4">
+      <div class="px-4 pt-4">
+        <div class="flex items-center justify-between gap-3">
+            <div>
             <span class="block text-[10px] font-semibold tracking-[0.05em] text-[#153860]">CATÁLOGO NC</span>
-            <h1 class="mt-1 text-[29px] font-semibold leading-tight text-[#0f172a]">Produtos e Preços</h1>
-            <p class="mt-1 text-[12px] text-[#64748b]">Consulta de valores, estoque, embalagens e disponibilidade.</p>
-        </div>
-
-        <div class="mt-14 px-4">
-            <div class="flex items-end justify-between">
-                <div>
-                    <h2 class="text-[16px] font-medium text-[#0f172a]">Todos os Produtos</h2>
-                    <p class="text-[10px] text-[#94a3b8]">{{ produtosMobile.length }} produtos</p>
-                </div>
-                <span class="text-[10px] text-[#94a3b8]">Preço Unitário</span>
+            <h1 class="mt-0.5 text-[26px] font-semibold leading-tight text-[#0f172a]">Produtos e Preços</h1>
+            <p class="mt-0.5 text-[12px] text-[#64748b]">Consulta de valores, estoque, embalagens e disponibilidade.</p>
             </div>
 
-            <label class="mt-3 flex h-[38px] items-center gap-2 rounded-full bg-white px-4 shadow-sm">
-                <span class="text-lg leading-none text-[#94a3b8]">⌕</span>
-                <input
-                    type="search"
-                    [(ngModel)]="termoBuscaMobile"
-                    class="min-w-0 flex-1 bg-transparent text-[12px] text-slate-700 outline-none placeholder:text-[#94a3b8]"
-                    placeholder="Buscar produto ou SKU">
-            </label>
-
-            <div class="mt-3 space-y-4">
-                @for (produto of produtosMobile; track produto.id) {
-                    <article class="flex min-h-[94px] items-center gap-3 rounded-[12px] border border-[#e2e8f0] bg-white px-3 py-3">
-                        <div class="flex h-[70px] w-[62px] shrink-0 flex-col items-center justify-center rounded-[10px] bg-[#f6f6f7]">
-                            <div class="h-7 w-8 rounded-t-md border border-[#aeb6c0] bg-[#eef0f2]"></div>
-                            <span class="text-[8px] text-[#64748b]">NC</span>
-                            <span class="text-[8px] text-[#475569]">{{ produto.embalagem }}</span>
-                        </div>
-
-                        <div class="min-w-0 flex-1">
-                            <h2 class="truncate text-[12px] font-medium text-[#0f172a]">{{ produto.nome }}</h2>
-                            <p class="mt-1 truncate text-[9px] text-[#64748b]">{{ produto.cor }} · {{ produto.embalagem }}</p>
-                        </div>
-
-                        <div class="shrink-0 text-right">
-                            <p class="text-[9px] text-[#94a3b8]">Preço Unitário</p>
-                            <p class="text-[21px] font-medium leading-tight text-[#153860]">{{ produto.preco | currency:'BRL' }}</p>
-                        </div>
-                    </article>
-                } @empty {
-                    <p class="py-8 text-center text-xs text-[#64748b]">Nenhum produto encontrado.</p>
-                }
-            </div>
+            <button
+            type="button"
+            routerLink="/produtos/novo"
+            aria-label="Cadastrar produto"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#153860] text-[18px] font-bold text-white transition-opacity hover:opacity-90">
+            +
+            </button>
         </div>
+        </div>
+
+      <div class="mt-4 px-4">
+        <div class="flex items-end justify-between">
+          <div>
+            <h2 class="text-[16px] font-medium text-[#0f172a]">Todos os Produtos</h2>
+            <p class="!text-[10px] text-[#94a3b8]">{{ produtosMobile.length }} produtos</p>
+          </div>
+          <span class="text-[10px] text-[#94a3b8]">Preço Unitário</span>
+        </div>
+
+        <label class="mt-3 flex h-[38px] items-center gap-2 rounded-full bg-white px-4 shadow-sm">
+          <span class="text-lg leading-none text-[#94a3b8]">⌕</span>
+          <input
+            type="search"
+            [(ngModel)]="termoBuscaMobile"
+            class="min-w-0 flex-1 bg-transparent text-[12px] text-slate-700 outline-none placeholder:text-[#94a3b8]"
+            placeholder="Buscar produto ou código">
+        </label>
+
+        <div class="mt-3 space-y-4">
+          @for (produto of produtosMobile; track produto.id) {
+            <article class="flex min-h-[94px] items-center gap-3 rounded-[12px] border border-[#e2e8f0] bg-white px-3 py-3">
+              <div class="flex h-[70px] w-[62px] shrink-0 flex-col items-center justify-center rounded-[10px] bg-[#f6f6f7]">
+                <div class="h-7 w-8 rounded-t-md border border-[#aeb6c0] bg-[#eef0f2]"></div>
+                <span class="text-[8px] text-[#64748b]">NC</span>
+                <span class="text-[8px] text-[#475569]">{{ produto.embalagem }}</span>
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <h2 class="truncate text-[12px] font-medium text-[#0f172a]">{{ produto.nome }}</h2>
+                <p class="mt-1 truncate text-[9px] text-[#64748b]">{{ produto.cor }} · {{ produto.embalagem }}</p>
+              </div>
+
+              <div class="shrink-0 text-right">
+                <p class="text-[10px] text-[#94a3b8]">Preço Unitário</p>
+                <p class="text-[13px] font-medium leading-tight text-[#153860]">{{ produto.preco | currency:'BRL' }}</p>
+              </div>
+            </article>
+          } @empty {
+            <p class="py-8 text-center text-xs text-[#64748b]">Nenhum produto encontrado.</p>
+          }
+        </div>
+      </div>
     </section>
   </main>
   <app-mobile-navigation></app-mobile-navigation>

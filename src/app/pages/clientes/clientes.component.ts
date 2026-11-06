@@ -8,6 +8,7 @@ import { ClientesTableComponent } from '../../components/clientes/clientes-table
 import { Cliente } from '../../models/cliente.model';
 import { SidebarService } from '../../services/sidebar';
 import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
+import { MobileHeaderComponent } from '../../components/mobile-header/mobile-header.component';
 
 @Component({
   selector: 'app-clientes-page',
@@ -19,7 +20,8 @@ import { MobileNavigationComponent } from '../../components/mobile-navigation/mo
     TopHeaderComponent,
     ClientesTableComponent,
     RouterModule,
-    MobileNavigationComponent
+    MobileNavigationComponent,
+    MobileHeaderComponent
   ],
   templateUrl: './clientes.component.html'
 })

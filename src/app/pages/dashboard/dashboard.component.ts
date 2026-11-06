@@ -6,16 +6,15 @@ import { PedidoService } from '../../services/pedido';
 import { Observable, map } from 'rxjs';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopHeaderComponent } from '../../components/top-header/top-header.component';
-import { ProximasEntregas } from '../../components/proximas-entregas/proximas-entregas.component';
-import { ControleEntregas } from '../../components/controle-entregas/controle-entregas.component';
 import { SidebarService } from '../../services/sidebar';
 import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
+import { MobileHeaderComponent } from '../../components/mobile-header/mobile-header.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-dashboard',
-    standalone:true,
-    imports: [CommonModule, RouterModule, SidebarComponent, MobileNavigationComponent, TopHeaderComponent, ProximasEntregas, ControleEntregas, DragDropModule],
+    standalone: true,
+    imports: [CommonModule, RouterModule, SidebarComponent, MobileHeaderComponent, MobileNavigationComponent, TopHeaderComponent, DragDropModule],
     templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
