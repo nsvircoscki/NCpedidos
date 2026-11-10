@@ -1,0 +1,38 @@
+<main class="grid min-h-screen grid-cols-[minmax(520px,608px)_minmax(0,1fr)] overflow-hidden bg-[#f6f9fc] max-[900px]:block max-[900px]:overflow-visible">
+  <section class="min-h-screen bg-[#f6f9fc] px-0 pb-12 pl-[90px] pt-[147px] max-[900px]:px-6 max-[900px]:py-16" aria-labelledby="login-title">
+    <img class="block h-[98px] w-[393px] object-contain max-[900px]:h-auto max-[900px]:max-w-full" src="assets/logoLogin.svg" alt="NC Tintas" />
+
+    <form class="mt-16 w-[424px] px-[18px] max-[900px]:w-full max-[900px]:max-w-[424px]" (ngSubmit)="enter()">
+      <h1 id="login-title" class="mb-[35px] text-2xl font-extrabold leading-none text-[#0f172a]">Entrar</h1>
+
+      <input
+        id="username"
+        name="username"
+        type="text"
+        autocomplete="username"
+        placeholder="Digite seu e-mail ou usuário"
+        [(ngModel)]="username"
+        required
+        class="block h-[65px] w-[387px] rounded-[20px] border-[0.5px] border-[#64748b] bg-[#f6f9fc] px-5 text-base text-[#0f172a] outline-none focus:border-[#153860] focus:ring-4 focus:ring-[#153860]/[0.12] max-[900px]:w-full"
+      />
+
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Digite a sua senha"
+        [(ngModel)]="password"
+        required
+        class="block h-[65px] mt-8 w-[387px] rounded-[20px] border-[0.5px] border-[#64748b] bg-[#f6f9fc] px-5 text-base text-[#0f172a] outline-none focus:border-[#153860] focus:ring-4 focus:ring-[#153860]/[0.12] max-[900px]:w-full"
+      />
+
+      <button class="mx-auto mt-[35px] block h-[65px] w-[360px] cursor-pointer rounded-[20px] border-[0.5px] border-[#64748b] bg-[#153860] text-xl font-semibold text-white hover:bg-[#1d4878] max-[900px]:w-full" type="submit">Entrar</button>
+      <button class="ml-[14px] mt-[15px] block cursor-pointer border-0 bg-transparent p-0 text-sm font-bold text-black" type="button">Esqueceu sua senha?</button>
+    </form>
+  </section>
+
+  <aside class="relative min-h-screen overflow-hidden bg-[#153860] max-[900px]:hidden" aria-label="Produtos NC Tintas">
+    <img class="absolute left-[-59.49%] top-0 h-[106.25%] w-[159.21%] max-w-none object-cover object-center" src="assets/login-spray.png" alt="Spray NC Tintas" />
+  </aside>
+</main>

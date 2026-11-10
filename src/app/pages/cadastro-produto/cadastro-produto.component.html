@@ -1,0 +1,323 @@
+<div class="min-h-screen overflow-x-hidden bg-[#f6f9fc]">
+  <app-sidebar></app-sidebar>
+
+  <main
+    class="min-h-screen min-w-0 bg-[#f6f9fc] pb-24 transition-[margin-left] duration-300 lg:ml-[265px] lg:pb-8"
+    [class.lg:ml-[88px]]="sidebarMinimizada"
+  >
+    <div class="px-4 lg:hidden">
+      <app-mobile-header></app-mobile-header>
+    </div>
+
+    <div class="hidden lg:block">
+      <app-top-header></app-top-header>
+    </div>
+
+    <div class="mx-auto w-full max-w-[1600px] px-5 py-6 sm:px-6 lg:px-8 lg:py-8">
+      @if (produtoNaoEncontrado) {
+        <section class="rounded-2xl bg-white p-8 text-center shadow-sm">
+          <h1 class="text-xl font-bold text-[#153860]">Produto não encontrado</h1>
+          <p class="mt-2 text-sm text-slate-500">
+            Confira o endereço ou volte para a lista de produtos.
+          </p>
+          <a
+            routerLink="/produtos"
+            class="mt-5 inline-flex rounded-lg bg-[#153860] px-4 py-2 text-sm font-semibold text-white"
+          >
+            Voltar para produtos
+          </a>
+        </section>
+      } @else {
+        <form (ngSubmit)="salvar()">
+          <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <a
+                routerLink="/produtos"
+                class="text-xs font-medium text-[#153860] hover:underline"
+              >
+                ← Produtos
+              </a>
+              <p class="mt-4 text-[9px] font-bold uppercase tracking-wide text-[#153860]">
+                Produtos e preços
+              </p>
+              <h1 class="mt-1 text-2xl font-bold text-[#101b2b] md:text-[32px]">
+                {{ modoEdicao ? 'Editar produto' : 'Cadastrar produto' }}
+              </h1>
+              <p class="mt-1 text-xs text-[#94a3b8]">
+                {{ modoEdicao ? 'Atualize as informações do produto.' : 'Adicione um novo item ao catálogo comercial.' }}
+              </p>
+            </div>
+
+            <div class="flex gap-2">
+              <a
+                routerLink="/produtos"
+                class="flex h-10 items-center rounded-lg border border-[#dbe3eb] bg-white px-4 text-xs font-semibold text-[#153860]"
+              >
+                Cancelar
+              </a>
+              <button
+                type="submit"
+                class="h-10 rounded-lg bg-[#153860] px-5 text-xs font-semibold text-white transition hover:bg-[#1d4a78]"
+              >
+                {{ modoEdicao ? 'Salvar alterações' : 'Salvar produto' }}
+              </button>
+            </div>
+          </div>
+
+          <nav class="mb-5 flex overflow-x-auto rounded-xl bg-white px-4 shadow-sm" aria-label="Seções do cadastro">
+            <button
+              type="button"
+              (click)="selecionarAba('informacoes')"
+              class="shrink-0 border-b-2 px-5 py-5 text-xs font-semibold"
+              [class.border-[#153860]]="abaAtual === 'informacoes'"
+              [class.text-[#153860]]="abaAtual === 'informacoes'"
+              [class.border-transparent]="abaAtual !== 'informacoes'"
+              [class.text-[#94a3b8]]="abaAtual !== 'informacoes'"
+            >
+              Informações
+            </button>
+            <button
+              type="button"
+              (click)="selecionarAba('variacoes')"
+              class="shrink-0 border-b-2 px-5 py-5 text-xs font-semibold"
+              [class.border-[#153860]]="abaAtual === 'variacoes'"
+              [class.text-[#153860]]="abaAtual === 'variacoes'"
+              [class.border-transparent]="abaAtual !== 'variacoes'"
+              [class.text-[#94a3b8]]="abaAtual !== 'variacoes'"
+            >
+              Cores e embalagens
+            </button>
+            <button
+              type="button"
+              (click)="selecionarAba('precos')"
+              class="shrink-0 border-b-2 px-5 py-5 text-xs font-semibold"
+              [class.border-[#153860]]="abaAtual === 'precos'"
+              [class.text-[#153860]]="abaAtual === 'precos'"
+              [class.border-transparent]="abaAtual !== 'precos'"
+              [class.text-[#94a3b8]]="abaAtual !== 'precos'"
+            >
+              Preços e estoque
+            </button>
+          </nav>
+
+          <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <section class="min-h-[520px] rounded-2xl bg-white p-6 shadow-sm md:p-8 xl:p-10">
+              @if (abaAtual === 'informacoes') {
+                <div>
+                  <h2 class="text-base font-semibold text-[#101b2b]">Informações do produto</h2>
+                  <p class="mt-1 text-xs text-[#94a3b8]">
+                    Dados principais para identificação no catálogo.
+                  </p>
+
+                  <div class="mt-8 grid gap-x-6 gap-y-6 md:grid-cols-2">
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Nome do produto <span class="text-red-500">*</span>
+                      <input
+                        name="nome"
+                        [(ngModel)]="produto.nome"
+                        required
+                        placeholder="Digite aqui"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      SKU base <span class="text-red-500">*</span>
+                      <input
+                        name="codigoSKU"
+                        [(ngModel)]="produto.codigoSKU"
+                        required
+                        placeholder="Digite aqui"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Categoria
+                      <input
+                        name="categoria"
+                        [(ngModel)]="produto.categoria"
+                        placeholder="Ex.: Paredes"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Descrição
+                      <textarea
+                        name="descricao"
+                        [(ngModel)]="produto.descricao"
+                        rows="3"
+                        placeholder="Descreva características e aplicação do produto"
+                        class="min-h-28 rounded-lg border border-[#e2e8f0] px-4 py-3 text-sm outline-none focus:border-[#153860]"
+                      ></textarea>
+                    </label>
+                  </div>
+                </div>
+              }
+
+              @if (abaAtual === 'variacoes') {
+                <div>
+                  <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h2 class="text-sm font-semibold text-[#101b2b]">Cores e embalagens</h2>
+                      <p class="mt-1 text-[9px] text-[#94a3b8]">
+                        Informe a cor e a embalagem deste produto.
+                      </p>
+                    </div>
+                    <span class="rounded-full bg-[#eef5fa] px-3 py-1.5 text-[9px] font-semibold text-[#153860]">
+                      1 variação
+                    </span>
+                  </div>
+
+                  <div class="mt-8 grid gap-6 md:grid-cols-2">
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Cor
+                      <input
+                        name="cor"
+                        [(ngModel)]="produto.cor"
+                        placeholder="Ex.: Branco Neve"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Embalagem
+                      <input
+                        name="embalagem"
+                        [(ngModel)]="produto.embalagem"
+                        placeholder="Ex.: 18 L"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+                  </div>
+                </div>
+              }
+
+              @if (abaAtual === 'precos') {
+                <div>
+                  <h2 class="text-sm font-semibold text-[#101b2b]">Preços e estoque</h2>
+                  <p class="mt-1 text-[9px] text-[#94a3b8]">
+                    Defina o preço-base e a quantidade disponível.
+                  </p>
+
+                  <div class="mt-8 grid gap-6 md:grid-cols-2">
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Preço base
+                      <input
+                        name="preco"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        [(ngModel)]="produto.preco"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Estoque disponível
+                      <input
+                        name="estoque"
+                        type="number"
+                        min="0"
+                        [(ngModel)]="produto.estoque"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+
+                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
+                      Margem (%)
+                      <input
+                        name="margem"
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        [(ngModel)]="produto.margem"
+                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                      />
+                    </label>
+                  </div>
+                </div>
+              }
+            </section>
+
+            <aside class="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+              <section class="rounded-2xl bg-white p-6 shadow-sm">
+                <h2 class="text-sm font-semibold text-[#101b2b]">Imagem do produto</h2>
+                <p class="mt-1 text-[10px] text-[#94a3b8]">JPG ou PNG, até 5 MB</p>
+
+                <label class="mt-4 grid min-h-[170px] cursor-pointer place-items-center rounded-lg border border-dashed border-[#cbd5e1] bg-[#fbfcfe] p-5 text-center hover:bg-[#f6f9fc]">
+                  <span>
+                    <span class="block text-xl text-[#153860]">↑</span>
+                    <span class="mt-1 block text-[9px] font-semibold text-[#153860]">
+                      {{ nomeImagemSelecionada || 'Enviar imagem' }}
+                    </span>
+                    <span class="mt-1 block text-[8px] text-[#94a3b8]">
+                      Arraste ou selecione um arquivo
+                    </span>
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg"
+                    class="sr-only"
+                    (change)="selecionarImagem($event)"
+                  />
+                </label>
+              </section>
+
+              <section class="rounded-2xl bg-white p-6 shadow-sm">
+                <h2 class="text-sm font-semibold text-[#101b2b]">Publicação</h2>
+                <p class="mt-1 text-[10px] text-[#94a3b8]">
+                  Controle a disponibilidade no catálogo.
+                </p>
+
+                <label class="mt-5 flex cursor-pointer items-center justify-between gap-3">
+                  <span>
+                    <span class="block text-[9px] font-semibold text-[#101b2b]">Produto ativo</span>
+                    <span class="mt-1 block text-[8px] text-[#94a3b8]">Visível para novos pedidos</span>
+                  </span>
+                  <input
+                    type="checkbox"
+                    [checked]="produto.status === 'ATIVO'"
+                    (change)="alternarStatus($event)"
+                    class="h-4 w-4 accent-[#16815f]"
+                  />
+                </label>
+
+                <div class="mt-4 flex items-center justify-between border-t border-[#e2e8f0] pt-3">
+                  <span class="text-[8px] uppercase text-[#94a3b8]">Status</span>
+                  <span
+                    class="rounded-full px-3 py-1 text-[8px] font-semibold"
+                    [class.bg-[#e8f6f0]]="produto.status === 'ATIVO'"
+                    [class.text-[#16815f]]="produto.status === 'ATIVO'"
+                    [class.bg-[#fff1f2]]="produto.status === 'INATIVO'"
+                    [class.text-[#be123c]]="produto.status === 'INATIVO'"
+                  >
+                    {{ produto.status === 'ATIVO' ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </div>
+              </section>
+            </aside>
+          </div>
+
+          <div class="mt-5 flex justify-end gap-2 lg:hidden">
+            <a
+              routerLink="/produtos"
+              class="flex h-10 items-center rounded-lg border border-[#dbe3eb] bg-white px-4 text-xs font-semibold text-[#153860]"
+            >
+              Cancelar
+            </a>
+            <button
+              type="submit"
+              class="h-10 rounded-lg bg-[#153860] px-5 text-xs font-semibold text-white"
+            >
+              {{ modoEdicao ? 'Salvar alterações' : 'Salvar produto' }}
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </main>
+
+  <app-mobile-navigation></app-mobile-navigation>
+</div>

@@ -12,4 +12,24 @@ export interface Produto {
     margem: number;
     status: StatusProduto;
     cor: string;
+    precosPorCliente?: Record<string, number>;
+    rendimento?: string;
+    acabamento?: string;
+    linha?: string;
+    atualizadoEm?: string;
+    estoqueReservado?: number;
+    giro30Dias?: number;
+    estoquePorDeposito?: {
+        nome: string;
+        localizacao: string;
+        quantidade: number;
+    }[];
+    variacoes?: {
+        nome: string;
+        codigoSKU: string;
+        embalagem: string;
+        estoque: number;
+        preco: number;
+        corHex: string;
+    }[];
 }

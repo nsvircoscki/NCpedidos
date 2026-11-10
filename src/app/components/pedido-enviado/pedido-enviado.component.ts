@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopHeaderComponent } from '../top-header/top-header.component';
+import { MobileNavigationComponent } from '../mobile-navigation/mobile-navigation.component';
 
 @Component({
   selector: 'app-pedido-enviado',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SidebarComponent, TopHeaderComponent, MobileNavigationComponent],
   templateUrl: './pedido-enviado.component.html',
 })
 export class PedidoEnviadoComponent {

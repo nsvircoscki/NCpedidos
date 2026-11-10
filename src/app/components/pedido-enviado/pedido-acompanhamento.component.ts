@@ -1,20 +1,22 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MobileHeaderComponent } from '../mobile-header/mobile-header.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopHeaderComponent } from '../top-header/top-header.component';
+import { MobileNavigationComponent } from '../mobile-navigation/mobile-navigation.component';
 
 
 @Component({
     selector: 'app-pedido-acompanhamento',
     standalone: true,
-    imports: [CommonModule, MobileHeaderComponent],
+    imports: [CommonModule, MobileHeaderComponent, SidebarComponent, TopHeaderComponent, MobileNavigationComponent],
     templateUrl: './pedido-acompanhamento.component.html',
 })
 export class PedidoAcompanhamentoComponent {
-  abaAtiva: 'resumo' | 'acompanhamento' = 'acompanhamento';
+  private readonly router = inject(Router);
 
-  @Output() voltar = new EventEmitter<void>();
-
-  selecionarAba(aba: 'resumo' | 'acompanhamento'): void {
-    this.abaAtiva = aba;
+  voltarParaPedidos(): void {
+    void this.router.navigateByUrl('/pedidos');
   }
 }

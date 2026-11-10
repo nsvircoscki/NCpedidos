@@ -2,13 +2,14 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Produto } from '../../models/produto.model';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 type TipoDropdown = 'categoria' | 'status' | 'cor';
 
 @Component({
   selector: 'app-produtos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './produtos-table.component.html',
 })
 

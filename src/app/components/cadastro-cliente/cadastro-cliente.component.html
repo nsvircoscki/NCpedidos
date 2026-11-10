@@ -11,77 +11,118 @@
     </header>
 
     <div class="mb-[18px] grid grid-cols-2 gap-0 rounded-[10px] border border-[#e2e8f0] bg-white p-1 lg:grid-cols-2 lg:gap-5 lg:border-0 lg:bg-transparent lg:p-0">
+  
+      <!-- Botão PJ -->
       <button
         type="button"
-        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left"
-        [class.border-[#2c5d8f]]="tipoCadastro === 'PJ'"
+        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left transition-colors duration-300"
+        [class.border-[#183869]]="tipoCadastro === 'PJ'"
         [class.border-[#b5b5b5]]="tipoCadastro !== 'PJ'"
+        [class.bg-[#183869]]="tipoCadastro === 'PJ'" 
+        [class.bg-transparent]="tipoCadastro !== 'PJ'"
         (click)="selecionarTipo('PJ')">
         <span
-          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold text-white lg:flex"
-          [class.bg-[#183869]]="tipoCadastro === 'PJ'"
-          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PJ'">PJ</span>
+          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold lg:flex transition-colors duration-300"
+          [class.bg-white]="tipoCadastro === 'PJ'"
+          [class.text-[#183869]]="tipoCadastro === 'PJ'"
+          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PJ'"
+          [class.text-white]="tipoCadastro !== 'PJ'">PJ</span>
         <span class="ml-0 lg:ml-4">
-          <strong class="block text-[10px] font-semibold lg:text-xl">Pessoa jurídica</strong>
-          <small class="hidden text-sm font-semibold text-[#a0adc0] lg:block">Empresa com CNPJ</small>
+          <strong 
+            class="block text-[10px] font-semibold lg:text-xl transition-colors duration-300" 
+            [class.text-white]="tipoCadastro === 'PJ'"
+            [class.text-black]="tipoCadastro !== 'PJ'">
+            Pessoa jurídica
+          </strong>
+          <small 
+            class="hidden text-sm font-semibold lg:block transition-colors duration-300"
+            [class.text-white]="tipoCadastro === 'PJ'"
+            [class.text-[#a0adc0]]="tipoCadastro !== 'PJ'">
+            Empresa com CNPJ
+          </small>
         </span>
       </button>
 
+      <!-- Botão PF -->
       <button
         type="button"
-        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left"
-        [class.border-[#2c5d8f]]="tipoCadastro === 'PF'"
+        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left transition-colors duration-300"
+        [class.border-[#183869]]="tipoCadastro === 'PF'"
         [class.border-[#b5b5b5]]="tipoCadastro !== 'PF'"
+        [class.bg-[#183869]]="tipoCadastro === 'PF'"
+        [class.bg-transparent]="tipoCadastro !== 'PF'"
         (click)="selecionarTipo('PF')">
         <span
-          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold text-white lg:flex"
-          [class.bg-[#183869]]="tipoCadastro === 'PF'"
-          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PF'">PF</span>
+          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold lg:flex transition-colors duration-300"
+          [class.bg-white]="tipoCadastro === 'PF'"
+          [class.text-[#183869]]="tipoCadastro === 'PF'"
+          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PF'"
+          [class.text-white]="tipoCadastro !== 'PF'">PF</span>
         <span class="ml-0 lg:ml-4">
-          <strong class="block text-[10px] font-semibold text-black lg:text-xl">Pessoa física</strong>
-          <small class="hidden text-sm font-semibold text-[#a0adc0] lg:block">Profissional com CPF</small>
+          <strong 
+            class="block text-[10px] font-semibold lg:text-xl transition-colors duration-300" 
+            [class.text-white]="tipoCadastro === 'PF'"
+            [class.text-black]="tipoCadastro !== 'PF'">
+            Pessoa física
+          </strong>
+          <small 
+            class="hidden text-sm font-semibold lg:block transition-colors duration-300"
+            [class.text-white]="tipoCadastro === 'PF'"
+            [class.text-[#a0adc0]]="tipoCadastro !== 'PF'">
+            Profissional com CPF
+          </small>
         </span>
       </button>
+
     </div>
 
     @if (tipoCadastro === 'PF') {
     <div class="mb-[22px]">
       <label class="mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="cpf">CPF *</label>
-      <input id="cpf" placeholder="000.000.000-00" (input)="onInput1($event)"
+      <input id="cpf" placeholder="000.000.000-00" [value]="cliente['cpf'] || ''" (input)="emitirValor('cpf', $event)"
         class="h-12 w-full max-w-[761px] rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
     </div>
 
     <div class="mb-[38px]">
       <label class="mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="nomeCompleto">Nome completo</label>
-      <input id="nomeCompleto" placeholder="Nome completo do cliente" (input)="onInput2($event)"
+      <input id="nomeCompleto" placeholder="Nome completo do cliente" [value]="cliente['nomeCompleto'] || ''" (input)="emitirValor('nomeCompleto', $event)"
         class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-7 lg:text-base" />
     </div>
     } @else {
     <div class="mb-[22px]">
       <label class="mb-1 block text-base font-semibold text-[#414750]" for="cnpj">CNPJ</label>
       <div class="flex flex-col gap-3 lg:flex-row">
-        <input id="cnpj" placeholder="Digite o CNPJ" (input)="onPjInput1($event)"
+        <input id="cnpj" placeholder="Digite o CNPJ" [value]="cliente['cnpj'] || ''" (input)="emitirValor('cnpj', $event)"
           class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
         <button type="button"
-          class="h-12 shrink-0 rounded-[10px] border border-[#e2e8f0] bg-[#f5f9ff] px-4 text-[11px] font-bold text-black lg:h-[68px] lg:rounded-[41px] lg:px-10 lg:text-base">
-          Consultar CNPJ
+          (click)="consultarCNPJ()"
+          [disabled]="carregandoCNPJ"
+          class="h-12 shrink-0 rounded-[10px] border border-[#e2e8f0] bg-[#f5f9ff] px-4 text-[11px] font-bold text-black transition-opacity hover:bg-[#e8f1fc] disabled:cursor-not-allowed disabled:opacity-60 lg:h-[68px] lg:rounded-[41px] lg:px-10 lg:text-base">
+          @if (carregandoCNPJ) {
+            Consultando...
+          } @else {
+            Consultar CNPJ
+          }
         </button>
       </div>
+      @if (mensagemErroCNPJ) {
+        <p class="mt-2 text-xs font-semibold text-red-500">{{ mensagemErroCNPJ }}</p>
+      }
     </div>
     <div class="mb-[14px]">
       <label class="mb-1 block text-base font-semibold text-[#414750]" for="razaoSocial">Razão social</label>
-      <input id="razaoSocial" placeholder="Nome empresarial" (input)="onPjInput2($event)"
+      <input id="razaoSocial" placeholder="Nome empresarial" [value]="cliente['razaoSocial'] || ''" (input)="emitirValor('razaoSocial', $event)"
         class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
     </div>
     <div class="mb-[38px] grid gap-5 lg:grid-cols-2">
       <div>
         <label class="mb-1 block text-base font-semibold text-[#414750]" for="nomeFantasia">Nome fantasia</label>
-        <input id="nomeFantasia" placeholder="Como a empresa é conhecida" (input)="onPjInput3($event)"
+        <input id="nomeFantasia" placeholder="Como a empresa é conhecida" [value]="cliente['nomeFantasia'] || ''" (input)="emitirValor('nomeFantasia', $event)"
           class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
       </div>
       <div>
         <label class="mb-1 block text-base font-semibold text-[#414750]" for="segmento">Segmento</label>
-        <select id="segmento" (change)="onPjInput4($event)"
+        <select id="segmento" (change)="emitirValor('segmento', $event)"
           class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base">
           <option value="">Selecione</option>
         </select>
@@ -101,17 +142,17 @@
       <div class="grid grid-cols-2 gap-4 lg:gap-5">
         <div>
           <label class="mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="nomeResponsavel">Nome do contato *</label>
-          <input id="nomeResponsavel" placeholder="Nome completo" (input)="onInput4($event)"
+          <input id="nomeResponsavel" placeholder="Nome completo" [value]="cliente['nomeResponsavel'] || ''" (input)="emitirValor('nomeResponsavel', $event)"
             class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
         </div>
         <div>
           <label class="mb-1 block text-base font-semibold text-[#414750]" for="telefone">Telefone ou Whatsapp</label>
-          <input id="telefone" placeholder="(00) 00000-0000" (input)="onInput5($event)"
+          <input id="telefone" placeholder="(00) 00000-0000" [value]="cliente['telefone'] || ''" (input)="emitirValor('telefone', $event)"
             class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
         </div>
       </div>
       <label class="mb-1 mt-[18px] block text-base font-semibold text-[#414750]" for="email">E-mail</label>
-      <input id="email" placeholder="contato@empresa,com.br" (input)="onInput6($event)"
+      <input id="email" placeholder="contato@empresa,com.br" [value]="cliente['email'] || ''" (input)="emitirValor('email', $event)"
           class="h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
     </section>
 
@@ -127,36 +168,159 @@
       <div class="grid gap-5 lg:grid-cols-[1fr_2fr_1fr]">
         <div>
           <label class="mb-1 block text-base font-semibold text-[#414750]" for="cep">CEP</label>
-          <input id="cep" placeholder="00000-000" (input)="onInput7($event)"
-            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]" />
+          <input id="cep" placeholder="00000-000" [value]="cliente['cep'] || ''" (input)="emitirValor('cep', $event)" (blur)="consultarCEP()"
+            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869]" />
+             @if (mensagemErroCEP) {
+                <p class="mt-2 text-xs font-semibold text-red-500">{{ mensagemErroCEP }}</p>
+              }
         </div>
         <div>
           <label class="mb-1 block text-base font-semibold text-[#414750]" for="endereco">Endereço</label>
-          <input id="endereco" placeholder="Rua, avenida e número" (input)="onInput8($event)"
-            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]" />
+          <input id="endereco" placeholder="Rua, avenida e número" [value]="cliente['endereco'] || ''" (input)="emitirValor('endereco', $event)"
+            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869]" />
         </div>
         <div>
           <label class="mb-1 block text-base font-semibold text-[#414750]" for="bairro">Bairro</label>
-          <input id="bairro" placeholder="Digite o bairro" (input)="onInput9($event)"
-            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]" />
+          <input id="bairro" placeholder="Digite o bairro" [value]="cliente['bairro'] || ''" (input)="emitirValor('bairro', $event)"
+            class="h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869]" />
         </div>
       </div>
+
       <div class="mt-[9px] grid gap-5 lg:grid-cols-2">
+  
+  <!-- Coluna Cidade -->
         <div>
-          <label class="mb-1 block text-base font-semibold text-[#414750]" for="cidade">Cidade</label>
-          <select id="cidade" (change)="onInput10($event)"
-            class="h-[68px] w-full appearance-none rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]">
-            <option value="">Cidade</option>
-          </select>
+          <label class="mb-1 block text-base font-semibold text-[#414750]">Cidade</label>
+          <div class="relative">
+      
+          <!-- Botão Gatilho - Cidade -->
+          <button 
+            type="button"
+            (click)="dropdownCidadeAberto = !dropdownCidadeAberto"
+            class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869]">
+            <span [class.text-[#94a3b8]]="!cliente['cidade']">
+              {{ cliente['cidade'] || 'Buscar e selecionar cidade' }}
+            </span>
+
+            <svg
+              class="h-5 w-5 text-[#64748b] transition-transform duration-200"
+              [class.rotate-180]="dropdownCidadeAberto"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+
+          <!-- Menu com animação Dropdown e Campo de Busca -->
+          @if (dropdownCidadeAberto) {
+          <div class="absolute left-0 bottom-[calc(100%+8px)] z-50 flex max-h-80 w-[320px] flex-col overflow-hidden rounded-[20px] border border-[#e2e8f0] bg-white shadow-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2">
+            
+            <!-- CAMPO DE PESQUISA -->
+            <div class="border-b border-[#e2e8f0] p-3">
+              <input 
+                type="text" 
+                placeholder="Digite o nome da cidade..." 
+                (input)="filtrarCidades($event)"
+                class="h-10 w-full rounded-[12px] bg-[#f8fafc] px-4 text-sm text-[#0f172a] outline-none transition-colors focus:bg-[#f1f5f9]">
+            </div>
+
+            <!-- LISTA DE CIDADES -->
+            <div class="flex-1 overflow-y-auto p-2">
+              @if (carregandoCidades) {
+                <div class="flex items-center justify-center py-4 text-sm text-[#64748b]">
+                  <svg class="mr-2 h-5 w-5 animate-spin text-[#183869]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Carregando dados...
+                </div>
+              } @else if (cidadesFiltradas.length === 0) {
+                <div class="px-4 py-4 text-center text-sm text-[#64748b]">
+                  Nenhuma cidade encontrada
+                </div>
+              } @else {
+                @for (cidade of cidadesFiltradas; track cidade.nome) {
+                  <button 
+                    type="button"
+                    (click)="selecionarCidade(cidade)"
+                    class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9]"
+                    [class.bg-[#f1f5f9]]="cliente['cidade'] === cidade.nome"
+                    [class.font-bold]="cliente['cidade'] === cidade.nome">
+                    <span>{{ cidade.nome }} <small class="font-normal text-[#94a3b8]">- {{ cidade.uf }}</small></span>
+                    
+                    @if (cliente['cidade'] === cidade.nome) {
+                      <span class="text-[#183869]">✓</span>
+                    }
+                  </button>
+                }
+              }
+            </div>
+          </div>
+        }
         </div>
-        <div>
-          <label class="mb-1 block text-base font-semibold text-[#414750]" for="uf">UF</label>
-          <select id="uf" (change)="onInput11($event)"
-            class="h-[68px] w-full appearance-none rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#94a3b8] outline-none focus:border-[#183869]">
-            <option value="">Selecione</option>
-          </select>
         </div>
-      </div>
+
+  <!-- Coluna UF -->
+  <div>
+    <label class="mb-1 block text-base font-semibold text-[#414750]">UF</label>
+    <div class="relative">
+      
+      <!-- Botão Gatilho - UF -->
+      <button 
+        type="button"
+        (click)="dropdownUfAberto = !dropdownUfAberto"
+        class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869]">
+        <span [class.text-[#94a3b8]]="!cliente['uf']">
+          {{ cliente['uf'] || 'Selecione a UF' }}
+        </span>
+        
+        <svg 
+          class="h-5 w-5 text-[#64748b] transition-transform duration-200"
+          [class.rotate-180]="dropdownUfAberto"
+          fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      @if (dropdownUfAberto) {
+        <div class="absolute left-0 bottom-[calc(100%+8px)] z-50 flex max-h-80 w-[200px] flex-col overflow-hidden rounded-[20px] border border-[#e2e8f0] bg-white shadow-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2">
+          
+          <!-- CAMPO DE PESQUISA -->
+          <div class="border-b border-[#e2e8f0] p-3">
+            <input 
+              type="text" 
+              placeholder="Buscar UF..." 
+              (input)="filtrarUfs($event)"
+              class="h-10 w-full rounded-[12px] bg-[#f8fafc] px-4 text-sm text-[#0f172a] outline-none transition-colors focus:bg-[#f1f5f9]">
+          </div>
+
+          <!-- LISTA DE UFS -->
+          <div class="flex-1 overflow-y-auto p-2">
+            @if (ufsFiltradas.length === 0) {
+              <div class="px-4 py-4 text-center text-sm text-[#64748b]">
+                UF não encontrada
+              </div>
+            } @else {
+              @for (uf of ufsFiltradas; track uf) {
+                <button 
+                  type="button"
+                  (click)="selecionarOpcao('uf', uf)"
+                  class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9]"
+                  [class.bg-[#f1f5f9]]="cliente['uf'] === uf"
+                  [class.font-bold]="cliente['uf'] === uf">
+                  {{ uf }}
+                  @if (cliente['uf'] === uf) {
+                    <span class="text-[#183869]">✓</span>
+                  }
+                </button>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+</div>
     </section>
 
     <section class="mb-8 lg:hidden">
@@ -171,25 +335,25 @@
       <div class="grid gap-4">
         <div>
           <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="cepMobile">CEP</label>
-          <input id="cepMobile" placeholder="00000-000" (input)="onInput7($event)"
+          <input id="cepMobile" placeholder="00000-000" [value]="cliente['cep'] || ''" (input)="emitirValor('cep', $event)" (blur)="consultarCEP()"
             class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
         </div>
 
         <div>
           <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="enderecoMobile">Logradouro</label>
-          <input id="enderecoMobile" placeholder="Rua, avenida e número" (input)="onInput8($event)"
+          <input id="enderecoMobile" placeholder="Rua, avenida e número" [value]="cliente['endereco'] || ''" (input)="emitirValor('endereco', $event)"
             class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="bairroMobile">Bairro</label>
-            <input id="bairroMobile" placeholder="Bairro" (input)="onInput9($event)"
+            <input id="bairroMobile" placeholder="Bairro" [value]="cliente['bairro'] || ''" (input)="emitirValor('bairro', $event)"
               class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
           </div>
           <div>
             <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="numeroMobile">Número</label>
-            <input id="numeroMobile" placeholder="Nº"
+            <input id="numeroMobile" placeholder="Nº" [value]="cliente['numero'] || ''" (input)="emitirValor('numero', $event)"
               class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
           </div>
         </div>
@@ -197,12 +361,12 @@
         <div class="grid grid-cols-[1fr_88px] gap-3">
           <div>
             <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="cidadeMobile">Cidade</label>
-            <input id="cidadeMobile" placeholder="Cidade" (input)="onInput10($event)"
+            <input id="cidadeMobile" placeholder="Cidade" [value]="cliente['cidade'] || ''" (input)="emitirValor('cidade', $event)"
               class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
           </div>
           <div>
             <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="ufMobile">UF</label>
-            <input id="ufMobile" maxlength="2" placeholder="UF" (input)="onInput11($event)"
+            <input id="ufMobile" maxlength="2" placeholder="UF" [value]="cliente['uf'] || ''" (input)="emitirValor('uf', $event)"
               class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#183869]" />
           </div>
         </div>
@@ -234,6 +398,6 @@
     type="button"
     (click)="irParaProximaEtapa()"
     class="h-12 flex-[2] rounded-[10px] bg-[#153860] text-[10px] font-semibold text-white">
-    Cadastrar cliente ›
+    Avançar ›
   </button>
 </footer>

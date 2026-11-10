@@ -24,9 +24,9 @@ export class TabelaPrecosPageComponent {
   clienteNome = this.obterNomeCliente(this.clienteId);
   itens: ItemTabelaPreco[] = [];
   termoBusca = '';
-  categoriaSelecionada = '';
-  statusSelecionado = '';
-  corSelecionada = '';
+  categoriasSelecionadas: string[] = [];
+  statusSelecionados: string[] = [];
+  coresSelecionadas: string[] = [];
   paginaAtual = 1;
   itensPorPagina = 10;
   itensSelecionados = new Set<number>();
@@ -59,9 +59,9 @@ export class TabelaPrecosPageComponent {
 
     return this.itens.filter(item =>
       (!termo || item.produto.toLowerCase().includes(termo) || item.codigoSKU.toLowerCase().includes(termo)) &&
-      (!this.categoriaSelecionada || item.categoria === this.categoriaSelecionada) &&
-      (!this.statusSelecionado || item.status === this.statusSelecionado) &&
-      (!this.corSelecionada || item.cor === this.corSelecionada)
+      (!this.categoriasSelecionadas.length || this.categoriasSelecionadas.includes(item.categoria)) &&
+      (!this.statusSelecionados.length || this.statusSelecionados.includes(item.status)) &&
+      (!this.coresSelecionadas.length || this.coresSelecionadas.includes(item.cor))
     );
   }
 
@@ -75,22 +75,44 @@ export class TabelaPrecosPageComponent {
   }
 
   get possuiFiltrosAtivos(): boolean {
-    return Boolean(this.termoBusca.trim() || this.categoriaSelecionada || this.statusSelecionado || this.corSelecionada);
+    return Boolean(
+      this.termoBusca.trim() ||
+      this.categoriasSelecionadas.length ||
+      this.statusSelecionados.length ||
+      this.coresSelecionadas.length
+    );
   }
 
   limparFiltros(): void {
     this.termoBusca = '';
-    this.categoriaSelecionada = '';
-    this.statusSelecionado = '';
-    this.corSelecionada = '';
+    this.categoriasSelecionadas = [];
+    this.statusSelecionados = [];
+    this.coresSelecionadas = [];
     this.paginaAtual = 1;
   }
 
-  selecionarFiltro(tipo: 'categoria' | 'status' | 'cor', valor: string): void {
-    if (tipo === 'categoria') this.categoriaSelecionada = valor;
-    if (tipo === 'status') this.statusSelecionado = valor;
-    if (tipo === 'cor') this.corSelecionada = valor;
+  alternarFiltro(tipo: 'categoria' | 'status' | 'cor', valor: string): void {
+    const selecionados = tipo === 'categoria'
+      ? this.categoriasSelecionadas
+      : tipo === 'status'
+        ? this.statusSelecionados
+        : this.coresSelecionadas;
+    const indice = selecionados.indexOf(valor);
+
+    if (indice === -1) selecionados.push(valor);
+    else selecionados.splice(indice, 1);
+
     this.paginaAtual = 1;
+  }
+
+  filtroEstaSelecionado(tipo: 'categoria' | 'status' | 'cor', valor: string): boolean {
+    const selecionados = tipo === 'categoria'
+      ? this.categoriasSelecionadas
+      : tipo === 'status'
+        ? this.statusSelecionados
+        : this.coresSelecionadas;
+
+    return selecionados.includes(valor);
   }
 
   alternarSelecao(item: ItemTabelaPreco): void {

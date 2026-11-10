@@ -205,14 +205,15 @@
         @for (cliente of clientesDaPagina; track cliente.id) {
           <tr
             class="cursor-pointer transition hover:bg-slate-50"
-            (click)="abrirCliente(cliente)">
+            [class.bg-[#edf3f7]]="clienteEstaSelecionado(cliente)"
+            (click)="selecionarCliente(cliente)">
             <!-- Checkbox -->
             <td class="px-4 py-4">
               <input
                 type="checkbox"
                 [checked]="clienteEstaSelecionado(cliente)"
                 (click)="$event.stopPropagation()"
-                (change)="alternarSelecao(cliente)"
+                (change)="selecionarCliente(cliente)"
                 class="h-4 w-4 cursor-pointer accent-[#2D486F]"
                 [attr.aria-label]="'Selecionar ' + cliente.nome"
               />
@@ -280,14 +281,22 @@
 
             <!-- Ações -->
             <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
-              <div class="flex items-center gap-2">
+              <div class="relative flex items-center gap-2">
                 <button
                   type="button"
                   class="rounded-lg px-2 py-2 text-sm font-bold text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-                  (click)="$event.stopPropagation()"
+                  (click)="$event.stopPropagation(); alternarMenuAcoes(cliente)"
                   [attr.aria-label]="'Mais ações para ' + cliente.nome">
                   ⋯
                 </button>
+
+                @if (menuAcoesAberto === cliente.id) {
+                  <div class="absolute right-0 top-10 z-30 w-44 rounded-xl bg-white p-1.5 text-left shadow-xl ring-1 ring-slate-200">
+                    <button type="button" (click)="$event.stopPropagation(); editarCliente(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Editar cliente</button>
+                    <button type="button" (click)="$event.stopPropagation(); verTabelaDePrecos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Tabela de preços</button>
+                    <button type="button" (click)="$event.stopPropagation(); verPedidos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Pedidos</button>
+                  </div>
+                }
               </div>
             </td>
           </tr>

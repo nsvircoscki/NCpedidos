@@ -1,0 +1,268 @@
+<div class="min-h-screen overflow-x-hidden bg-[#f8f8ff]">
+  <app-sidebar></app-sidebar>
+
+  <main
+    class="min-w-0 pb-24 transition-[margin-left] duration-300 lg:ml-[265px] lg:flex lg:min-h-screen lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
+    [class.lg:ml-[88px]]="sidebarMinimizada">
+
+    <div class="px-4 lg:hidden">
+      <app-mobile-header></app-mobile-header>
+    </div>
+
+    <div class="hidden lg:block">
+      <app-top-header></app-top-header>
+    </div>
+
+    @if (produto) {
+      <section class="px-4 pt-5 lg:px-0 lg:pt-0">
+        <a routerLink="/produtos" class="inline-flex items-center gap-2 text-sm font-medium text-[#64748b] hover:text-[#153860]">
+          <span aria-hidden="true" class="text-lg">←</span>
+          <span class="lg:hidden">Produtos</span>
+          <span class="hidden lg:inline">Voltar para produtos</span>
+        </a>
+
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3 lg:mt-2">
+          <div>
+            <p class="hidden text-[11px] font-bold uppercase tracking-wide text-[#8997a7] lg:block">PRODUTOS</p>
+            <h1 class="mt-1 text-[22px] font-bold leading-tight text-[#101b2b] lg:text-[30px]">
+              {{ produto.nome }}
+            </h1>
+            <p class="mt-1 hidden text-[13px] text-[#94a3b8] lg:block">Detalhes, variações, estoque e histórico comercial do produto.</p>
+          </div>
+          <a
+            [routerLink]="['/produtos', produto.id, 'editar']"
+            class="hidden rounded-lg bg-[#153860] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#1d4a78] lg:inline-flex">
+            Editar produto
+          </a>
+        </div>
+      </section>
+
+      <!-- Detalhe para celular -->
+      <section class="mx-4 mt-5 overflow-hidden rounded-2xl bg-white shadow-sm lg:hidden">
+        <div class="relative grid min-h-[260px] place-items-center bg-[#f0f4f8] p-6">
+          <span class="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-[#153860]">{{ produto.categoria }}</span>
+          <div class="relative flex h-[190px] w-[138px] flex-col items-center drop-shadow-md" role="img" [attr.aria-label]="'Ilustração da embalagem de ' + produto.nome">
+            <div class="z-10 h-4 w-[118px] rounded-t-md border border-[#c8d1dc] bg-gradient-to-b from-white to-[#dce3eb]"></div>
+            <div class="relative -mt-px flex h-[142px] w-[128px] flex-col items-center overflow-hidden rounded-b-[20px] border-x border-b border-[#d2d9e1] bg-gradient-to-r from-[#e7ebef] via-white to-[#d9e0e7]">
+              <div class="mt-5 w-full bg-[#153860] px-2 py-3 text-center text-[9px] font-extrabold tracking-wide text-white">NC TINTAS</div>
+              <span class="mt-2 text-[9px] font-bold text-[#334155]">{{ produto.nome }}</span>
+              <span class="mt-1 text-[8px] text-[#64748b]">{{ produto.embalagem }}</span>
+              <div class="absolute bottom-0 h-5 w-full opacity-80" [style.backgroundColor]="produto.cor.toLowerCase().includes('branco') ? '#dfe3e6' : '#cad5df'"></div>
+            </div>
+            <div class="h-5 w-[78px] rounded-b-lg border-x border-b border-[#c8d1dc] bg-gradient-to-r from-[#d9e0e7] via-white to-[#d9e0e7]"></div>
+          </div>
+        </div>
+
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="text-xs text-[#8997a7]">{{ produto.categoria }} · {{ produto.codigoSKU }}</p>
+              <h2 class="mt-1 text-lg font-bold text-[#101b2b]">{{ produto.nome }}</h2>
+            </div>
+            <span class="shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold"
+              [ngClass]="produto.status === 'ATIVO' ? 'bg-[#e8f6ef] text-[#16815f]' : 'bg-[#fff0f0] text-[#d34242]'">
+              {{ produto.status === 'ATIVO' ? 'Ativo' : 'Inativo' }}
+            </span>
+          </div>
+          <p class="mt-3 text-sm leading-6 text-[#64748b]">{{ produto.descricao }}</p>
+
+          <div class="mt-5 grid grid-cols-2 gap-3">
+            <div class="rounded-xl bg-[#f6f8fb] p-3">
+              <p class="text-[11px] text-[#8997a7]">Cor</p>
+              <p class="mt-1 text-sm font-semibold text-[#153860]">{{ produto.cor }}</p>
+            </div>
+            <div class="rounded-xl bg-[#f6f8fb] p-3">
+              <p class="text-[11px] text-[#8997a7]">Embalagem</p>
+              <p class="mt-1 text-sm font-semibold text-[#153860]">{{ produto.embalagem }}</p>
+            </div>
+          </div>
+
+          <div class="mt-4 flex items-center justify-between rounded-xl border border-[#e7edf3] p-4">
+            <div>
+              <p class="text-xs text-[#8997a7]">Estoque disponível</p>
+              <p class="mt-1 text-lg font-bold text-[#153860]">{{ produto.estoque }} unidades</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-[#8997a7]">Preço base</p>
+              <p class="mt-1 text-lg font-bold text-[#153860]">{{ produto.preco | currency:'BRL' }}</p>
+            </div>
+          </div>
+
+          <a [routerLink]="['/produtos', produto.id, 'editar']" class="mt-4 flex h-11 items-center justify-center rounded-lg bg-[#153860] text-sm font-semibold text-white">
+            Editar produto
+          </a>
+        </div>
+      </section>
+
+      <!-- Detalhe para desktop -->
+      <div class="hidden space-y-5 lg:block">
+        <section class="grid gap-5 rounded-2xl bg-white p-6 shadow-sm xl:grid-cols-[minmax(300px,0.8fr)_1.2fr]">
+          <div class="grid min-h-[310px] place-items-center rounded-xl bg-[#eff3f6] p-6">
+            <div class="relative flex h-[220px] w-[160px] flex-col items-center" role="img" [attr.aria-label]="'Embalagem de ' + produto.nome">
+              <img src="assets/product-can-lid.svg" alt="" aria-hidden="true" class="z-10" />
+              <div class="relative -mt-1 flex h-[190px] w-[144px] flex-col items-center overflow-hidden rounded-b-[10px] border-x border-b border-[#d7dce1] bg-[#f7f4ea]">
+                <div class="mt-[45px] flex h-[70px] w-full flex-col items-center justify-center bg-[#244f7b] text-white">
+                  <span class="text-[27px] font-bold leading-7">NC</span>
+                  <span class="text-[8px] font-bold">TINTA ACRÍLICA</span>
+                </div>
+                <span class="mt-2 px-2 text-center text-[9px] font-semibold text-[#334155]">{{ produto.nome }}</span>
+              </div>
+              <span class="absolute bottom-0 left-[-38px] rounded-xl bg-[#102d4e] px-4 py-1.5 text-[9px] font-semibold text-white">1 de 4</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-center py-2">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="rounded-full px-3 py-1 text-xs font-semibold"
+                [ngClass]="produto.status === 'ATIVO' ? 'bg-[#e8f6ef] text-[#16815f]' : 'bg-[#fff0f0] text-[#d34242]'">
+                {{ produto.status === 'ATIVO' ? 'Ativo' : 'Inativo' }}
+              </span>
+              <span class="text-sm text-[#8997a7]">SKU: {{ produto.codigoSKU }}</span>
+            </div>
+            <h2 class="mt-4 text-2xl font-bold text-[#101b2b]">{{ produto.nome }}</h2>
+            <p class="mt-3 max-w-3xl text-sm leading-6 text-[#64748b]">{{ produto.descricao }}</p>
+
+            <div class="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+              <div class="border-b border-[#edf1f5] pb-3">
+                <p class="text-xs text-[#8997a7]">Categoria</p>
+                <p class="mt-1 text-sm font-semibold text-[#153860]">{{ produto.categoria }}</p>
+              </div>
+              <div class="border-b border-[#edf1f5] pb-3">
+                <p class="text-xs text-[#8997a7]">Rendimento</p>
+                <p class="mt-1 text-sm font-semibold text-[#153860]">{{ produto.rendimento ?? '—' }}</p>
+              </div>
+              <div class="border-b border-[#edf1f5] pb-3">
+                <p class="text-xs text-[#8997a7]">Atualização</p>
+                <p class="mt-1 text-sm font-semibold text-[#153860]">{{ produto.atualizadoEm ?? '—' }}</p>
+              </div>
+              <div class="border-b border-[#edf1f5] pb-3">
+                <p class="text-xs text-[#8997a7]">Acabamento</p>
+                <p class="mt-1 text-sm font-semibold text-[#153860]">{{ produto.acabamento ?? '—' }}</p>
+              </div>
+              <div class="border-b border-[#edf1f5] pb-3">
+                <p class="text-xs text-[#8997a7]">Linha</p>
+                <p class="mt-1 text-sm font-semibold text-[#153860]">{{ produto.linha ?? '—' }}</p>
+              </div>
+            </div>
+            <div class="mt-5 border-t border-[#edf1f5] pt-3 text-center">
+              <p class="text-xs text-[#8997a7]">Preço base</p>
+              <p class="mt-1 text-2xl font-bold text-[#153860]">{{ produto.preco | currency:'BRL' }}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+          <article class="rounded-2xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-[#64748b]">Estoque disponível</p>
+            <p class="mt-3 text-2xl font-bold text-[#101b2b]">{{ produto.estoque }}</p>
+            <p class="mt-1 text-xs text-[#8997a7]">unidades no catálogo</p>
+          </article>
+          <article class="rounded-2xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-[#64748b]">Estoque reservado</p>
+            <p class="mt-3 text-2xl font-bold text-[#101b2b]">{{ produto.estoqueReservado ?? '—' }}<span *ngIf="produto.estoqueReservado !== undefined" class="ml-1 text-sm font-medium">un.</span></p>
+            <p class="mt-1 text-xs text-[#8997a7]">{{ produto.estoqueReservado !== undefined ? 'separado para pedidos' : 'dado não informado' }}</p>
+          </article>
+          <article class="rounded-2xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-[#64748b]">Giro em 30 dias</p>
+            <p class="mt-3 text-2xl font-bold text-[#16815f]">{{ produto.giro30Dias ?? '—' }}<span *ngIf="produto.giro30Dias !== undefined" class="ml-1 text-sm font-medium">un.</span></p>
+            <p class="mt-1 text-xs text-[#8997a7]">{{ produto.giro30Dias !== undefined ? 'vendas no período' : 'dado não informado' }}</p>
+          </article>
+          <article class="rounded-2xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-[#64748b]">Margem</p>
+            <p class="mt-3 text-2xl font-bold text-[#101b2b]">{{ produto.margem }}%</p>
+            <p class="mt-1 text-xs text-[#8997a7]">margem cadastrada</p>
+          </article>
+        </section>
+
+        <section class="grid items-stretch gap-5 xl:grid-cols-[minmax(0,2.1fr)_minmax(300px,1fr)]">
+          <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
+            <div class="flex items-center justify-between gap-3 px-6 py-5">
+              <div>
+                <h2 class="text-base font-semibold text-[#101b2b]">Cores e embalagens</h2>
+                <p class="mt-1 text-xs text-[#8997a7]">Variações comerciais disponíveis.</p>
+              </div>
+              <a [routerLink]="['/produtos', produto.id, 'editar']" class="shrink-0 rounded-lg border border-[#d6e0e9] px-4 py-2.5 text-xs font-semibold text-[#153860] hover:bg-[#f7f9fb]">Gerenciar</a>
+            </div>
+            <div class="overflow-x-auto px-6 pb-6">
+              <table class="w-full min-w-[620px] text-left">
+                <thead class="border-b border-[#e5ebf0] text-[9px] uppercase text-[#8997a7]">
+                  <tr>
+                    <th class="py-3 font-medium">Variação</th>
+                    <th class="py-3 font-medium">SKU</th>
+                    <th class="py-3 font-medium">Embalagem</th>
+                    <th class="py-3 font-medium">Disponível</th>
+                    <th class="py-3 font-medium">Preço</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @if (produto.variacoes?.length) {
+                    @for (variacao of produto.variacoes; track variacao.codigoSKU) {
+                      <tr class="border-b border-[#e5ebf0] text-[11px] text-[#153860] last:border-0">
+                        <td class="py-4 font-medium">
+                          <span class="mr-3 inline-block h-7 w-7 align-middle rounded-md border border-[#e5e7eb]" [style.backgroundColor]="variacao.corHex"></span>
+                          {{ variacao.nome }}
+                        </td>
+                        <td class="py-4 text-[#718096]">{{ variacao.codigoSKU }}</td>
+                        <td class="py-4 text-[#718096]">{{ variacao.embalagem }}</td>
+                        <td class="py-4">{{ variacao.estoque }} un.</td>
+                        <td class="py-4 font-semibold">{{ variacao.preco | currency:'BRL' }}</td>
+                      </tr>
+                    }
+                  } @else {
+                    <tr class="border-b border-[#e5ebf0] text-[11px] text-[#153860]">
+                      <td class="py-4 font-medium">
+                        <span class="mr-3 inline-block h-7 w-7 align-middle rounded-md border border-[#e5e7eb] bg-[#f2efe6]"></span>
+                        {{ produto.cor }}
+                      </td>
+                      <td class="py-4 text-[#718096]">{{ produto.codigoSKU }}</td>
+                      <td class="py-4 text-[#718096]">{{ produto.embalagem }}</td>
+                      <td class="py-4">{{ produto.estoque }} un.</td>
+                      <td class="py-4 font-semibold">{{ produto.preco | currency:'BRL' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="min-h-[270px] rounded-2xl bg-white p-6 shadow-sm">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h2 class="text-base font-semibold text-[#101b2b]">Controle de estoque</h2>
+                <p class="mt-1 text-xs text-[#8997a7]">Posição atual por depósito.</p>
+              </div>
+              <a [routerLink]="['/produtos', produto.id, 'editar']" class="shrink-0 rounded-lg border border-[#d6e0e9] px-3 py-2.5 text-[10px] font-semibold text-[#153860] hover:bg-[#f7f9fb]">Ajustar estoque</a>
+            </div>
+
+            @if (produto.estoquePorDeposito?.length) {
+              @for (deposito of produto.estoquePorDeposito; track deposito.nome) {
+                <div class="mt-8">
+                  <div class="flex items-center justify-between gap-3 text-[11px]">
+                    <span class="font-semibold text-[#101b2b]">{{ deposito.nome }}</span>
+                    <span class="font-medium text-[#101b2b]">{{ deposito.quantidade }} un.</span>
+                  </div>
+                  <p class="mt-1 text-[9px] text-[#8997a7]">{{ deposito.localizacao }}</p>
+                  <div class="mt-3 h-[5px] overflow-hidden rounded-full bg-[#e9eef3]">
+                    <div class="h-full rounded-full bg-[#153860]" [style.width.%]="percentualEstoqueDeposito"></div>
+                  </div>
+                </div>
+              }
+            } @else {
+              <p class="mt-8 rounded-xl bg-[#f7f9fb] p-4 text-xs leading-5 text-[#8997a7]">A posição por depósito ainda não foi informada.</p>
+            }
+          </article>
+        </section>
+      </div>
+    } @else {
+      <section class="mx-4 mt-6 rounded-2xl bg-white p-8 text-center shadow-sm lg:mx-0">
+        <h1 class="text-xl font-bold text-[#153860]">Produto não encontrado</h1>
+        <p class="mt-2 text-sm text-[#64748b]">Confira o endereço ou volte para a lista de produtos.</p>
+        <a routerLink="/produtos" class="mt-4 inline-flex text-sm font-semibold text-[#153860] hover:underline">Voltar para produtos</a>
+      </section>
+    }
+  </main>
+
+  <div class="lg:hidden">
+    <app-mobile-navigation></app-mobile-navigation>
+  </div>
+</div>

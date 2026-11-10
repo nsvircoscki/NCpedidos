@@ -5,7 +5,7 @@
     class="min-w-0 pb-24 transition-[margin-left] duration-300 w-full bg-[#f8f8ff] lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
     [class.lg:ml-[88px]]="sidebarMinimizada"
   >
-    <div class="px-4 lg:px-0">
+    <div class="px-4 lg:hidden">
       <app-mobile-header></app-mobile-header>
     </div>
 
@@ -45,24 +45,23 @@
             class="h-12 w-full rounded-full bg-[#F6F9FC] py-2.5 pl-10 pr-5 text-[13px] text-slate-700 outline-none placeholder:text-slate-400"
           />
         </label>
-        <div class="flex gap-2">
-          @for (filter of ["Todos", "Em análise", "Aprovado", "Faturado"]; track filter) {
-            <button
-              class="rounded-full border border-[#e2e8f0] px-4 py-2 text-[12px] font-medium text-[#64748b] transition-colors hover:bg-slate-50"
-              [class.!border-[#153860]]="statusFilter === filter"
-              [class.!bg-[#f0f4f8]]="statusFilter === filter"
-              [class.!text-[#153860]]="statusFilter === filter"
-              type="button"
-              (click)="statusFilter = filter"
-            >
-              {{ filter }}
-            </button>
-          }
-        </div>
+        <label class="flex min-w-[220px] items-center gap-3 text-[12px] font-medium text-[#64748b]">
+          <span>Status</span>
+          <select
+            [(ngModel)]="statusFilter"
+            aria-label="Filtrar pedidos por status"
+            class="h-11 min-w-[170px] rounded-xl border border-[#e2e8f0] bg-white px-3 text-[12px] text-[#153860] outline-none focus:border-[#153860]"
+          >
+            <option>Todos</option>
+            <option>Em análise</option>
+            <option>Aprovado</option>
+            <option>Faturado</option>
+          </select>
+        </label>
       </div>
 
       <div class="mb-3 flex items-center justify-between px-4">
-        <span class="text-[10px] text-slate-500">{{ filteredOrders().length }} pedidos encontrados</span>
+        <span class="text-[10px] text-[#64748b]">{{ filteredOrders().length }} pedido(s) encontrado(s)</span>
         <button
           class="text-[11px] font-semibold text-[#153860] hover:underline"
           type="button"
@@ -72,37 +71,54 @@
         </button>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full min-w-[620px] border-collapse text-left">
-          <thead>
-            <tr class="bg-slate-50 text-[11px] text-slate-400">
-              <th class="p-3 font-bold uppercase">Pedido</th>
-              <th class="p-3 font-bold uppercase">Cliente</th>
-              <th class="p-3 font-bold uppercase">Data</th>
-              <th class="p-3 font-bold uppercase">Volumes</th>
-              <th class="p-3 font-bold uppercase">Total</th>
-              <th class="p-3 font-bold uppercase">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (order of filteredOrders(); track order.id) {
-              <tr class="border-b border-slate-100 text-sm hover:bg-slate-50 transition-colors">
-                <td class="p-3"><strong class="text-[#153860]">#{{ order.id }}</strong></td>
-                <td class="p-3 font-medium text-[#0f172a]">{{ order.client }}</td>
-                <td class="p-3 text-slate-500 text-[12px]">{{ order.date }}</td>
-                <td class="p-3 text-slate-500 text-[12px]">{{ order.volumes }} vol.</td>
-                <td class="p-3 font-semibold text-[#153860]">{{ currency(order.total) }}</td>
-                <td class="p-3">
-                  <span class="status-pill text-[10px]" [attr.data-status]="order.status">{{ order.status }}</span>
-                </td>
-              </tr>
-            } @empty {
-              <tr>
-                <td colspan="6" class="p-8 text-center text-sm text-slate-400">Nenhum pedido encontrado.</td>
-              </tr>
-            }
-          </tbody>
-        </table>
+      <div class="w-full overflow-x-auto">
+        <div class="grid min-w-[950px] grid-cols-[auto_minmax(220px,1.4fr)_minmax(110px,.7fr)_minmax(100px,.6fr)_minmax(130px,.8fr)_minmax(120px,.7fr)] bg-slate-50 text-[10px] font-bold uppercase leading-none text-slate-400">
+          <span class="w-12 px-4 py-4">&nbsp;</span>
+          <span class="px-4 py-4">Pedido / Cliente</span>
+          <span class="px-4 py-4">Data</span>
+          <span class="px-4 py-4">Volumes</span>
+          <span class="px-4 py-4">Valor</span>
+          <span class="px-4 py-4">Status</span>
+        </div>
+        @for (order of filteredOrders(); track order.id; let last = $last) {
+          <button
+            type="button"
+            routerLink="/pedido-acompanhamento"
+            class="grid min-h-[72px] w-full min-w-[950px] grid-cols-[auto_minmax(220px,1.4fr)_minmax(110px,.7fr)_minmax(100px,.6fr)_minmax(130px,.8fr)_minmax(120px,.7fr)] items-center border-b border-slate-100 text-left transition-colors hover:bg-slate-50"
+            [class.border-b]="!last"
+            [class.border-[#dbe4ed]]="!last">
+            <span
+              class="ml-4 grid h-10 w-10 shrink-0 place-items-center rounded-lg text-[11px] font-semibold"
+              [class.bg-[#dbe8f4]]="order.avatar === 'blue'"
+              [class.text-[#153860]]="order.avatar === 'blue'"
+              [class.bg-[#fce7d6]]="order.avatar === 'orange'"
+              [class.text-[#9a4a1a]]="order.avatar === 'orange'">
+              {{ order.initials }}
+            </span>
+
+            <span class="min-w-0 px-4">
+              <strong class="block truncate text-[12px] font-semibold text-[#0f172a]">{{ order.client }}</strong>
+              <small class="mt-1 block text-[10px] text-[#64748b]">Pedido #{{ order.id }}</small>
+            </span>
+
+            <span class="px-4 text-[11px] text-[#153860]">{{ order.date }}</span>
+            <span class="px-4 text-[11px] text-[#153860]">{{ order.volumes }}</span>
+            <span class="px-4 text-[11px] text-[#153860]">{{ currency(order.total) }}</span>
+            <span class="px-4"><span class="status-pill text-[10px]" [attr.data-status]="order.status">{{ order.status }}</span></span>
+          </button>
+        } @empty {
+          <div class="min-w-[950px] px-6 py-14 text-center">
+            <p class="text-[14px] font-semibold text-[#0f172a]">Nenhum pedido encontrado</p>
+            <p class="mt-1 text-[11px] text-[#64748b]">Tente alterar os filtros de busca.</p>
+          </div>
+        }
+      </div>
+      <div class="flex items-center justify-between border-t border-slate-100 px-4 py-4 text-[11px] text-[#64748b]">
+        <span>Página 1 de 1</span>
+        <div class="flex gap-2">
+          <button type="button" disabled class="rounded-lg border border-slate-200 px-3 py-2 text-slate-300">Anterior</button>
+          <button type="button" disabled class="rounded-lg border border-slate-200 px-3 py-2 text-slate-300">Próxima</button>
+        </div>
       </div>
     </section>
 

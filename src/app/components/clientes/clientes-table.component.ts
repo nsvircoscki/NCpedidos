@@ -25,6 +25,7 @@ export class ClientesTableComponent {
   paginaAtual = 1;
   itensPorPagina = 10;
   dropdownAberto: TipoDropdownCliente | null = null;
+  menuAcoesAberto: number | null = null;
   clientesSelecionados = new Set<number>();
 
   get tiposCliente(): string[] {
@@ -128,7 +129,7 @@ export class ClientesTableComponent {
     this.paginaAtual = 1;
   }
 
-  alternarSelecao(cliente: Cliente): void {
+  selecionarCliente(cliente: Cliente): void {
     if (this.clientesSelecionados.has(cliente.id)) {
       this.clientesSelecionados.delete(cliente.id);
     } else {
@@ -136,8 +137,23 @@ export class ClientesTableComponent {
     }
   }
 
-  abrirCliente(cliente:Cliente): void { 
+  alternarMenuAcoes(cliente: Cliente): void {
+    this.menuAcoesAberto = this.menuAcoesAberto === cliente.id ? null : cliente.id;
+  }
+
+  editarCliente(cliente: Cliente): void {
+    this.menuAcoesAberto = null;
+    this.router.navigate(['/clientes', cliente.id]);
+  }
+
+  verTabelaDePrecos(cliente: Cliente): void {
+    this.menuAcoesAberto = null;
     this.router.navigate(['/clientes', cliente.id, 'tabela-precos']);
+  }
+
+  verPedidos(cliente: Cliente): void {
+    this.menuAcoesAberto = null;
+    this.router.navigate(['/pedidos'], { queryParams: { clienteId: cliente.id } });
   }
 
   clienteEstaSelecionado(cliente: Cliente): boolean {

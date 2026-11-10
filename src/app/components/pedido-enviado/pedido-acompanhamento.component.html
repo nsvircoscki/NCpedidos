@@ -1,19 +1,21 @@
-<div class="min-h-screen bg-[#f8fafc] px-4 pb-8 pt-3 text-[#0f172a]">
+<app-sidebar></app-sidebar>
+<main class="min-h-screen bg-[#f8fafc] text-[#0f172a] lg:ml-[265px] lg:px-8 lg:pb-10">
+    <div class="hidden lg:block"><app-top-header></app-top-header></div>
+  <div class="mx-auto min-h-screen max-w-5xl px-4 pb-24 pt-3 lg:px-0 lg:pb-10 lg:pt-8">
 
-    <header class="flex items-center justify-between pb-4 pt-2">
-        <button 
+    <header class="flex items-center justify-between pb-4 pt-2 lg:pb-6">
+        <button
            type="button"
-           (click)="voltar.emit()"
+           (click)="voltarParaPedidos()"
            aria-label="Voltar"
-           router-link="/pedidos"
-           class="grid h-10 w-10 place-items-center rounded-xl bg-[#edf3f7] text-lg font-bold text-[#153860] transition-colors hover:bg-[#e2ecf3]"
+           class="relative z-10 grid h-10 w-10 cursor-pointer place-items-center rounded-xl bg-[#edf3f7] text-lg font-bold text-[#153860] transition-colors hover:bg-[#e2ecf3] focus:outline-none focus:ring-2 focus:ring-[#153860] lg:-ml-8"
         >
             ‹
         </button>
 
-        <div class="ml-3 flex-1">
-            <h1 class="text-xl font-bold leading-tight text-[#0f172a]">Pedido enviado</h1>
-            <p class="text-xs text-[#64748b]">Resumo e acompanhamento</p>
+        <div class="ml-3 flex-1 lg:ml-0">
+            <h1 class="text-xl font-bold leading-tight text-[#0f172a] lg:text-3xl">Acompanhamento do pedido</h1>
+            <p class="text-xs text-[#64748b] lg:mt-1 lg:text-sm">Acompanhe as etapas até a entrega</p>
         </div>
 
         <div class="text-right">
@@ -22,7 +24,7 @@
         </div>
     </header>
 
-    <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#FFF9EA] p-4">
+    <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#FFF9EA] p-4 lg:mt-0 lg:p-5">
         <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F3A928] text-base font-medium text-white">
             ◷
         </div>
@@ -34,36 +36,12 @@
         </div>
     </div>
 
-    <div class="mt-4 flex rounded-xl bg-[#f1f5f9] p-1">
-        <button
-          type="button"
-          (click)="selecionarAba('resumo')"
-          class="flex-1 py-2 text-center rounded-lg text-xs transition-all" 
-          [ngClass]="abaAtiva === 'resumo'
-            ? 'bg-[#153860] font-semibold text-white shadow-sm'
-            : 'font-medium text-[#64748b] hover:text-[#153860] hover:shadow-sm'"
-        >
-            Resumo
-        </button>
-
-        <button
-            type="button"
-            (click)="selecionarAba('acompanhamento')"
-            class="flex-1 py-2 text-center rounded-lg text-xs transition-all"
-            [ngClass]="abaAtiva === 'acompanhamento'
-              ? 'bg-[#153860] font-semibold text-white shadow-sm'
-              : 'font-medium text-[#64748b] hover:text-[#153860] hover:shadow-sm'"
-        >
-            Acompanhamento
-        </button>
-    </div>
-
-    <section class="mt-6">
+    <section class="mt-6 lg:mt-8">
         <div class="mb-2 flex items-center justify-between">
             <h3 class="text-base font-bold text-[#0f172a]">Acompanhamento</h3>
         </div>
         <p class="text-[11px] -mt-2 text-[#64748B]">Veja cada etapa até a entrega do pedido</p>
-        <div class="rounded-2xl mt-1 border border-slate-200 bg-white shadow-sm p-4  ">
+        <div class="mt-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:p-8">
           <div class="flex items-start gap-4 w-full">
             <div class="flex flex-col items-center self-stretch">
                 <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#26835A] text-[10px] font-medium text-white">✓</span>
@@ -139,7 +117,7 @@
             </div>  
         </div>
 
-        <div class="mt-[16px]">
+        <div class="mt-6 lg:mt-8">
             <h3 class="text-base font-bold mb-[8px] text-[#0f172a]">Previsão de Entrega</h3>
 
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 w-full">
@@ -162,9 +140,10 @@
 
     </section>
 
-    <div class="mt-6">
+    <div class="mt-6 lg:mt-8">
         <button class="rounded-xl border-1 border-[#153860] bg-white shadow-sm p-4 w-full">
             <p class="text-sm font-semibold text-[#153860]">Precisa de ajuda com este pedido?</p>
         </button>
     </div>
 </div>
+<app-mobile-navigation></app-mobile-navigation>

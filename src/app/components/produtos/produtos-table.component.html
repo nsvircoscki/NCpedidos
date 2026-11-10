@@ -304,6 +304,14 @@
             <!-- Ações -->
             <td class="px-4 py-4">
               <div class="flex items-center gap-2">
+                <a
+                  [routerLink]="['/produtos', produto.id, 'editar']"
+                  (click)="$event.stopPropagation()"
+                  class="rounded-lg px-2 py-2 text-xs font-semibold text-[#153860] transition hover:bg-slate-100"
+                >
+                  Editar
+                </a>
+
                 <button
                   type="button"
                   class="rounded-lg px-2 py-2 text-sm font-bold text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"

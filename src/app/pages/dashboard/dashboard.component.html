@@ -5,7 +5,9 @@
         class="flex min-h-screen min-w-0 w-full max-w-full flex-col gap-6 bg-[#F8F8FF] px-4 pb-24 lg:ml-[var(--sidebar-width)] lg:px-8 lg:pb-8"
         [style.--sidebar-width.px]="sidebarMinimizada ? 88 : 265">
 
-        <app-mobile-header></app-mobile-header>
+        <div class="lg:hidden">
+            <app-mobile-header></app-mobile-header>
+        </div>
         
         <div class="hidden lg:block">
             <app-top-header></app-top-header>
@@ -58,7 +60,7 @@
             </section>
         </div>
         
-        <section class="hidden px-[17px] pt-4 lg:block">
+        <section class="hidden pt-4 lg:block">
             <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
                 {{ dataAtual | date: "EEEE, dd 'DE' MMMM" | uppercase }}
             </span>

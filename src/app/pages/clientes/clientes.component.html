@@ -36,7 +36,7 @@
     </section>
 
     <section class="lg:hidden">
-      <div class="px-4 lg:px-0">
+      <div class="px-4 lg:hidden">
         <app-mobile-header></app-mobile-header>
       </div>
       <header class="hidden">
@@ -98,10 +98,11 @@
 
       <div class="mx-4 mt-6 overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-white px-3">
         @for (cliente of clientesMobile; track cliente.id) {
-          <button
+          <div
             type="button"
             class="flex min-h-[76px] w-full items-center gap-3 border-b border-[#dbe4ed] text-left last:border-b-0"
-            [routerLink]="['/clientes', cliente.id, 'tabela-precos']">
+            [class.bg-[#edf3f7]]="clienteMobileEstaSelecionado(cliente)"
+            (click)="selecionarClienteMobile(cliente)">
             <span
               class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[11px] font-medium"
               [ngClass]="cliente.id === 1 ? 'bg-[#edf3f7] text-[#153860]' : 'bg-[#fff0df] text-[#a75a15]'">
@@ -117,7 +118,22 @@
             </span>
 
             <span class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl leading-none text-[#153860]">›</span>
-          </button>
+            <button
+              type="button"
+              class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-xl font-bold leading-none text-[#153860]"
+              (click)="$event.stopPropagation(); alternarMenuAcoesMobile(cliente)"
+              [attr.aria-label]="'Mais ações para ' + cliente.nome">
+              ⋯
+            </button>
+
+            @if (menuAcoesMobileAberto === cliente.id) {
+              <div class="absolute right-2 top-14 z-30 w-44 rounded-xl bg-white p-1.5 text-left shadow-xl ring-1 ring-slate-200">
+                <button type="button" (click)="editarClienteMobile(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Editar cliente</button>
+                <button type="button" (click)="verTabelaDePrecosMobile(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Tabela de preços</button>
+                <button type="button" (click)="verPedidosMobile(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Pedidos</button>
+              </div>
+            }
+          </div>
         } @empty {
           <p class="px-3 py-8 text-center text-xs text-[#64748b]">Nenhum cliente encontrado.</p>
         }

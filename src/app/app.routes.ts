@@ -10,12 +10,19 @@ import { TabelaPrecosPageComponent } from './pages/tabela-precos/tabela-precos.c
 import { PedidosComponent } from './pages/pedidos/pedidos.component';
 import { PedidoEnviadoComponent } from './components/pedido-enviado/pedido-enviado.component';
 import { PedidoAcompanhamentoComponent } from './components/pedido-enviado/pedido-acompanhamento.component';
+import { LoginComponent } from './pages/login/login.component';
+import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
+import { CadastroProdutoComponent } from './pages/cadastro-produto/cadastro-produto.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+    { path: '', redirectTo: 'login', pathMatch: 'full'},
+    { path: 'login', component: LoginComponent },
     { path: 'dashboard', component: DashboardComponent},
     { path: 'pedidos', component: PedidosComponent },
     { path: 'produtos', component: ProdutosPageComponent },
+    { path: 'produtos/novo', component: CadastroProdutoComponent },
+    { path: 'produtos/:id/editar', component: CadastroProdutoComponent},
+    { path: 'produtos/:id', component: DetalheProdutoComponent },
     { path: 'clientes', component: ClientesPageComponent },
     { path: 'clientes/novo', component: CadastroClientePageComponent },
     { path: 'clientes/analise', component: AnaliseClientePageComponent },

@@ -23,21 +23,48 @@
             placeholder="Pesquisar produto ou SKU"
             class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 px-5 text-[13px] text-slate-700 outline-none placeholder:text-slate-400" />
         </div>
-        <select [(ngModel)]="categoriaSelecionada" (ngModelChange)="paginaAtual = 1"
-          class="h-12 min-w-[190px] rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700">
-          <option value="">Todas as categorias</option>
-          @for (categoria of categorias; track categoria) { <option [value]="categoria">{{ categoria }}</option> }
-        </select>
-        <select [(ngModel)]="statusSelecionado" (ngModelChange)="paginaAtual = 1"
-          class="h-12 min-w-[160px] rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700">
-          <option value="">Todos os status</option>
-          @for (statusItem of status; track statusItem) { <option [value]="statusItem">{{ textoStatus(statusItem) }}</option> }
-        </select>
-        <select [(ngModel)]="corSelecionada" (ngModelChange)="paginaAtual = 1"
-          class="h-12 min-w-[150px] rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700">
-          <option value="">Todas as cores</option>
-          @for (cor of cores; track cor) { <option [value]="cor">{{ cor }}</option> }
-        </select>
+        <details class="relative">
+          <summary class="flex h-12 min-w-[190px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700">
+            {{ categoriasSelecionadas.length ? 'Categoria (' + categoriasSelecionadas.length + ')' : 'Todas as categorias' }}
+            <span aria-hidden="true">⌄</span>
+          </summary>
+          <div class="absolute left-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+            @for (categoria of categorias; track categoria) {
+              <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
+                <input type="checkbox" [checked]="filtroEstaSelecionado('categoria', categoria)" (change)="alternarFiltro('categoria', categoria)" class="h-4 w-4 accent-[#153860]" />
+                {{ categoria }}
+              </label>
+            }
+          </div>
+        </details>
+        <details class="relative">
+          <summary class="flex h-12 min-w-[160px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700">
+            {{ statusSelecionados.length ? 'Status (' + statusSelecionados.length + ')' : 'Todos os status' }}
+            <span aria-hidden="true">⌄</span>
+          </summary>
+          <div class="absolute left-0 top-full z-30 mt-2 min-w-full rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+            @for (statusItem of status; track statusItem) {
+              <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
+                <input type="checkbox" [checked]="filtroEstaSelecionado('status', statusItem)" (change)="alternarFiltro('status', statusItem)" class="h-4 w-4 accent-[#153860]" />
+                {{ textoStatus(statusItem) }}
+              </label>
+            }
+          </div>
+        </details>
+        <details class="relative">
+          <summary class="flex h-12 min-w-[150px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700">
+            {{ coresSelecionadas.length ? 'Cor (' + coresSelecionadas.length + ')' : 'Todas as cores' }}
+            <span aria-hidden="true">⌄</span>
+          </summary>
+          <div class="absolute left-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+            @for (cor of cores; track cor) {
+              <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
+                <input type="checkbox" [checked]="filtroEstaSelecionado('cor', cor)" (change)="alternarFiltro('cor', cor)" class="h-4 w-4 accent-[#153860]" />
+                {{ cor }}
+              </label>
+            }
+          </div>
+        </details>
         @if (possuiFiltrosAtivos) {
           <button type="button" (click)="limparFiltros()" class="p-1 text-slate-400 hover:text-slate-600">Limpar</button>
         }

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "figma-mcp",
+  "version": "0.1.0",
+  "description": "Connects ChatGPT and Codex to Figma through the official remote MCP server.",
+  "author": { "name": "OpenAI user" },
+  "keywords": ["figma", "design", "mcp", "frontend"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Figma MCP",
+        "shortDescription": "Connect to Figma MCP",
+        "longDescription": "Read Figma designs, generate implementation guidance, and create or update native Figma content through the official remote MCP server.",
+        "developerName": "OpenAI user",
+        "category": "Developer Tools",
+        "capabilities": ["Interactive"],
+        "defaultPrompt": "Use Figma MCP to inspect this design and help implement it in the current project."
+      }
+    }
+  }
+}

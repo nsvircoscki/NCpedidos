@@ -5,7 +5,7 @@
     class="min-w-0 pb-24 transition-[margin-left] duration-300 bg-[#F8F8FF] lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
     [class.lg:ml-[88px]]="sidebarMinimizada">
 
-    <div class="px-4 lg:px-0">
+    <div class="px-4 lg:hidden">
       <app-mobile-header></app-mobile-header>
     </div>
     
@@ -28,74 +28,212 @@
       </p>
     </section>
 
-    <section class="hidden rounded-xl bg-white py-4 shadow-sm lg:block">
-      <app-produtos [produtos]="produtos"></app-produtos>
-    </section>
+    <div class="hidden justify-end lg:flex">
+      <a
+        routerLink="/produtos/novo"
+        class="rounded-lg bg-[#153860] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#1d4a78]"
+      >
+        + Cadastrar produto
+      </a>
+    </div>
 
     <!-- SEÇÃO MOBILE -->
-    <section class="lg:hidden">
+    <section class="w-full">
+      <div class="w-full px-4 pt-4 lg:px-0 lg:pt-0">
+        <p class="text-[8px] font-bold tracking-wide text-[#8997a7] lg:hidden">
+          OLÁ, RAFAEL
+        </p>
 
-      <div class="px-4 pt-4">
-        <div class="flex items-center justify-between gap-3">
-            <div>
-            <span class="block text-[10px] font-semibold tracking-[0.05em] text-[#153860]">CATÁLOGO NC</span>
-            <h1 class="mt-0.5 text-[26px] font-semibold leading-tight text-[#0f172a]">Produtos e Preços</h1>
-            <p class="mt-0.5 text-[12px] text-[#64748b]">Consulta de valores, estoque, embalagens e disponibilidade.</p>
-            </div>
+        <h1 class="mt-1 text-[22px] font-bold leading-tight text-[#101b2b] lg:hidden">
+          O que vamos vender hoje?
+        </h1>
 
-            <button
+        <!-- Cliente e tabela de preço -->
+        <div class="relative mt-5">
+          <button
             type="button"
-            routerLink="/produtos/novo"
-            aria-label="Cadastrar produto"
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#153860] text-[18px] font-bold text-white transition-opacity hover:opacity-90">
-            +
-            </button>
-        </div>
+            aria-haspopup="listbox"
+            [attr.aria-expanded]="seletorClientesAberto"
+            (click)="seletorClientesAberto = !seletorClientesAberto"
+            class="flex min-h-[68px] w-full items-center gap-3 rounded-[15px] bg-[#eef5fa] p-3 text-left transition hover:bg-[#e6f0f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#153d65]"
+          >
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#153d65] text-[10px] font-bold text-white">
+              {{ iniciaisCliente }}
+            </span>
+
+            <span class="min-w-0 flex-1">
+              <span class="block text-[7px] text-[#8997a7]">VENDENDO PARA</span>
+              <span class="mt-1 block truncate text-[12px] font-semibold text-[#101b2b]">
+                {{ nomeClienteSelecionado }}
+              </span>
+              <span class="mt-1 block text-[8px] font-semibold text-[#16815f]">
+                {{ clienteSelecionado ? 'Preço personalizado' : 'Preço base do catálogo' }}
+              </span>
+            </span>
+
+            <span aria-hidden="true" class="text-xl text-[#153d65]">{{ seletorClientesAberto ? '⌃' : '›' }}</span>
+          </button>
+
+          @if (seletorClientesAberto) {
+            <div class="fixed inset-0 z-40" (click)="seletorClientesAberto = false"></div>
+            <section
+              role="listbox"
+              aria-label="Selecionar cliente para consultar preços"
+              class="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-[#e0e7ed] bg-white py-1 shadow-xl"
+            >
+              <p class="px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-[#8997a7]">Clientes</p>
+              @for (cliente of clientes; track cliente.id) {
+                <button
+                  type="button"
+                  role="option"
+                  [attr.aria-selected]="clienteSelecionado === cliente.id"
+                  (click)="selecionarCliente(cliente.id)"
+                  class="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[#153860] transition hover:bg-[#f2f6fa]"
+                >
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eef3f8] text-[10px] font-bold text-[#153d65]">
+                    {{ iniciaisDoNome(cliente.nome) }}
+                  </span>
+                  <span class="min-w-0 flex-1 truncate">{{ cliente.nome }}</span>
+                  @if (clienteSelecionado === cliente.id) {
+                    <span aria-hidden="true" class="font-bold text-[#16815f]">✓</span>
+                  }
+                </button>
+              }
+              @if (clienteSelecionado) {
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  (click)="selecionarCliente('')"
+                  class="w-full border-t border-[#edf1f5] px-4 py-3 text-left text-xs font-medium text-[#64748b] hover:bg-[#f8fafc]"
+                >
+                  Remover seleção e usar preço base
+                </button>
+              }
+            </section>
+          }
         </div>
 
-      <div class="mt-4 px-4">
-        <div class="flex items-end justify-between">
-          <div>
-            <h2 class="text-[16px] font-medium text-[#0f172a]">Todos os Produtos</h2>
-            <p class="!text-[10px] text-[#94a3b8]">{{ produtosMobile.length }} produtos</p>
-          </div>
-          <span class="text-[10px] text-[#94a3b8]">Preço Unitário</span>
-        </div>
+        <!-- Busca -->
+        <label class="mt-4 flex h-[42px] items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3">
+          <img
+            src="assets/img/searchIcon.svg"
+            alt=""
+            aria-hidden="true"
+            class="h-4 w-4"
+          />
 
-        <label class="mt-3 flex h-[38px] items-center gap-2 rounded-full bg-white px-4 shadow-sm">
-          <span class="text-lg leading-none text-[#94a3b8]">⌕</span>
           <input
             type="search"
             [(ngModel)]="termoBuscaMobile"
-            class="min-w-0 flex-1 bg-transparent text-[12px] text-slate-700 outline-none placeholder:text-[#94a3b8]"
-            placeholder="Buscar produto ou código">
+            placeholder="Buscar produto ou SKU"
+            class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+          />
         </label>
 
-        <div class="mt-3 space-y-4">
+        <!-- Categorias -->
+        <div class="mt-3 flex gap-2 overflow-x-auto pb-1">
+          @for (categoria of categoriasMobile; track categoria) {
+            <button
+              type="button"
+              (click)="categoriaSelecionada = categoria"
+              class="shrink-0 rounded-full border px-3 py-2 text-[8px] font-semibold"
+              [class.border-[#153d65]]="categoriaSelecionada === categoria"
+              [class.bg-[#153d65]]="categoriaSelecionada === categoria"
+              [class.text-white]="categoriaSelecionada === categoria"
+              [class.border-[#e0e7ed]]="categoriaSelecionada !== categoria"
+              [class.bg-white]="categoriaSelecionada !== categoria"
+              [class.text-[#68788c]]="categoriaSelecionada !== categoria"
+            >
+              {{ categoria }}
+            </button>
+          }
+        </div>
+
+        <!-- Título e quantidade -->
+        <div class="mt-5 flex items-center justify-between">
+          <div>
+            <h2 class="text-[16px] font-bold text-[#101b2b]">Produtos e preços</h2>
+            <p class="text-[9px] text-[#8997a7]">
+              {{ produtosMobile.length }} produtos na sua tabela
+            </p>
+          </div>
+
+          <button
+            type="button"
+            (click)="categoriaSelecionada = 'Todas'; termoBuscaMobile = ''"
+            class="text-[9px] font-semibold text-[#153d65]"
+          >
+            Limpar filtros
+          </button>
+        </div>
+
+        <!-- Grade de produtos -->
+        <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           @for (produto of produtosMobile; track produto.id) {
-            <article class="flex min-h-[94px] items-center gap-3 rounded-[12px] border border-[#e2e8f0] bg-white px-3 py-3">
-              <div class="flex h-[70px] w-[62px] shrink-0 flex-col items-center justify-center rounded-[10px] bg-[#f6f6f7]">
-                <div class="h-7 w-8 rounded-t-md border border-[#aeb6c0] bg-[#eef0f2]"></div>
-                <span class="text-[8px] text-[#64748b]">NC</span>
-                <span class="text-[8px] text-[#475569]">{{ produto.embalagem }}</span>
-              </div>
+            <a
+              [routerLink]="['/produtos', produto.id]"
+              class="block overflow-hidden rounded-[14px] border border-[#e3e9ee] bg-white text-inherit no-underline transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)]"
+            >
+                <!-- Ilustração provisória da embalagem -->
+                <div class="relative grid h-[104px] place-items-center bg-[#eff3f6] md:h-36">
+                  <div class="flex h-[54px] w-[58px] flex-col items-center">
+                    <div class="h-[8px] w-full rounded-t-full border border-[#cbd5df] bg-[#e3e8eb]"></div>
+                    <div class="grid h-[46px] w-full place-items-center rounded-b-[5px] bg-[#f5f2e8]">
+                      <span class="w-full bg-[#23588a] py-1 text-center text-[10px] font-bold text-white">
+                        NC
+                      </span>
+                    </div>
+                  </div>
 
-              <div class="min-w-0 flex-1">
-                <h2 class="truncate text-[12px] font-medium text-[#0f172a]">{{ produto.nome }}</h2>
-                <p class="mt-1 truncate text-[9px] text-[#64748b]">{{ produto.cor }} · {{ produto.embalagem }}</p>
-              </div>
+                  @if (produto.estoque > 0 && produto.estoque < 20) {
+                    <span class="absolute left-2 top-2 rounded-full bg-[#fff1d6] px-2 py-1 text-[7px] font-bold text-[#b7791f]">
+                      Estoque baixo
+                    </span>
+                  }
+                </div>
 
-              <div class="shrink-0 text-right">
-                <p class="text-[10px] text-[#94a3b8]">Preço Unitário</p>
-                <p class="text-[13px] font-medium leading-tight text-[#153860]">{{ produto.preco | currency:'BRL' }}</p>
+                <div class="px-2.5 pt-3 md:px-4">
+                  <p class="truncate text-[7px] font-bold uppercase text-[#8997a7]">
+                    {{ produto.categoria }}
+                  </p>
+
+                  <h3 class="mt-1 min-h-8 text-[11px] font-bold leading-4 text-[#101b2b]">
+                    {{ produto.nome }}
+                  </h3>
+
+                  <p class="mt-1 truncate text-[8px] text-[#8997a7]">
+                    {{ produto.cor }} · {{ produto.embalagem }}
+                  </p>
+                </div>
+              <div class="px-2.5 pb-3 pt-2 md:px-4">
+                <p
+                  class="text-[8px]"
+                  [class.text-[#16815f]]="produto.estoque >= 20"
+                  [class.text-[#d99019]]="produto.estoque < 20"
+                >
+                  ● {{ produto.estoque }} un. disponíveis
+                </p>
+
+                <div class="my-2 border-t border-[#edf1f4]"></div>
+
+                <p class="text-[14px] font-bold text-[#153d65]">
+                  {{ precoDoProduto(produto) | currency:'BRL' }}
+                </p>
+
+                <div class="mt-2 w-full rounded-[8px] bg-[#edf3f8] py-1.5 text-center text-[8px] font-bold text-[#153d65]">
+                  Ver produto
+                </div>
               </div>
-            </article>
+            </a>
           } @empty {
-            <p class="py-8 text-center text-xs text-[#64748b]">Nenhum produto encontrado.</p>
+            <p class="col-span-2 py-8 text-center text-xs text-[#64748b]">
+              Nenhum produto encontrado.
+            </p>
           }
         </div>
       </div>
-    </section>
+  </section>
   </main>
   <app-mobile-navigation></app-mobile-navigation>
 </div>

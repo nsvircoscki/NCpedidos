@@ -9,6 +9,7 @@ import { Cliente } from '../../models/cliente.model';
 import { SidebarService } from '../../services/sidebar';
 import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
 import { MobileHeaderComponent } from '../../components/mobile-header/mobile-header.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-clientes-page',
@@ -27,6 +28,7 @@ import { MobileHeaderComponent } from '../../components/mobile-header/mobile-hea
 })
 export class ClientesPageComponent {
     private sidebarService = inject(SidebarService);
+    private router = inject(Router);
     
     sidebarMinimizada = false;
 
@@ -88,6 +90,8 @@ export class ClientesPageComponent {
   ];
 
   termoBuscaMobile = '';
+  clientesMobileSelecionados = new Set<number>();
+  menuAcoesMobileAberto: number | null = null;
 
   get clientesMobile(): Cliente[] {
     const termo = this.termoBuscaMobile.trim().toLowerCase();
@@ -104,5 +108,36 @@ export class ClientesPageComponent {
     return partes.length === 1
       ? partes[0].substring(0, 2).toUpperCase()
       : (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+  }
+
+  selecionarClienteMobile(cliente: Cliente): void {
+    if (this.clientesMobileSelecionados.has(cliente.id)) {
+      this.clientesMobileSelecionados.delete(cliente.id);
+    } else {
+      this.clientesMobileSelecionados.add(cliente.id);
+    }
+  }
+
+  clienteMobileEstaSelecionado(cliente: Cliente): boolean {
+    return this.clientesMobileSelecionados.has(cliente.id);
+  }
+
+  alternarMenuAcoesMobile(cliente: Cliente): void {
+    this.menuAcoesMobileAberto = this.menuAcoesMobileAberto === cliente.id ? null : cliente.id;
+  }
+
+  editarClienteMobile(cliente: Cliente): void {
+    this.menuAcoesMobileAberto = null;
+    this.router.navigate(['/clientes', cliente.id]);
+  }
+
+  verTabelaDePrecosMobile(cliente: Cliente): void {
+    this.menuAcoesMobileAberto = null;
+    this.router.navigate(['/clientes', cliente.id, 'tabela-precos']);
+  }
+
+  verPedidosMobile(cliente: Cliente): void {
+    this.menuAcoesMobileAberto = null;
+    this.router.navigate(['/pedidos'], { queryParams: { clienteId: cliente.id } });
   }
 }

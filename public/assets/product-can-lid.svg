@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="144" height="24" viewBox="0 0 144 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Can lid">
+<ellipse cx="72" cy="12" rx="72" ry="12" fill="#E6E8E9"/>
+<mask id="stroke0_0_42" fill="white">
+<path d="M144 12C144 18.6274 111.765 24 72 24C32.2355 24 0 18.6274 0 12C0 5.37258 32.2355 0 72 0C111.765 0 144 5.37258 144 12Z"/>
+</mask>
+<ellipse cx="72" cy="12" rx="72" ry="12" stroke-width="2" stroke="#C7CDD2" mask="url(#stroke0_0_42)"/>
+</g>
+</svg>
