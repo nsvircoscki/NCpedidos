@@ -51,6 +51,8 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Histórico
 
+- 2026-11-12: README reescrito (funcionalidades atuais, como rodar, estrutura de pastas). (Claude)
+
 - 2026-11-12: logo da NC Tintas no topo do PDF do pedido (a mesma `assets/logo-nc-tintas.svg` da
   sidebar, desenhada num canvas e embutida como JPEG). O topo do PDF ficou branco com uma faixa azul,
   porque a logo é azul e vermelha. Testado no Edge headless: a logo aparece e o PDF tem ~35 KB. (Claude)
