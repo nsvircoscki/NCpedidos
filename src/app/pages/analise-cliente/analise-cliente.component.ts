@@ -2,9 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { TopHeaderComponent } from '../../components/top-header/top-header.component';
-import { SidebarService } from '../../services/sidebar';
 
 type ReviewStatus = 'waiting' | 'approved' | 'rejected';
 
@@ -16,13 +13,11 @@ interface ClientField {
 @Component({
   selector: 'app-analise-cliente',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SidebarComponent, TopHeaderComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './analise-cliente.component.html'
 })
 export class AnaliseClientePageComponent {
-  private readonly sidebarService = inject(SidebarService);
 
-  sidebarMinimizada = false;
   status: ReviewStatus = 'waiting';
   notes = '';
   internalNote = '';
@@ -38,11 +33,6 @@ export class AnaliseClientePageComponent {
     { label: 'Localização', value: 'Exemplo - Ex' }
   ];
 
-  constructor() {
-    this.sidebarService.minimizada$.subscribe((estado) => {
-      this.sidebarMinimizada = estado;
-    });
-  }
 
   statusLabel(): string {
     switch (this.status) {

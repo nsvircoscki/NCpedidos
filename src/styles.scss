@@ -1,24 +1,6 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
-.dashboard-widget {
-  transition: box-shadow 180ms ease, opacity 180ms ease;
-}
-
-.dashboard-widget.cdk-drag-preview {
-  opacity: 0.9;
-  box-shadow: 0 18px 35px rgb(21 56 96 / 18%);
-}
-
-.dashboard-widget.cdk-drag-placeholder {
-  opacity: 0.35;
-  background: #e8eef5;
-}
-
-.cdk-drop-list-dragging .dashboard-widget:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0.2, 0, 0, 1);
-}
-
 @keyframes dropdown-enter {
   from {
     opacity: 0;
@@ -61,6 +43,102 @@
 
 .settings-input:focus {
     border-color: #153860;
+}
+
+/* ============================================================================
+   Label input: label flutuante dos campos de formulário
+   Baseado no Label Input do Spell UI (spell.sh/docs/label-input).
+
+   Só no desktop (lg, a partir de 1024px). No mobile o label continua acima do campo.
+   - Campo vazio e sem foco: o label fica dentro do campo, no lugar do placeholder.
+   - Com foco ou com valor: o label sobe, diminui e fica sobre a borda do campo.
+   - O placeholder (dica, ex.: "00000-000") só aparece depois que o label sobe.
+
+   Estrutura (o wrapper deve envolver SÓ o label e o campo; mensagens de erro ficam fora):
+     <div class="label-input">
+       <label class="label-input__label" for="cep">CEP</label>
+       <input class="label-input__field" id="cep" placeholder="00000-000" />
+     </div>
+   O campo precisa de um placeholder (pode ser " ") para o CSS saber se ele está vazio.
+
+   Variações:
+     .label-input--md        campos médios (h-12, px-4, text-sm)
+     .label-input--sm        campos pequenos (h-11, px-3, text-xs)
+     .label-input--textarea  label no alto do campo, para <textarea>
+     .label-input--fixo      label sempre em cima: <select> e dropdowns próprios,
+                             que sempre mostram algum texto
+   ========================================================================== */
+.label-input--md {
+    --label-input-x: 1rem;
+    --label-input-size: 0.875rem;
+}
+
+.label-input--sm {
+    --label-input-x: 0.75rem;
+    --label-input-size: 0.8125rem;
+}
+
+@media (min-width: 64rem) {
+    /*
+      A caixa precisa ter exatamente a altura do campo, porque o label se
+      centraliza por ela. align-self: start impede que um grid/flex a estique
+      quando um vizinho da mesma linha é mais alto (ex.: textarea, mensagem de erro),
+      e display: block no campo remove o espaço extra de elemento inline.
+    */
+    .label-input {
+        position: relative;
+        align-self: start;
+    }
+
+    .label-input .label-input__field {
+        display: block;
+    }
+
+    .label-input .label-input__label {
+        position: absolute;
+        top: 50%;
+        left: calc(var(--label-input-x, 1.5rem) - 0.375rem);
+        z-index: 1;
+        display: block;
+        max-width: calc(100% - 2 * var(--label-input-x, 1.5rem));
+        margin: 0;
+        padding: 0 0.375rem;
+        overflow: hidden;
+        background: var(--label-input-bg, #fff);
+        color: #94a3b8;
+        font-size: var(--label-input-size, 1rem);
+        font-weight: 500;
+        line-height: 1.25;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        pointer-events: none;
+        transform: translateY(-50%);
+        transform-origin: left center;
+        transition: top 200ms ease, transform 200ms ease, color 200ms ease;
+    }
+
+    .label-input--textarea .label-input__label {
+        top: 1.5rem;
+    }
+
+    /* Label flutuando: com foco, com valor ou fixo */
+    .label-input:focus-within .label-input__label,
+    .label-input:has(.label-input__field:not(:placeholder-shown)) .label-input__label,
+    .label-input--fixo .label-input__label {
+        top: 0;
+        color: #64748b;
+        font-weight: 600;
+        transform: translateY(-50%) scale(0.8);
+    }
+
+    .label-input:focus-within .label-input__label {
+        color: #153860;
+    }
+
+    /* Enquanto o label ocupa o lugar do placeholder, o placeholder fica invisível */
+    .label-input:not(:focus-within) .label-input__field::placeholder {
+        color: transparent;
+    }
 }
 
 html,

@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { TopHeaderComponent } from '../../components/top-header/top-header.component';
-import { SidebarService } from '../../services/sidebar';
 import {
   Configuracoes,
   ConfiguracoesSelecionadas
@@ -27,15 +24,13 @@ type SettingSection = ConfiguracoesSecao;
 @Component({
   selector: 'app-configuracoes',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, TopHeaderComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './configuracoes.component.html',
 })
 export class ConfiguracoesComponent {
-  private readonly sidebarService = inject(SidebarService);
 
   activeSection: SettingSection = 'Geral';
   saved = false;
-  sidebarMinimizada = false;
 
   readonly sections: Array<{
     name: SettingSection;
@@ -82,11 +77,6 @@ export class ConfiguracoesComponent {
     zipCode: '',
   };
 
-  constructor() {
-    this.sidebarService.minimizada$.subscribe((estado) => {
-      this.sidebarMinimizada = estado;
-    });
-  }
 
   readonly configurations: Record<
     Exclude<SettingSection, 'Geral'>,

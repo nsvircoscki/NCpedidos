@@ -1,8 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { TopHeaderComponent } from '../../components/top-header/top-header.component';
-import { SidebarService } from '../../services/sidebar';
 import { CadastroClienteComponent } from '../../components/cadastro-cliente/cadastro-cliente.component';
 import { ObservacoesClienteComponent, ObservacoesCliente } from '../../components/cadastro-cliente/observacoes-cliente/observacoes-cliente.component';
 
@@ -10,19 +7,15 @@ import { ObservacoesClienteComponent, ObservacoesCliente } from '../../component
     selector: 'app-cadastro-cliente-page',
     standalone: true,
     imports: [
-        SidebarComponent,
-        TopHeaderComponent,
         CadastroClienteComponent,
         ObservacoesClienteComponent
     ],
     templateUrl: './cadastro-cliente.component.html',
 })
 export class CadastroClientePageComponent {
-    private sidebarService = inject(SidebarService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     
-    sidebarMinimizada = false;
     etapaAtual = 1;
 
     cliente = {
@@ -58,11 +51,6 @@ export class CadastroClientePageComponent {
         } satisfies ObservacoesCliente
     };
 
-     constructor() {
-        this.sidebarService.minimizada$.subscribe((estado) => {
-            this.sidebarMinimizada = estado;
-        });
-    }
 
     irParaProximaEtapa(): void {
         this.etapaAtual = 2;

@@ -1,17 +1,6 @@
-<div class="min-h-screen overflow-x-hidden bg-[#f8f8ff]">
-  <app-sidebar></app-sidebar>
+<div class="min-w-0 lg:flex lg:flex-col lg:gap-6">
 
-  <main
-    class="min-w-0 pb-24 transition-[margin-left] duration-300 lg:ml-[265px] lg:flex lg:min-h-screen lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
-    [class.lg:ml-[88px]]="sidebarMinimizada">
 
-    <div class="px-4 lg:hidden">
-      <app-mobile-header></app-mobile-header>
-    </div>
-
-    <div class="hidden lg:block">
-      <app-top-header></app-top-header>
-    </div>
 
     @if (produto) {
       <section class="px-4 pt-5 lg:px-0 lg:pt-0">
@@ -260,9 +249,4 @@
         <a routerLink="/produtos" class="mt-4 inline-flex text-sm font-semibold text-[#153860] hover:underline">Voltar para produtos</a>
       </section>
     }
-  </main>
-
-  <div class="lg:hidden">
-    <app-mobile-navigation></app-mobile-navigation>
   </div>
-</div>

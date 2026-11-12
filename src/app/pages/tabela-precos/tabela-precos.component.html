@@ -1,10 +1,4 @@
-<div class="min-h-screen overflow-x-hidden bg-[#f8fafc]">
-  <app-sidebar></app-sidebar>
-  <main class="min-w-0 pb-10 transition-[margin-left] duration-300 lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
-    [class.lg:ml-[88px]]="sidebarMinimizada">
-    <div class="hidden lg:block">
-      <app-top-header></app-top-header>
-    </div>
+<div class="min-w-0 lg:flex lg:flex-col lg:gap-6">
 
     <!-- VERSÃO DESKTOP -->
     <section class="hidden pt-4 lg:block">
@@ -18,11 +12,15 @@
 
     <section class="hidden rounded-xl bg-white py-4 shadow-sm lg:block">
       <div class="mb-6 flex flex-wrap items-center gap-3 px-4">
-        <div class="relative min-w-[220px] flex-1">
+        <label class="relative min-w-[220px] flex-1">
+          <svg aria-hidden="true" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <circle cx="11" cy="11" r="7" />
+            <path stroke-linecap="round" d="m20 20-4-4" />
+          </svg>
           <input type="search" [(ngModel)]="termoBusca" (ngModelChange)="paginaAtual = 1"
             placeholder="Pesquisar produto ou SKU"
-            class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 px-5 text-[13px] text-slate-700 outline-none placeholder:text-slate-400" />
-        </div>
+            class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400" />
+        </label>
         <details class="relative">
           <summary class="flex h-12 min-w-[190px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700">
             {{ categoriasSelecionadas.length ? 'Categoria (' + categoriasSelecionadas.length + ')' : 'Todas as categorias' }}
@@ -80,63 +78,56 @@
         </button>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full min-w-[1050px] border-collapse text-left">
-          <thead>
-            <tr class="bg-slate-50 text-[10px] font-bold leading-none text-slate-400">
-              <th class="w-12 px-4 py-4"></th>
-              <th class="px-4 py-4 uppercase">Produto</th>
-              <th class="px-4 py-4 uppercase">Categoria</th>
-              <th class="px-4 py-4 uppercase">Embalagem</th>
-              <th class="px-4 py-4 uppercase">Estoque</th>
-              <th class="px-4 py-4 uppercase">Preço base</th>
-              <th class="px-4 py-4 uppercase">Preço do cliente</th>
-              <th class="px-4 py-4 uppercase">Status</th>
-              <th class="px-4 py-4 uppercase">Ações</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100">
-            @for (item of itensDaPagina; track item.id) {
-              <tr class="transition hover:bg-slate-50" (click)="alternarSelecao(item)">
-                <td class="px-4 py-4">
-                  <input type="checkbox" [checked]="itemEstaSelecionado(item)" (click)="$event.stopPropagation()"
-                    (change)="alternarSelecao(item)" class="h-4 w-4 cursor-pointer accent-[#2D486F]" />
-                </td>
-                <td class="px-4 py-4">
-                  <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-xs font-bold text-slate-500">{{ item.cor.charAt(0) }}</div>
-                    <div>
-                      <div class="text-[13px] font-bold text-slate-800">{{ item.produto }}</div>
-                      <div class="mt-1 text-[10px] text-slate-500">{{ item.codigoSKU }} · {{ item.cor }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-4 py-4 text-xs text-slate-700">{{ item.categoria }}</td>
-                <td class="px-4 py-4 text-xs text-slate-700">{{ item.embalagem }}</td>
-                <td class="px-4 py-4 text-xs font-bold" [class.text-red-500]="item.estoque < 50">{{ item.estoque }} un.</td>
-                <td class="px-4 py-4 text-sm font-bold text-slate-500">{{ item.precoBase | currency:'BRL' }}</td>
-                <td class="px-4 py-4">
-                  <input type="number" min="0" step="0.01" [(ngModel)]="item.preco" (click)="$event.stopPropagation()"
-                    class="w-36 rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold text-[#153860] outline-none focus:border-[#2d486f]" />
-                </td>
-                <td class="px-4 py-4">
-                  <span class="rounded-xl px-3 py-1.5 text-[10px] font-bold"
-                    [class.bg-[#ECF8F2]]="item.status === 'ATIVO'" [class.text-[#267253]]="item.status === 'ATIVO'"
-                    [class.bg-red-50]="item.status !== 'ATIVO'" [class.text-red-600]="item.status !== 'ATIVO'">
-                    {{ textoStatus(item.status) }}
-                  </span>
-                </td>
-                <td class="px-4 py-4">
-                  <button type="button" (click)="$event.stopPropagation()" class="rounded-lg px-3 py-2 text-xs font-bold text-[#2d486f] hover:bg-blue-50">
-                    Salvar preço
-                  </button>
-                </td>
-              </tr>
-            } @empty {
-              <tr><td colspan="9" class="px-4 py-12 text-center text-sm text-slate-400">Nenhum produto encontrado.</td></tr>
-            }
-          </tbody>
-        </table>
+      <div class="grid grid-cols-2 gap-4 px-4 md:grid-cols-3 xl:grid-cols-4">
+        @for (item of itensDaPagina; track item.id) {
+          <article class="overflow-hidden rounded-[14px] border bg-white transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)]"
+            [class.border-[#153860]]="itemEstaSelecionado(item)"
+            [class.border-[#e3e9ee]]="!itemEstaSelecionado(item)">
+            <div class="relative grid h-[104px] place-items-center bg-[#eff3f6] md:h-36">
+              <div class="flex h-[54px] w-[58px] flex-col items-center">
+                <div class="h-[8px] w-full rounded-t-full border border-[#cbd5df] bg-[#e3e8eb]"></div>
+                <div class="grid h-[46px] w-full place-items-center rounded-b-[5px] bg-[#f5f2e8]">
+                  <span class="w-full bg-[#23588a] py-1 text-center text-[10px] font-bold text-white">NC</span>
+                </div>
+              </div>
+              <label class="absolute right-2 top-2 grid h-7 w-7 cursor-pointer place-items-center rounded-full bg-white/90 shadow-sm" aria-label="Selecionar produto">
+                <input type="checkbox" [checked]="itemEstaSelecionado(item)" (change)="alternarSelecao(item)" (click)="$event.stopPropagation()" class="h-4 w-4 cursor-pointer accent-[#153860]" />
+              </label>
+              @if (item.estoque > 0 && item.estoque < 50) {
+                <span class="absolute left-2 top-2 rounded-full bg-[#fff1d6] px-2 py-1 text-[7px] font-bold text-[#b7791f]">Estoque baixo</span>
+              }
+            </div>
+
+            <div class="px-3 pt-3 md:px-4">
+              <p class="truncate text-[8px] font-bold uppercase text-[#8997a7]">{{ item.categoria }}</p>
+              <h3 class="mt-1 min-h-8 text-[11px] font-bold leading-4 text-[#101b2b] md:text-xs">{{ item.produto }}</h3>
+              <p class="mt-1 truncate text-[8px] text-[#8997a7]">{{ item.codigoSKU }} · {{ item.cor }} · {{ item.embalagem }}</p>
+              <p class="mt-2 text-[9px]" [class.text-[#16815f]]="item.estoque >= 50" [class.text-[#d99019]]="item.estoque < 50">● {{ item.estoque }} un. disponíveis</p>
+            </div>
+
+            <div class="px-3 pb-3 pt-2 md:px-4">
+              <div class="my-2 border-t border-[#edf1f4]"></div>
+              <div class="flex items-end justify-between gap-2">
+                <div class="min-w-0">
+                  <p class="text-[8px] text-[#8997a7]">Preço base</p>
+                  <p class="mt-0.5 text-[10px] font-semibold text-[#64748b]">{{ item.precoBase | currency:'BRL' }}</p>
+                </div>
+                <span class="rounded-full px-2 py-1 text-[8px] font-semibold"
+                  [class.bg-[#e8f6ef]]="item.status === 'ATIVO'" [class.text-[#16815f]]="item.status === 'ATIVO'"
+                  [class.bg-[#fff0f0]]="item.status !== 'ATIVO'" [class.text-[#d34242]]="item.status !== 'ATIVO'">{{ textoStatus(item.status) }}</span>
+              </div>
+              <label class="mt-2 block text-[8px] text-[#8997a7]">Preço do cliente
+                <input type="number" min="0" step="0.01" [(ngModel)]="item.preco" [name]="'preco-' + item.id"
+                  class="mt-1 h-9 w-full rounded-lg border border-[#dbe3eb] px-2 text-sm font-bold text-[#153860] outline-none focus:border-[#153860]" />
+              </label>
+              <button type="button" class="mt-2 w-full rounded-lg bg-[#edf3f8] py-2 text-[9px] font-bold text-[#153860] transition hover:bg-[#e1ebf4]">
+                Salvar preço
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <p class="col-span-full py-12 text-center text-sm text-slate-400">Nenhum produto encontrado.</p>
+        }
       </div>
 
       <div class="mt-6 flex items-center justify-between border-t border-slate-100 px-4 pt-4">
@@ -152,16 +143,6 @@
 
     <!-- VERSÃO MOBILE -->
     <section class="lg:hidden">
-      <header class="relative flex h-[72px] items-center border-b border-[#e2e8f0] bg-white px-4">
-        <img class="h-[54px] w-[136px] object-contain object-left" src="assets/img/logo.svg" alt="NC Tintas">
-        <div class="ml-auto flex items-center gap-2">
-          <button type="button" aria-label="Pesquisar" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] text-lg text-[#475569]">⌕</button>
-          <button type="button" aria-label="Notificações" class="grid h-[38px] w-[38px] place-items-center rounded-[10px]">
-            <img class="h-[22px] w-[22px]" src="assets/notificationIcon.svg" alt="">
-          </button>
-          <span class="grid h-[38px] w-[38px] place-items-center rounded-full bg-[#b9cde5] text-[11px] font-semibold text-[#153860]">CA</span>
-        </div>
-      </header>
 
       <!-- Bloco de Título do Topo -->
       <div class="px-4 pt-4">
@@ -172,52 +153,215 @@
             <h1 class="mt-0.5 text-[26px] font-semibold leading-tight text-[#0f172a]">Produtos e Preços</h1>
             <p class="mt-0.5 text-[12px] text-[#64748b]">Valores exclusivos de {{ clienteNome }}.</p>
           </div>  
-          <button
-            type="button"
-            routerLink="/clientes/novo"
-            aria-label="Cadastrar cliente"
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#153860] text-[18px] font-bold text-white transition-opacity hover:opacity-90">
-            +
-          </button>
         </div>
       </div>
 
       <div class="mt-4 px-4">
-        <div class="flex items-end justify-between">
-          <div>
-            <h2 class="text-[16px] font-medium text-[#0f172a]">Todos os Produtos</h2>
-            <p class="text-[10px] text-[#94a3b8]">{{ itensFiltrados.length }} produtos</p>
-          </div>
-          <span class="text-[10px] text-[#94a3b8]">Preço do cliente</span>
+        <div class="flex items-center gap-2">
+          <label class="flex h-[42px] min-w-0 flex-1 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3">
+            <img
+              src="assets/img/searchIcon.svg"
+              alt=""
+              aria-hidden="true"
+              class="h-4 w-4"
+            />
+
+            <input
+              type="search"
+              [(ngModel)]="termoBusca"
+              (ngModelChange)="paginaAtual = 1"
+              placeholder="Buscar produto ou SKU"
+              class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+            />
+          </label>
+
+          <button
+            type="button"
+            aria-label="Abrir filtros"
+            [attr.aria-expanded]="filtrosAbertos"
+            (click)="filtrosAbertos = true"
+            class="relative grid h-[42px] w-[42px] shrink-0 place-items-center rounded-[12px] border border-[#e0e7ed] bg-white text-[#153d65] transition hover:bg-[#f2f6fa] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#153d65]"
+          >
+            <span aria-hidden="true" class="flex w-4 flex-col gap-1">
+              <span class="h-0.5 w-full rounded-full bg-current"></span>
+              <span class="h-0.5 w-full rounded-full bg-current"></span>
+              <span class="h-0.5 w-full rounded-full bg-current"></span>
+            </span>
+            @if (totalFiltrosAtivos > 0) {
+              <span class="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#153d65] px-1 text-[9px] font-bold text-white">
+                {{ totalFiltrosAtivos }}
+              </span>
+            }
+          </button>
         </div>
 
-        <label class="mt-3 flex h-[38px] items-center gap-2 rounded-full bg-white px-4 shadow-sm">
-          <span class="text-lg leading-none text-[#94a3b8]">⌕</span>
-          <input
-            type="search"
-            [(ngModel)]="termoBusca"
-            (ngModelChange)="paginaAtual = 1"
-            class="min-w-0 flex-1 bg-transparent text-[12px] text-slate-700 outline-none placeholder:text-[#94a3b8]"
-            placeholder="Buscar produto ou SKU">
-        </label>
+        <!-- Overlay: fade -->
+        <div
+          (click)="filtrosAbertos = false"
+          ngmMotion
+          [initial]="false"
+          [animate]="{ opacity: filtrosAbertos ? 1 : 0 }"
+          [transition]="{ duration: 0.3, ease: 'easeOut' }"
+          class="fixed inset-0 z-[60] bg-black/40"
+          [class.pointer-events-none]="!filtrosAbertos"
+          aria-hidden="true"
+        ></div>
 
-        <div class="mt-3 space-y-4">
+        <!-- Drawer: sobe de baixo -->
+        <aside
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filtros"
+          [attr.aria-hidden]="!filtrosAbertos"
+          [attr.inert]="filtrosAbertos ? null : ''"
+          class="fixed inset-x-0 bottom-0 z-[70] max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-2xl"
+          ngmMotion
+          [initial]="false"
+          [animate]="{ y: filtrosAbertos ? '0%' : '100%' }"
+          [transition]="{ duration: 0.3, ease: 'easeOut' }"
+        >
+          <div class="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#e0e7ed]"></div>
+
+          <div class="flex items-center justify-between">
+            <h2 class="text-[16px] font-bold text-[#101b2b]">Filtros</h2>
+            <button
+              type="button"
+              (click)="filtrosAbertos = false"
+              aria-label="Fechar filtros"
+              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]"
+            >
+              ✕
+            </button>
+          </div>
+
+          <h3 class="mb-3 mt-5 text-[10px] font-bold uppercase tracking-wide text-[#8997a7]">Categoria</h3>
+          <div class="flex flex-wrap gap-2">
+            @for (categoria of categoriasMobile; track categoria) {
+              <button
+                type="button"
+                (click)="selecionarCategoriaMobile(categoria)"
+                [attr.aria-pressed]="categoriaMobileSelecionada === categoria"
+                class="rounded-full border px-4 py-2 text-[11px] font-semibold"
+                [class.border-[#153d65]]="categoriaMobileSelecionada === categoria"
+                [class.bg-[#153d65]]="categoriaMobileSelecionada === categoria"
+                [class.text-white]="categoriaMobileSelecionada === categoria"
+                [class.border-[#e0e7ed]]="!(categoriaMobileSelecionada === categoria)"
+                [class.bg-white]="!(categoriaMobileSelecionada === categoria)"
+                [class.text-[#68788c]]="!(categoriaMobileSelecionada === categoria)"
+              >
+                {{ categoria }}
+              </button>
+            }
+          </div>
+
+          <h3 class="mb-3 mt-5 text-[10px] font-bold uppercase tracking-wide text-[#8997a7]">Status</h3>
+          <div class="flex flex-wrap gap-2">
+            @for (statusItem of status; track statusItem) {
+              <button
+                type="button"
+                (click)="alternarFiltro('status', statusItem)"
+                [attr.aria-pressed]="filtroEstaSelecionado('status', statusItem)"
+                class="rounded-full border px-4 py-2 text-[11px] font-semibold"
+                [class.border-[#153d65]]="filtroEstaSelecionado('status', statusItem)"
+                [class.bg-[#153d65]]="filtroEstaSelecionado('status', statusItem)"
+                [class.text-white]="filtroEstaSelecionado('status', statusItem)"
+                [class.border-[#e0e7ed]]="!(filtroEstaSelecionado('status', statusItem))"
+                [class.bg-white]="!(filtroEstaSelecionado('status', statusItem))"
+                [class.text-[#68788c]]="!(filtroEstaSelecionado('status', statusItem))"
+              >
+                {{ textoStatus(statusItem) }}
+              </button>
+            }
+          </div>
+
+          <h3 class="mb-3 mt-5 text-[10px] font-bold uppercase tracking-wide text-[#8997a7]">Cor</h3>
+          <div class="flex flex-wrap gap-2">
+            @for (cor of cores; track cor) {
+              <button
+                type="button"
+                (click)="alternarFiltro('cor', cor)"
+                [attr.aria-pressed]="filtroEstaSelecionado('cor', cor)"
+                class="rounded-full border px-4 py-2 text-[11px] font-semibold"
+                [class.border-[#153d65]]="filtroEstaSelecionado('cor', cor)"
+                [class.bg-[#153d65]]="filtroEstaSelecionado('cor', cor)"
+                [class.text-white]="filtroEstaSelecionado('cor', cor)"
+                [class.border-[#e0e7ed]]="!(filtroEstaSelecionado('cor', cor))"
+                [class.bg-white]="!(filtroEstaSelecionado('cor', cor))"
+                [class.text-[#68788c]]="!(filtroEstaSelecionado('cor', cor))"
+              >
+                {{ cor }}
+              </button>
+            }
+          </div>
+
+          <div class="mt-6 flex gap-3">
+            <button
+              type="button"
+              (click)="limparFiltrosMobile()"
+              class="flex-1 rounded-full border border-[#e0e7ed] py-3 text-[12px] font-semibold text-[#68788c]"
+            >
+              Limpar
+            </button>
+            <button
+              type="button"
+              (click)="filtrosAbertos = false"
+              class="flex-1 rounded-full bg-[#153d65] py-3 text-[12px] font-semibold text-white"
+            >
+              Ver {{ itensFiltrados.length }} produtos
+            </button>
+          </div>
+        </aside>
+
+        <!-- Categorias -->
+        <div class="mt-3 flex gap-2 overflow-x-auto pb-1">
+          @for (categoria of categoriasMobile; track categoria) {
+            <button
+              type="button"
+              (click)="selecionarCategoriaMobile(categoria)"
+              class="shrink-0 rounded-full border px-3 py-2 text-[8px] font-semibold"
+              [class.border-[#153d65]]="categoriaMobileSelecionada === categoria"
+              [class.bg-[#153d65]]="categoriaMobileSelecionada === categoria"
+              [class.text-white]="categoriaMobileSelecionada === categoria"
+              [class.border-[#e0e7ed]]="categoriaMobileSelecionada !== categoria"
+              [class.bg-white]="categoriaMobileSelecionada !== categoria"
+              [class.text-[#68788c]]="categoriaMobileSelecionada !== categoria">
+              {{ categoria }}
+            </button>
+          }
+        </div>
+
+        <div class="mt-5 flex items-center justify-between">
+          <div>
+            <h2 class="text-[16px] font-bold text-[#101b2b]">Produtos e preços</h2>
+            <p class="text-[9px] text-[#8997a7]">{{ itensFiltrados.length }} produtos na tabela deste cliente</p>
+          </div>
+          <button type="button" (click)="limparFiltrosMobile()" class="text-[9px] font-semibold text-[#153d65]">
+            Limpar filtros
+          </button>
+        </div>
+
+        <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
           @for (item of itensDaPagina; track item.id) {
-            <article class="flex min-h-[94px] items-center gap-3 rounded-[12px] border border-[#e2e8f0] bg-white px-3 py-3">
-              <div class="flex h-[70px] w-[62px] shrink-0 flex-col items-center justify-center rounded-[10px] bg-[#f6f6f7]">
-                <div class="h-7 w-8 rounded-t-md border border-[#aeb6c0] bg-[#eef0f2]"></div>
-                <span class="text-[8px] text-[#64748b]">NC</span>
-                <span class="text-[8px] text-[#475569]">{{ item.embalagem }}</span>
+            <article class="overflow-hidden rounded-[14px] border border-[#e3e9ee] bg-white transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)]">
+              <div class="relative grid h-[104px] place-items-center bg-[#eff3f6]">
+                <div class="flex h-[54px] w-[58px] flex-col items-center">
+                  <div class="h-[8px] w-full rounded-t-full border border-[#cbd5df] bg-[#e3e8eb]"></div>
+                  <div class="grid h-[46px] w-full place-items-center rounded-b-[5px] bg-[#f5f2e8]">
+                    <span class="w-full bg-[#23588a] py-1 text-center text-[10px] font-bold text-white">NC</span>
+                  </div>
+                </div>
               </div>
 
-              <div class="min-w-0 flex-1">
-                <h3 class="truncate text-[12px] font-medium text-[#0f172a]">{{ item.produto }}</h3>
-                <p class="mt-1 truncate text-[9px] text-[#64748b]">{{ item.cor }} · {{ item.embalagem }}</p>
+              <div class="px-2.5 pt-3">
+                <p class="truncate text-[7px] font-bold uppercase text-[#8997a7]">{{ item.categoria }}</p>
+                <h3 class="mt-1 min-h-8 text-[11px] font-bold leading-4 text-[#101b2b]">{{ item.produto }}</h3>
+                <p class="mt-1 truncate text-[8px] text-[#8997a7]">{{ item.cor }} · {{ item.embalagem }}</p>
               </div>
 
-              <div class="shrink-0 text-right">
-                <p class="text-[9px] text-[#94a3b8]">Preço Unitário</p>
-                <p class="text-[13px] font-medium leading-tight text-[#153860]">{{ item.preco | currency:'BRL' }}</p>
+              <div class="px-2.5 pb-3 pt-2">
+                <p class="text-[8px]" [class.text-[#16815f]]="item.estoque >= 50" [class.text-[#d99019]]="item.estoque < 50">● {{ item.estoque }} un. disponíveis</p>
+                <div class="my-2 border-t border-[#edf1f4]"></div>
+                <p class="text-[14px] font-bold text-[#153d65]">{{ item.preco | currency:'BRL' }}</p>
               </div>
             </article>
           } @empty {
@@ -226,6 +370,4 @@
         </div>
       </div>
     </section>
-  </main>
-  <app-mobile-navigation></app-mobile-navigation>
-</div>
+  </div>

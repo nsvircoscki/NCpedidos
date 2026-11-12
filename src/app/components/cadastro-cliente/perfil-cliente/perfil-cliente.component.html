@@ -11,61 +11,61 @@
     </header>
 
     <div class="grid gap-4 lg:grid-cols-[1fr_2fr_1fr] lg:gap-5">
-      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
-        CEP
+      <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        <span class="label-input__label">CEP</span>
         <input
           name="cep"
           [(ngModel)]="cliente.cep"
           placeholder="00000-000"
-          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+          class="label-input__field h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
 
-      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
-        Logradouro
+      <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        <span class="label-input__label">Logradouro</span>
         <input
           name="endereco"
           [(ngModel)]="cliente.endereco"
           placeholder="Rua, avenida e número"
-          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+          class="label-input__field h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
 
-      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
-        Número
+      <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        <span class="label-input__label">Número</span>
         <input
           name="numero"
           [(ngModel)]="cliente.numero"
           placeholder="Nº"
-          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+          class="label-input__field h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
     </div>
 
     <div class="grid gap-4 lg:grid-cols-3 lg:gap-5">
-      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
-        Bairro
+      <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        <span class="label-input__label">Bairro</span>
         <input
           name="bairro"
           [(ngModel)]="cliente.bairro"
           placeholder="Digite o bairro"
-          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+          class="label-input__field h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
 
-      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
-        Cidade
+      <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        <span class="label-input__label">Cidade</span>
         <input
           name="cidade"
           [(ngModel)]="cliente.cidade"
           placeholder="Cidade"
-          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+          class="label-input__field h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
 
-      <label class="flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
-        UF
+      <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base">
+        <span class="label-input__label">UF</span>
         <input
           name="uf"
           maxlength="2"
           [(ngModel)]="cliente.uf"
           placeholder="UF"
-          class="h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
+          class="label-input__field h-12 rounded-[10px] border border-slate-200 bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#2d5d8e] lg:h-16 lg:rounded-[41px] lg:px-6 lg:text-base">
       </label>
     </div>
 

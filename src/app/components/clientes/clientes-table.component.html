@@ -22,137 +22,158 @@
       />
     </div>
 
-    <!-- Filtro de Tipo (Pessoa Física / Jurídica / Pintor / Revenda) -->
-      <div class="relative">
-        <button
-          type="button"
-          (click)="alternarDropdown('tipo')"
-          class="flex h-12 min-w-[190px] items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860]">
-          <span class="flex items-center gap-2">
-            <svg aria-hidden="true" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            {{ valorSelecionado('tipo') || 'Todos os tipos' }}
+    <!--
+      Botão hambúrguer: abre um painel com ordenação + filtros (tipo, status, cidade).
+      O número no canto mostra quantos filtros estão ativos.
+    -->
+    <div class="relative">
+      <button
+        type="button"
+        (click)="alternarFiltros()"
+        aria-label="Abrir filtros e ordenação"
+        aria-haspopup="dialog"
+        [attr.aria-expanded]="filtrosAbertos"
+        class="relative grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[#A9B6C5] bg-white text-[#153860] transition hover:border-[#153860]"
+        [class.border-[#153860]]="filtrosAbertos">
+        <span aria-hidden="true" class="flex w-4 flex-col gap-1">
+          <span class="h-0.5 w-full rounded-full bg-current"></span>
+          <span class="h-0.5 w-full rounded-full bg-current"></span>
+          <span class="h-0.5 w-full rounded-full bg-current"></span>
+        </span>
+        @if (totalFiltrosAtivos > 0) {
+          <span class="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#153860] px-1 text-[10px] font-bold text-white">
+            {{ totalFiltrosAtivos }}
           </span>
+        }
+      </button>
 
-          <svg
-            class="h-4 w-4 transition-transform duration-150"
-            [class.rotate-180]="dropdownAberto === 'tipo'"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
-          </svg>
-        </button>
+    </div>
 
-        @if (dropdownAberto === 'tipo') {
-          <div class="absolute left-0 top-[calc(100%+6px)] z-20 w-full origin-top rounded-xl bg-white p-2 shadow-xl ring-1 ring-slate-100 animate-dropdown">
+
+    <!--
+      Modal de filtros: centralizado, abre com pop-in e pode ser puxado para os lados, mas sempre volta ao meio.
+      Fica sempre no HTML; o ngmMotion anima entre aberto e fechado.
+      Fechado: invisível, sem cliques (pointer-events-none) e fora do Tab (inert).
+    -->
+    <div
+      class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      [class.pointer-events-none]="!filtrosAbertos"
+      [attr.inert]="filtrosAbertos ? null : ''"
+      [attr.aria-hidden]="!filtrosAbertos">
+
+      <!-- Fundo escuro (fade): clicar nele fecha -->
+      <div
+        (click)="fecharFiltros()"
+        ngmMotion
+        [initial]="false"
+        [animate]="{ opacity: filtrosAbertos ? 1 : 0 }"
+        [transition]="{ duration: 0.2, ease: 'easeOut' }"
+        class="absolute inset-0 bg-black/40"
+      ></div>
+
+      <!-- Camada 1: pop-in (abre crescendo com mola, fecha encolhendo rápido) -->
+      <div
+        ngmMotion
+        [initial]="false"
+        [animate]="{ opacity: filtrosAbertos ? 1 : 0, scale: filtrosAbertos ? 1 : 0.6 }"
+        [transition]="filtrosAbertos
+          ? { type: 'spring', stiffness: 380, damping: 18, mass: 0.8, opacity: { duration: 0.15 } }
+          : { duration: 0.15, ease: 'easeIn' }"
+        class="relative w-full max-w-lg">
+
+        <!-- Camada 2: puxa para os lados com efeito gelatina e volta sozinho para o meio ao soltar -->
+        <section
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filtros e ordenação"
+          ngmMotion
+          #modalFiltros
+          drag="x"
+          [dragX]="arrastoX"
+          [dragConstraints]="limitesArrasto()"
+          [dragElastic]="0.1"
+          [dragSnapToOrigin]="true"
+          [style]="estiloArrasto"
+          [whileDrag]="{ boxShadow: '0 22px 52px rgba(21, 56, 96, 0.28)' }"
+          class="max-h-[85vh] cursor-grab touch-pan-y select-none overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl active:cursor-grabbing">
+
+          <div class="mb-4 flex items-center justify-between">
+            <h2 class="text-[16px] font-bold text-[#101b2b]">Filtros</h2>
             <button
               type="button"
-              (click)="selecionarFiltro('tipo', '')"
-              class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
-              Todos os tipos
+              (click)="fecharFiltros()"
+              aria-label="Fechar filtros"
+              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]">
+              ✕
             </button>
+          </div>
 
-            @for (tipo of tiposCliente; track tipo) {
+          <!-- Ordenação: uma opção por vez -->
+          <h3 class="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-400">Ordenar por</h3>
+          <div class="grid gap-1">
+            @for (opcao of opcoesOrdenacao; track opcao.valor) {
               <button
                 type="button"
-                (click)="selecionarFiltro('tipo', tipo)"
-                class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
-                {{ tipo }}
+                (click)="selecionarOrdenacao(opcao.valor)"
+                [attr.aria-pressed]="ordenacao === opcao.valor"
+                class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors hover:bg-slate-100"
+                [class.bg-[#eef3f8]]="ordenacao === opcao.valor"
+                [class.font-semibold]="ordenacao === opcao.valor"
+                [class.text-[#153860]]="ordenacao === opcao.valor">
+                {{ opcao.texto }}
+                @if (ordenacao === opcao.valor) {
+                  <span aria-hidden="true">✓</span>
+                }
               </button>
             }
           </div>
-        }
+
+          <!--
+            Molde dos grupos de filtro (Tipo, Status, Cidade): título + chips.
+            É escrito uma vez e usado três vezes com o *ngTemplateOutlet logo abaixo.
+            Clicar no chip já marcado desmarca (volta para "todos").
+          -->
+          <ng-template #grupoChips let-tipo="tipo" let-titulo="titulo" let-opcoes="opcoes">
+            <h3 class="mb-2 mt-5 text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ titulo }}</h3>
+            <div class="flex flex-wrap gap-2">
+              @for (opcao of opcoes; track opcao) {
+                <button
+                  type="button"
+                  (click)="selecionarFiltro(tipo, opcao)"
+                  [attr.aria-pressed]="valorSelecionado(tipo) === opcao"
+                  class="rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors"
+                  [class.border-[#153860]]="valorSelecionado(tipo) === opcao"
+                  [class.bg-[#153860]]="valorSelecionado(tipo) === opcao"
+                  [class.text-white]="valorSelecionado(tipo) === opcao"
+                  [class.border-slate-200]="valorSelecionado(tipo) !== opcao"
+                  [class.text-slate-600]="valorSelecionado(tipo) !== opcao"
+                  [class.hover:bg-slate-50]="valorSelecionado(tipo) !== opcao">
+                  {{ tipo === 'status' ? textoStatus(opcao) : opcao }}
+                </button>
+              }
+            </div>
+          </ng-template>
+
+          <ng-container *ngTemplateOutlet="grupoChips; context: { tipo: 'tipo', titulo: 'Tipo', opcoes: tiposCliente }"></ng-container>
+          <ng-container *ngTemplateOutlet="grupoChips; context: { tipo: 'status', titulo: 'Status', opcoes: status }"></ng-container>
+          <ng-container *ngTemplateOutlet="grupoChips; context: { tipo: 'cidade', titulo: 'Cidade', opcoes: cidades }"></ng-container>
+
+          <div class="mt-6 flex gap-2">
+            <button
+              type="button"
+              (click)="limparFiltrosDoPainel()"
+              class="flex-1 rounded-full border border-slate-200 py-2.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">
+              Limpar filtros
+            </button>
+            <button
+              type="button"
+              (click)="fecharFiltros()"
+              class="flex-1 rounded-full bg-[#153860] py-2.5 text-xs font-semibold text-white transition hover:bg-[#0f2947]">
+              Ver {{ clientesFiltrados.length }} clientes
+            </button>
+          </div>
+        </section>
       </div>
-    <!-- Filtro de Status -->
-    <div class="relative">
-      <button
-        type="button"
-        (click)="alternarDropdown('status')"
-        class="flex h-12 min-w-[160px] items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860]">
-        <span class="flex items-center gap-2">
-          <svg aria-hidden="true" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="8" />
-            <path stroke-linecap="round" d="m9 12 2 2 4-4" />
-          </svg>
-          {{ textoStatus(valorSelecionado('status')) || 'Todos os status' }}
-        </span>
-
-        <svg
-          class="h-4 w-4 transition-transform duration-150"
-          [class.rotate-180]="dropdownAberto === 'status'"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
-        </svg>
-      </button>
-
-      @if (dropdownAberto === 'status') {
-        <div class="absolute left-0 top-[calc(100%+6px)] z-20 w-full origin-top rounded-xl bg-white p-2 shadow-xl ring-1 ring-slate-100 animate-dropdown">
-          <button
-            type="button"
-            (click)="selecionarFiltro('status', '')"
-            class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
-            Todos os status
-          </button>
-
-          @for (statusCliente of status; track statusCliente) {
-            <button
-              type="button"
-              (click)="selecionarFiltro('status', statusCliente)"
-              class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
-              {{ textoStatus(statusCliente) }}
-            </button>
-          }
-        </div>
-      }
-    </div>
-
-    <!-- Filtro de Cidade/Região -->
-    <div class="relative">
-      <button
-        type="button"
-        (click)="alternarDropdown('cidade')"
-        class="flex h-12 min-w-[160px] items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860]">
-        <span class="flex items-center gap-2">
-          <svg aria-hidden="true" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          {{ valorSelecionado('cidade') || 'Todas as cidades' }}
-        </span>
-
-        <svg
-          class="h-4 w-4 transition-transform duration-150"
-          [class.rotate-180]="dropdownAberto === 'cidade'"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
-        </svg>
-      </button>
-
-      @if (dropdownAberto === 'cidade') {
-        <div class="absolute right-0 top-[calc(100%+6px)] z-20 w-full origin-top rounded-xl bg-white p-2 shadow-xl ring-1 ring-slate-100 animate-dropdown">
-          <button
-            type="button"
-            (click)="selecionarFiltro('cidade', '')"
-            class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
-            Todas as cidades
-          </button>
-
-          @for (cidade of cidades; track cidade) {
-            <button
-              type="button"
-              (click)="selecionarFiltro('cidade', cidade)"
-              class="w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900">
-              {{ cidade }}
-            </button>
-          }
-        </div>
-      }
     </div>
 
     @if (possuiFiltrosAtivos) {

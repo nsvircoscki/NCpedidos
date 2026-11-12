@@ -13,17 +13,19 @@ export class TopHeaderComponent {
     pesquisaAberta = false;
     termoPesquisa = '';
 
+    // "Pedido enviado" e "Acompanhamento" dependem de um id: por enquanto apontam
+    // para um pedido de exemplo (1047) até existirem dados reais.
     paginas = [
         { nome: 'Visão geral', rota: '/dashboard' },
         { nome: 'Pedidos', rota: '/pedidos' },
         { nome: 'Produtos', rota: '/produtos' },
-        { nome: 'Novo pedido', rota: '/cadastro-pedido' },
+        { nome: 'Novo pedido', rota: '/pedidos/novo' },
         { nome: 'Clientes', rota: '/clientes' },
         { nome: 'Cadastrar cliente', rota: '/clientes/novo' },
         { nome: 'Análise de clientes', rota: '/clientes/analise' },
-        { nome: 'Pedido Enviado', rota: '/pedido-enviado' },
+        { nome: 'Pedido Enviado', rota: '/pedidos/1047' },
         { nome: 'Configurações', rota: '/configuracoes' },
-        { nome: 'Acompanhamento do pedido', rota: '/pedido-acompanhamento' },
+        { nome: 'Acompanhamento do pedido', rota: '/pedidos/1047/acompanhamento' },
     ];
 
     get paginasFiltradas() {

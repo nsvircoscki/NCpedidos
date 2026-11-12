@@ -1,17 +1,6 @@
-<div class="min-h-screen overflow-x-hidden bg-[#F8F8FF]">
-  <app-sidebar></app-sidebar>
+<div class="min-w-0 lg:flex lg:flex-col lg:gap-6">
 
-  <main
-    class="min-w-0 pb-24 transition-[margin-left] duration-300 bg-[#F8F8FF] lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
-    [class.lg:ml-[88px]]="sidebarMinimizada">
-
-    <div class="px-4 lg:hidden">
-      <app-mobile-header></app-mobile-header>
-    </div>
     
-    <div class="hidden lg:block">
-      <app-top-header></app-top-header>
-    </div>
 
     <!-- SEÇÃO DESKTOP -->
     <section class="hidden pt-4 lg:block">
@@ -49,12 +38,12 @@
         </h1>
 
         <!-- Cliente e tabela de preço -->
-        <div class="relative mt-5">
+        <div class="mt-5">
           <button
             type="button"
-            aria-haspopup="listbox"
+            aria-haspopup="dialog"
             [attr.aria-expanded]="seletorClientesAberto"
-            (click)="seletorClientesAberto = !seletorClientesAberto"
+            (click)="abrirSeletorClientes()"
             class="flex min-h-[68px] w-full items-center gap-3 rounded-[15px] bg-[#eef5fa] p-3 text-left transition hover:bg-[#e6f0f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#153d65]"
           >
             <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#153d65] text-[10px] font-bold text-white">
@@ -71,79 +60,323 @@
               </span>
             </span>
 
-            <span aria-hidden="true" class="text-xl text-[#153d65]">{{ seletorClientesAberto ? '⌃' : '›' }}</span>
+            <span aria-hidden="true" class="text-xl text-[#153d65]">›</span>
           </button>
 
-          @if (seletorClientesAberto) {
-            <div class="fixed inset-0 z-40" (click)="seletorClientesAberto = false"></div>
-            <section
-              role="listbox"
-              aria-label="Selecionar cliente para consultar preços"
-              class="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-[#e0e7ed] bg-white py-1 shadow-xl"
+        </div>
+
+        <!-- Modal: selecionar cliente (centralizado, com pop-in) -->
+        <div
+          class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+          [class.pointer-events-none]="!seletorClientesAberto"
+          [attr.inert]="seletorClientesAberto ? null : ''"
+          [attr.aria-hidden]="!seletorClientesAberto"
+        >
+          <!-- Fundo escuro (fade): clicar nele fecha o modal -->
+          <div
+            class="absolute inset-0 bg-black/40"
+            (click)="fecharSeletorClientes()"
+            ngmMotion
+            [initial]="false"
+            [animate]="{ opacity: seletorClientesAberto ? 1 : 0 }"
+            [transition]="{ duration: 0.2, ease: 'easeOut' }"
+          ></div>
+
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-label="Selecionar cliente"
+            ngmMotion
+            [initial]="false"
+            [animate]="{
+              opacity: seletorClientesAberto ? 1 : 0,
+              scale: seletorClientesAberto ? 1 : 0.6
+            }"
+            [transition]="seletorClientesAberto
+              ? { type: 'spring', stiffness: 380, damping: 18, mass: 0.8, opacity: { duration: 0.15 } }
+              : { duration: 0.15, ease: 'easeIn' }"
+            class="relative max-h-[85vh] w-full max-w-[440px] overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl"
+          >
+          <div class="flex items-center justify-between">
+            <h2 class="text-[16px] font-bold text-[#101b2b]">Selecionar cliente</h2>
+            <button
+              type="button"
+              (click)="fecharSeletorClientes()"
+              aria-label="Fechar seleção de cliente"
+              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]"
             >
-              <p class="px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-[#8997a7]">Clientes</p>
-              @for (cliente of clientes; track cliente.id) {
-                <button
-                  type="button"
-                  role="option"
-                  [attr.aria-selected]="clienteSelecionado === cliente.id"
-                  (click)="selecionarCliente(cliente.id)"
-                  class="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[#153860] transition hover:bg-[#f2f6fa]"
-                >
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eef3f8] text-[10px] font-bold text-[#153d65]">
-                    {{ iniciaisDoNome(cliente.nome) }}
-                  </span>
-                  <span class="min-w-0 flex-1 truncate">{{ cliente.nome }}</span>
-                  @if (clienteSelecionado === cliente.id) {
-                    <span aria-hidden="true" class="font-bold text-[#16815f]">✓</span>
-                  }
-                </button>
+              ✕
+            </button>
+          </div>
+
+          <label class="mt-4 flex h-10 items-center gap-2 rounded-[12px] border border-[#e0e7ed] bg-[#f8fafc] px-3 focus-within:border-[#153d65]">
+            <img src="assets/img/searchIcon.svg" alt="" aria-hidden="true" class="h-4 w-4" />
+            <input
+              type="search"
+              [(ngModel)]="buscaCliente"
+              placeholder="Pesquisar cliente"
+              aria-label="Pesquisar cliente"
+              class="min-w-0 flex-1 bg-transparent text-[12px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+            />
+          </label>
+
+          <div role="listbox" aria-label="Clientes" class="mt-4 flex flex-col gap-1">
+            @for (cliente of clientesFiltrados; track cliente.id) {
+              <button
+                type="button"
+                role="option"
+                [attr.aria-selected]="clienteSelecionado === cliente.id"
+                (click)="selecionarCliente(cliente.id)"
+                class="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-[#153860] transition hover:bg-[#f2f6fa]"
+                [class.bg-[#eef5fa]]="clienteSelecionado === cliente.id"
+              >
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eef3f8] text-[10px] font-bold text-[#153d65]">
+                  {{ iniciaisDoNome(cliente.nome) }}
+                </span>
+                <span class="min-w-0 flex-1 truncate">{{ cliente.nome }}</span>
+                @if (clienteSelecionado === cliente.id) {
+                  <span aria-hidden="true" class="font-bold text-[#16815f]">✓</span>
+                }
+              </button>
+            } @empty {
+              <p class="w-full py-3 text-center text-[11px] text-[#8997a7]">Nenhum cliente encontrado.</p>
+            }
+          </div>
+
+          @if (clienteSelecionado) {
+            <button
+              type="button"
+              (click)="selecionarCliente('')"
+              class="mt-6 w-full rounded-full border border-[#e0e7ed] py-3 text-[12px] font-semibold text-[#68788c]"
+            >
+              Remover seleção e usar preço base
+            </button>
+          }
+          </section>
+        </div>
+
+        <!-- Busca e filtros (desktop) -->
+        <div class="mt-4 hidden flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm lg:flex">
+          <label class="relative min-w-[220px] flex-1">
+            <svg aria-hidden="true" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <circle cx="11" cy="11" r="7" />
+              <path stroke-linecap="round" d="m20 20-4-4" />
+            </svg>
+            <input
+              type="search"
+              [(ngModel)]="termoBuscaMobile"
+              placeholder="Pesquisar produto ou SKU"
+              class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400"
+            />
+          </label>
+
+          <details class="relative">
+            <summary class="flex h-12 min-w-[190px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860] [&::-webkit-details-marker]:hidden">
+              {{ categoriasSelecionadas.length ? 'Categoria (' + categoriasSelecionadas.length + ')' : 'Todas as categorias' }}
+              <span aria-hidden="true">⌄</span>
+            </summary>
+            <div class="absolute left-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+              @for (categoria of categorias; track categoria) {
+                <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
+                  <input type="checkbox" [checked]="categoriaEstaSelecionada(categoria)" (change)="alternarCategoria(categoria)" class="h-4 w-4 accent-[#153860]" />
+                  {{ categoria }}
+                </label>
               }
-              @if (clienteSelecionado) {
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected="false"
-                  (click)="selecionarCliente('')"
-                  class="w-full border-t border-[#edf1f5] px-4 py-3 text-left text-xs font-medium text-[#64748b] hover:bg-[#f8fafc]"
-                >
-                  Remover seleção e usar preço base
-                </button>
+            </div>
+          </details>
+
+          <details class="relative">
+            <summary class="flex h-12 min-w-[160px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860] [&::-webkit-details-marker]:hidden">
+              {{ statusSelecionados.length ? 'Status (' + statusSelecionados.length + ')' : 'Todos os status' }}
+              <span aria-hidden="true">⌄</span>
+            </summary>
+            <div class="absolute left-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+              @for (statusItem of statusProdutos; track statusItem) {
+                <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
+                  <input type="checkbox" [checked]="statusSelecionados.includes(statusItem)" (change)="alternarStatus(statusItem)" class="h-4 w-4 accent-[#153860]" />
+                  {{ textoStatus(statusItem) }}
+                </label>
               }
-            </section>
+            </div>
+          </details>
+
+          <details class="relative">
+            <summary class="flex h-12 min-w-[150px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860] [&::-webkit-details-marker]:hidden">
+              {{ coresSelecionadas.length ? 'Cor (' + coresSelecionadas.length + ')' : 'Todas as cores' }}
+              <span aria-hidden="true">⌄</span>
+            </summary>
+            <div class="absolute right-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+              @for (cor of cores; track cor) {
+                <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
+                  <input type="checkbox" [checked]="coresSelecionadas.includes(cor)" (change)="alternarCor(cor)" class="h-4 w-4 accent-[#153860]" />
+                  {{ cor }}
+                </label>
+              }
+            </div>
+          </details>
+
+          @if (totalFiltrosAtivos > 0) {
+            <button type="button" (click)="limparFiltros()" class="p-1 text-xs text-slate-400 hover:text-slate-600">Limpar</button>
           }
         </div>
 
-        <!-- Busca -->
-        <label class="mt-4 flex h-[42px] items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3">
-          <img
-            src="assets/img/searchIcon.svg"
-            alt=""
-            aria-hidden="true"
-            class="h-4 w-4"
-          />
+        <!-- Busca (mobile) -->
+        <div class="mt-4 flex items-center gap-2 lg:hidden">
+          <label class="flex h-[42px] min-w-0 flex-1 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3">
+            <img
+              src="assets/img/searchIcon.svg"
+              alt=""
+              aria-hidden="true"
+              class="h-4 w-4"
+            />
 
-          <input
-            type="search"
-            [(ngModel)]="termoBuscaMobile"
-            placeholder="Buscar produto ou SKU"
-            class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
-          />
-        </label>
+            <input
+              type="search"
+              [(ngModel)]="termoBuscaMobile"
+              placeholder="Buscar produto ou SKU"
+              class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+            />
+          </label>
 
-        <!-- Categorias -->
-        <div class="mt-3 flex gap-2 overflow-x-auto pb-1">
-          @for (categoria of categoriasMobile; track categoria) {
+          <button
+            type="button"
+            aria-label="Abrir filtros"
+            aria-haspopup="dialog"
+            [attr.aria-expanded]="filtrosAbertos"
+            (click)="filtrosAbertos ? fecharFiltros() : abrirFiltros()"
+            class="relative grid h-[42px] w-[42px] shrink-0 place-items-center rounded-[12px] border border-[#e0e7ed] bg-white text-[#153d65] transition hover:bg-[#f2f6fa] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#153d65]"
+          >
+            <span aria-hidden="true" class="flex w-4 flex-col gap-1">
+              <span class="h-0.5 w-full rounded-full bg-current"></span>
+              <span class="h-0.5 w-full rounded-full bg-current"></span>
+              <span class="h-0.5 w-full rounded-full bg-current"></span>
+            </span>
+            @if (totalFiltrosAtivos > 0) {
+              <span class="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#153d65] px-1 text-[9px] font-bold text-white">
+                {{ totalFiltrosAtivos }}
+              </span>
+            }
+          </button>
+        </div>
+
+        <!-- Overlay: fade (mobile) -->
+        <div
+          (click)="fecharFiltros()"
+          ngmMotion
+          [initial]="false"
+          [animate]="{ opacity: filtrosAbertos ? 1 : 0 }"
+          [transition]="{ duration: 0.3, ease: 'easeOut' }"
+          class="fixed inset-0 z-[60] bg-black/40 lg:hidden"
+          [class.pointer-events-none]="!filtrosAbertos"
+          aria-hidden="true"
+        ></div>
+
+        <!-- Drawer: sobe de baixo (mobile) -->
+        <aside
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filtros"
+          [attr.aria-hidden]="!filtrosAbertos"
+          [attr.inert]="filtrosAbertos ? null : ''"
+          class="fixed inset-x-0 bottom-0 z-[70] max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-2xl lg:hidden"
+          ngmMotion
+          [initial]="false"
+          [animate]="{ y: filtrosAbertos ? '0%' : '100%' }"
+          [transition]="{ duration: 0.3, ease: 'easeOut' }"
+        >
+          <div class="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#e0e7ed]"></div>
+
+          <div class="flex items-center justify-between">
+            <h2 class="text-[16px] font-bold text-[#101b2b]">Filtros</h2>
             <button
               type="button"
-              (click)="categoriaSelecionada = categoria"
+              (click)="fecharFiltros()"
+              aria-label="Fechar filtros"
+              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]"
+            >
+              ✕
+            </button>
+          </div>
+
+          <label class="mt-4 flex h-10 items-center gap-2 rounded-[12px] border border-[#e0e7ed] bg-[#f8fafc] px-3 focus-within:border-[#153d65]">
+            <img src="assets/img/searchIcon.svg" alt="" aria-hidden="true" class="h-4 w-4" />
+            <input
+              type="search"
+              [(ngModel)]="buscaFiltro"
+              placeholder="Pesquisar filtros"
+              aria-label="Pesquisar filtros"
+              class="min-w-0 flex-1 bg-transparent text-[12px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+            />
+          </label>
+
+          <h3 class="mb-3 mt-5 text-[10px] font-bold uppercase tracking-wide text-[#8997a7]">Categoria</h3>
+          <div class="flex flex-wrap gap-2">
+            @for (categoria of categoriasFiltradas; track categoria) {
+              <button
+                type="button"
+                (click)="alternarCategoria(categoria)"
+                [attr.aria-pressed]="categoriaEstaSelecionada(categoria)"
+                class="rounded-full border px-4 py-2 text-[11px] font-semibold"
+                [class.border-[#153d65]]="categoriaEstaSelecionada(categoria)"
+                [class.bg-[#153d65]]="categoriaEstaSelecionada(categoria)"
+                [class.text-white]="categoriaEstaSelecionada(categoria)"
+                [class.border-[#e0e7ed]]="!categoriaEstaSelecionada(categoria)"
+                [class.bg-white]="!categoriaEstaSelecionada(categoria)"
+                [class.text-[#68788c]]="!categoriaEstaSelecionada(categoria)"
+              >
+                {{ categoria }}
+              </button>
+            } @empty {
+              <p class="w-full py-3 text-center text-[11px] text-[#8997a7]">Nenhum filtro encontrado.</p>
+            }
+          </div>
+
+          <div class="mt-6 flex gap-3">
+            <button
+              type="button"
+              (click)="limparFiltros()"
+              class="flex-1 rounded-full border border-[#e0e7ed] py-3 text-[12px] font-semibold text-[#68788c]"
+            >
+              Limpar
+            </button>
+            <button
+              type="button"
+              (click)="fecharFiltros()"
+              class="flex-1 rounded-full bg-[#153d65] py-3 text-[12px] font-semibold text-white"
+            >
+              Ver {{ produtosMobile.length }} produtos
+            </button>
+          </div>
+        </aside>
+
+        <!-- Categorias (atalho mobile) -->
+        <div class="mt-3 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+          <button
+            type="button"
+            (click)="limparCategorias()"
+            [attr.aria-pressed]="categoriasSelecionadas.length === 0"
+            class="shrink-0 rounded-full border px-3 py-2 text-[8px] font-semibold"
+            [class.border-[#153d65]]="categoriasSelecionadas.length === 0"
+            [class.bg-[#153d65]]="categoriasSelecionadas.length === 0"
+            [class.text-white]="categoriasSelecionadas.length === 0"
+            [class.border-[#e0e7ed]]="categoriasSelecionadas.length > 0"
+            [class.bg-white]="categoriasSelecionadas.length > 0"
+            [class.text-[#68788c]]="categoriasSelecionadas.length > 0"
+          >
+            Todas
+          </button>
+          @for (categoria of categorias; track categoria) {
+            <button
+              type="button"
+              (click)="alternarCategoria(categoria)"
+              [attr.aria-pressed]="categoriaEstaSelecionada(categoria)"
               class="shrink-0 rounded-full border px-3 py-2 text-[8px] font-semibold"
-              [class.border-[#153d65]]="categoriaSelecionada === categoria"
-              [class.bg-[#153d65]]="categoriaSelecionada === categoria"
-              [class.text-white]="categoriaSelecionada === categoria"
-              [class.border-[#e0e7ed]]="categoriaSelecionada !== categoria"
-              [class.bg-white]="categoriaSelecionada !== categoria"
-              [class.text-[#68788c]]="categoriaSelecionada !== categoria"
+              [class.border-[#153d65]]="categoriaEstaSelecionada(categoria)"
+              [class.bg-[#153d65]]="categoriaEstaSelecionada(categoria)"
+              [class.text-white]="categoriaEstaSelecionada(categoria)"
+              [class.border-[#e0e7ed]]="!categoriaEstaSelecionada(categoria)"
+              [class.bg-white]="!categoriaEstaSelecionada(categoria)"
+              [class.text-[#68788c]]="!categoriaEstaSelecionada(categoria)"
             >
               {{ categoria }}
             </button>
@@ -161,7 +394,7 @@
 
           <button
             type="button"
-            (click)="categoriaSelecionada = 'Todas'; termoBuscaMobile = ''"
+            (click)="limparFiltros()"
             class="text-[9px] font-semibold text-[#153d65]"
           >
             Limpar filtros
@@ -234,6 +467,4 @@
         </div>
       </div>
   </section>
-  </main>
-  <app-mobile-navigation></app-mobile-navigation>
-</div>
+  </div>

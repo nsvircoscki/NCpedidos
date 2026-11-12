@@ -1,12 +1,4 @@
-<div class="min-h-screen overflow-x-hidden bg-[#f8fafc]">
-  <app-sidebar></app-sidebar>
-
-  <main
-    class="min-w-0 pb-24 bg-[#F8F8FF] lg:ml-[265px] lg:flex lg:flex-col lg:gap-6 lg:px-8 lg:pb-8"
-    [class.lg:ml-[88px]]="sidebarMinimizada">
-    <div class="hidden lg:block">
-      <app-top-header></app-top-header>
-    </div>
+<div class="min-w-0 lg:flex lg:flex-col lg:gap-6">
 
     <section class="hidden lg:flex lg:items-end lg:justify-between lg:gap-4 lg:pt-4">
         <div>
@@ -36,37 +28,6 @@
     </section>
 
     <section class="lg:hidden">
-      <div class="px-4 lg:hidden">
-        <app-mobile-header></app-mobile-header>
-      </div>
-      <header class="hidden">
-            <img src="assets/img/logo.svg" alt="Logo NC Tintas" class="h-[54px] w-[136px] max-w-[42%] object-contain object-left">
-
-            <div class="flex items-center gap-4">
-                <button type="button" aria-label="Pesquisar" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] text-[#475569]">
-                    <svg
-                        class="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-
-                <button type="button" aria-label="Notificações" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] text-[#475569]">
-                    <img src="assets/notificationIcon.svg" alt="" class="h-[22px] w-[22px]">
-                </button>
-
-
-                <div class="grid h-[38px] w-[38px] place-items-center rounded-full bg-[#b9cce3] text-[11px] font-semibold text-[#153860]">
-                    CA
-                </div>
-            </div>
-        </header>
 
       <div class="px-4 pt-2">
         <span class="text-[10px] font-semibold tracking-[0.05em] text-[#153860]">NC TINTAS</span>
@@ -86,19 +47,26 @@
             </button>
         </div>
 
-        <label class="mt-5 flex h-[38px] items-center gap-2 rounded-full bg-white shadow-sm px-4">
-            <span class="text-lg leading-none text-[#94a3b8]">⌕</span>
-            <input
+        <label class="mt-5 flex h-[42px] min-w-0 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3">
+          <img
+            src="assets/img/searchIcon.svg"
+            alt=""
+            aria-hidden="true"
+            class="h-4 w-4"
+          />
+
+          <input
             type="search"
             [(ngModel)]="termoBuscaMobile"
-            class="min-w-0 flex-1 bg-transparent text-[12px] text-slate-700 outline-none placeholder:text-[#94a3b8]"
-            placeholder="Buscar nome, CPF ou CNPJ">
+            placeholder="Buscar nome, CPF ou CNPJ"
+            class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+          />
         </label>
         </div>
 
       <div class="mx-4 mt-6 overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-white px-3">
         @for (cliente of clientesMobile; track cliente.id) {
-          <div
+          <button
             type="button"
             class="flex min-h-[76px] w-full items-center gap-3 border-b border-[#dbe4ed] text-left last:border-b-0"
             [class.bg-[#edf3f7]]="clienteMobileEstaSelecionado(cliente)"
@@ -117,29 +85,102 @@
               </span>
             </span>
 
-            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl leading-none text-[#153860]">›</span>
-            <button
-              type="button"
-              class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-xl font-bold leading-none text-[#153860]"
-              (click)="$event.stopPropagation(); alternarMenuAcoesMobile(cliente)"
-              [attr.aria-label]="'Mais ações para ' + cliente.nome">
-              ⋯
-            </button>
-
-            @if (menuAcoesMobileAberto === cliente.id) {
-              <div class="absolute right-2 top-14 z-30 w-44 rounded-xl bg-white p-1.5 text-left shadow-xl ring-1 ring-slate-200">
-                <button type="button" (click)="editarClienteMobile(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Editar cliente</button>
-                <button type="button" (click)="verTabelaDePrecosMobile(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Tabela de preços</button>
-                <button type="button" (click)="verPedidosMobile(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Pedidos</button>
-              </div>
-            }
-          </div>
+            <span aria-hidden="true" class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl leading-none text-[#153860]">›</span>
+          </button>
         } @empty {
           <p class="px-3 py-8 text-center text-xs text-[#64748b]">Nenhum cliente encontrado.</p>
         }
       </div>
-    </section>
-  </main>
 
-  <app-mobile-navigation></app-mobile-navigation>
-</div>
+      <!-- Modal de opções do cliente (centralizado, com pop-in) -->
+      <div
+        class="fixed inset-0 z-[1000] flex items-center justify-center p-3"
+        [class.pointer-events-none]="!modalClienteMobileAberto"
+        [attr.inert]="modalClienteMobileAberto ? null : ''"
+        [attr.aria-hidden]="!modalClienteMobileAberto"
+      >
+        <div
+          class="absolute inset-0 bg-slate-900/50"
+          (click)="fecharModalClienteMobile()"
+          ngmMotion
+          [initial]="false"
+          [animate]="{ opacity: modalClienteMobileAberto ? 1 : 0 }"
+          [transition]="{ duration: 0.2, ease: 'easeOut' }"
+        ></div>
+
+        @if (clienteMobileSelecionado; as cliente) {
+          <section
+            role="dialog"
+            aria-modal="true"
+            [attr.aria-label]="'Opções para ' + cliente.nome"
+            ngmMotion
+            [initial]="{ opacity: 0, scale: 0.6 }"
+            [animate]="{
+              opacity: modalClienteMobileAberto ? 1 : 0,
+              scale: modalClienteMobileAberto ? 1 : 0.6
+            }"
+            [transition]="modalClienteMobileAberto
+              ? { type: 'spring', stiffness: 380, damping: 18, mass: 0.8, opacity: { duration: 0.15 } }
+              : { duration: 0.15, ease: 'easeIn' }"
+            class="relative w-full max-w-[320px] rounded-[18px] bg-white px-3 py-2.5 shadow-2xl">
+            <div class="mx-auto h-1 w-10 rounded-full bg-[#cbd5e1]"></div>
+
+            <div class="mt-4 px-0.5">
+              <p class="text-[8px] font-medium text-[#94a3b8]">Cliente selecionado</p>
+              <div class="mt-3 flex items-center gap-3">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#fff0df] text-[9px] font-semibold text-[#a75a15]">
+                  {{ obterIniciais(cliente.nome) }}
+                </span>
+                <span class="min-w-0">
+                  <span class="block truncate text-[10px] font-semibold text-[#0f172a]">{{ cliente.nome }}</span>
+                  <span class="mt-0.5 block truncate text-[7px] text-[#94a3b8]">{{ cliente.tipo }} {{ cliente.cpfcnpj }}</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="mt-5 px-0.5">
+              <h2 class="text-[15px] font-bold leading-tight text-[#0f172a]">O que deseja consultar?</h2>
+              <p class="mt-1 text-[8px] text-[#94a3b8]">Escolha uma opção para continuar.</p>
+            </div>
+
+            <div class="mt-4 grid gap-2 px-0.5">
+              <button
+                type="button"
+                (click)="verTabelaDePrecosMobile(cliente)"
+                class="flex min-h-[54px] items-center gap-3 rounded-xl border border-[#e2e8f0] px-2.5 text-left transition hover:bg-[#f8fafc]">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-[9px] bg-[#edf3f8] text-sm font-semibold text-[#153860]">$</span>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-[9px] font-semibold text-[#0f172a]">Tabela de preços</span>
+                  <span class="mt-1 block text-[7px] text-[#94a3b8]">Consulte os valores para este cliente</span>
+                </span>
+                <span aria-hidden="true" class="text-lg leading-none text-[#153860]">›</span>
+              </button>
+              <button
+                type="button"
+                (click)="verPedidosMobile(cliente)"
+                class="flex min-h-[54px] items-center gap-3 rounded-xl border border-[#e2e8f0] px-2.5 text-left transition hover:bg-[#f8fafc]">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-[9px] bg-[#edf3f8] text-[#153860]">
+                  <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <rect x="5" y="4" width="14" height="16" rx="2" />
+                    <path stroke-linecap="round" d="M8 9h8M8 12h8M8 15h5" />
+                  </svg>
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-[9px] font-semibold text-[#0f172a]">Pedidos do cliente</span>
+                  <span class="mt-1 block text-[7px] text-[#94a3b8]">Veja o histórico e acompanhe entregas</span>
+                </span>
+                <span aria-hidden="true" class="text-lg leading-none text-[#153860]">›</span>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              (click)="fecharModalClienteMobile()"
+              class="mt-2.5 h-8 w-full rounded-[9px] bg-[#f6f9fc] text-[8px] font-medium text-[#64748b] transition hover:bg-[#edf3f8]">
+              Cancelar
+            </button>
+          </section>
+        }
+      </div>
+    </section>
+  </div>

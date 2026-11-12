@@ -1,19 +1,7 @@
-<div class="min-h-screen overflow-x-hidden bg-[#f6f9fc]">
-  <app-sidebar></app-sidebar>
+<div class="min-w-0">
 
-  <main
-    class="min-h-screen min-w-0 bg-[#f6f9fc] pb-24 transition-[margin-left] duration-300 lg:ml-[265px] lg:pb-8"
-    [class.lg:ml-[88px]]="sidebarMinimizada"
-  >
-    <div class="px-4 lg:hidden">
-      <app-mobile-header></app-mobile-header>
-    </div>
 
-    <div class="hidden lg:block">
-      <app-top-header></app-top-header>
-    </div>
-
-    <div class="mx-auto w-full max-w-[1600px] px-5 py-6 sm:px-6 lg:px-8 lg:py-8">
+    <div class="mx-auto w-full max-w-[1600px] px-5 py-6 sm:px-6 lg:px-0 lg:py-0">
       @if (produtoNaoEncontrado) {
         <section class="rounded-2xl bg-white p-8 text-center shadow-sm">
           <h1 class="text-xl font-bold text-[#153860]">Produto não encontrado</h1>
@@ -110,46 +98,46 @@
                   </p>
 
                   <div class="mt-8 grid gap-x-6 gap-y-6 md:grid-cols-2">
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Nome do produto <span class="text-red-500">*</span>
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Nome do produto <span class="text-red-500">*</span></span>
                       <input
                         name="nome"
                         [(ngModel)]="produto.nome"
                         required
                         placeholder="Digite aqui"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
 
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      SKU base <span class="text-red-500">*</span>
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">SKU base <span class="text-red-500">*</span></span>
                       <input
                         name="codigoSKU"
                         [(ngModel)]="produto.codigoSKU"
                         required
                         placeholder="Digite aqui"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
 
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Categoria
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Categoria</span>
                       <input
                         name="categoria"
                         [(ngModel)]="produto.categoria"
                         placeholder="Ex.: Paredes"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
 
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Descrição
+                    <label class="label-input label-input--md label-input--textarea grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Descrição</span>
                       <textarea
                         name="descricao"
                         [(ngModel)]="produto.descricao"
                         rows="3"
                         placeholder="Descreva características e aplicação do produto"
-                        class="min-h-28 rounded-lg border border-[#e2e8f0] px-4 py-3 text-sm outline-none focus:border-[#153860]"
+                        class="label-input__field min-h-28 rounded-lg border border-[#e2e8f0] px-4 py-3 text-sm outline-none focus:border-[#153860]"
                       ></textarea>
                     </label>
                   </div>
@@ -171,23 +159,23 @@
                   </div>
 
                   <div class="mt-8 grid gap-6 md:grid-cols-2">
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Cor
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Cor</span>
                       <input
                         name="cor"
                         [(ngModel)]="produto.cor"
                         placeholder="Ex.: Branco Neve"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
 
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Embalagem
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Embalagem</span>
                       <input
                         name="embalagem"
                         [(ngModel)]="produto.embalagem"
                         placeholder="Ex.: 18 L"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
                   </div>
@@ -202,38 +190,41 @@
                   </p>
 
                   <div class="mt-8 grid gap-6 md:grid-cols-2">
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Preço base
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Preço base</span>
                       <input
                         name="preco"
                         type="number"
                         min="0"
                         step="0.01"
                         [(ngModel)]="produto.preco"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        placeholder=" "
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
 
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Estoque disponível
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Estoque disponível</span>
                       <input
                         name="estoque"
                         type="number"
                         min="0"
                         [(ngModel)]="produto.estoque"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        placeholder=" "
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
 
-                    <label class="grid gap-2 text-xs font-medium text-[#475569]">
-                      Margem (%)
+                    <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569]">
+                      <span class="label-input__label">Margem (%)</span>
                       <input
                         name="margem"
                         type="number"
                         min="0"
                         step="0.1"
                         [(ngModel)]="produto.margem"
-                        class="h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
+                        placeholder=" "
+                        class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860]"
                       />
                     </label>
                   </div>
@@ -317,7 +308,4 @@
         </form>
       }
     </div>
-  </main>
-
-  <app-mobile-navigation></app-mobile-navigation>
-</div>
+  </div>

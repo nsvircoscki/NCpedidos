@@ -14,3 +14,10 @@ export interface Cliente {
     ultimaCompra?: Date | string;
     status: 'ATIVO' | 'INATIVO';
 }
+
+export interface ClienteOption {
+    id: number;
+    nome: string;
+    documento: string;   // CPF ou CNPJ
+    limite: number;      // limite de crédito disponível
+}

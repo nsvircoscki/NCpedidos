@@ -1,15 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { TopHeaderComponent } from '../../components/top-header/top-header.component';
 import { ClientesTableComponent } from '../../components/clientes/clientes-table.component';
 import { Cliente } from '../../models/cliente.model';
-import { SidebarService } from '../../services/sidebar';
-import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
-import { MobileHeaderComponent } from '../../components/mobile-header/mobile-header.component';
 import { Router } from '@angular/router';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-clientes-page',
@@ -17,26 +13,16 @@ import { Router } from '@angular/router';
   imports: [
     CommonModule,
     FormsModule,
-    SidebarComponent,
-    TopHeaderComponent,
     ClientesTableComponent,
     RouterModule,
-    MobileNavigationComponent,
-    MobileHeaderComponent
+    NgmMotionDirective
   ],
   templateUrl: './clientes.component.html'
 })
 export class ClientesPageComponent {
-    private sidebarService = inject(SidebarService);
     private router = inject(Router);
     
-    sidebarMinimizada = false;
 
-    constructor() {
-        this.sidebarService.minimizada$.subscribe((estado) => {
-            this.sidebarMinimizada = estado;
-        });
-    }
 
     clientes: Cliente[] = [
     {
@@ -90,8 +76,8 @@ export class ClientesPageComponent {
   ];
 
   termoBuscaMobile = '';
-  clientesMobileSelecionados = new Set<number>();
-  menuAcoesMobileAberto: number | null = null;
+  clienteMobileSelecionado: Cliente | null = null;
+  modalClienteMobileAberto = false;
 
   get clientesMobile(): Cliente[] {
     const termo = this.termoBuscaMobile.trim().toLowerCase();
@@ -111,33 +97,27 @@ export class ClientesPageComponent {
   }
 
   selecionarClienteMobile(cliente: Cliente): void {
-    if (this.clientesMobileSelecionados.has(cliente.id)) {
-      this.clientesMobileSelecionados.delete(cliente.id);
-    } else {
-      this.clientesMobileSelecionados.add(cliente.id);
-    }
+    this.clienteMobileSelecionado = cliente;
+    this.modalClienteMobileAberto = true;
   }
 
   clienteMobileEstaSelecionado(cliente: Cliente): boolean {
-    return this.clientesMobileSelecionados.has(cliente.id);
+    return this.modalClienteMobileAberto && this.clienteMobileSelecionado?.id === cliente.id;
   }
 
-  alternarMenuAcoesMobile(cliente: Cliente): void {
-    this.menuAcoesMobileAberto = this.menuAcoesMobileAberto === cliente.id ? null : cliente.id;
-  }
-
-  editarClienteMobile(cliente: Cliente): void {
-    this.menuAcoesMobileAberto = null;
-    this.router.navigate(['/clientes', cliente.id]);
+  /** Mantém o cliente em clienteMobileSelecionado para o modal animar a saída. */
+  @HostListener('document:keydown.escape')
+  fecharModalClienteMobile(): void {
+    this.modalClienteMobileAberto = false;
   }
 
   verTabelaDePrecosMobile(cliente: Cliente): void {
-    this.menuAcoesMobileAberto = null;
+    this.fecharModalClienteMobile();
     this.router.navigate(['/clientes', cliente.id, 'tabela-precos']);
   }
 
   verPedidosMobile(cliente: Cliente): void {
-    this.menuAcoesMobileAberto = null;
+    this.fecharModalClienteMobile();
     this.router.navigate(['/pedidos'], { queryParams: { clienteId: cliente.id } });
   }
 }

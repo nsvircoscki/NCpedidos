@@ -1,11 +1,4 @@
-<div class="flex min-h-screen bg-[#f6f9fc]">
-  <app-sidebar></app-sidebar>
-
-  <main
-    class="flex min-w-0 flex-1 flex-col gap-6 px-8 pb-8 transition-[margin-left] duration-300"
-    [class.ml-[265px]]="!sidebarMinimizada"
-    [class.ml-[88px]]="sidebarMinimizada">
-    <app-top-header></app-top-header>
+<div class="flex min-w-0 flex-col gap-6 px-4 lg:px-0">
 
     <section class="pt-4">
         <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">ADMINISTRAÇÃO</span>
@@ -41,16 +34,16 @@
               <p class="mt-1 text-xs text-slate-400">Mantenha os dados institucionais atualizados.</p>
             </div>
             <div class="mt-6 grid gap-5 sm:grid-cols-2">
-              <label class="block sm:col-span-2"><span class="settings-label">Razão social</span><input [(ngModel)]="company.companyName" class="settings-input" type="text"></label>
-              <label class="block"><span class="settings-label">Nome fantasia</span><input [(ngModel)]="company.tradeName" class="settings-input" type="text"></label>
-              <label class="block"><span class="settings-label">CNPJ</span><input [(ngModel)]="company.document" class="settings-input" type="text"></label>
-              <label class="block"><span class="settings-label">Inscrição estadual</span><input [(ngModel)]="company.stateRegistration" class="settings-input" type="text"></label>
-              <label class="block"><span class="settings-label">E-mail</span><input [(ngModel)]="company.email" class="settings-input" type="email"></label>
-              <label class="block"><span class="settings-label">Telefone</span><input [(ngModel)]="company.phone" class="settings-input" type="tel"></label>
-              <label class="block sm:col-span-2"><span class="settings-label">Endereço</span><input [(ngModel)]="company.address" class="settings-input" type="text"></label>
-              <label class="block"><span class="settings-label">Cidade</span><input [(ngModel)]="company.city" class="settings-input" type="text"></label>
-              <label class="block"><span class="settings-label">UF</span><input [(ngModel)]="company.state" class="settings-input" type="text"></label>
-              <label class="block"><span class="settings-label">CEP</span><input [(ngModel)]="company.zipCode" class="settings-input" type="text"></label>
+              <label class="label-input label-input--sm block sm:col-span-2"><span class="settings-label label-input__label">Razão social</span><input [(ngModel)]="company.companyName" placeholder=" " class="settings-input label-input__field" type="text"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">Nome fantasia</span><input [(ngModel)]="company.tradeName" placeholder=" " class="settings-input label-input__field" type="text"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">CNPJ</span><input [(ngModel)]="company.document" placeholder=" " class="settings-input label-input__field" type="text"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">Inscrição estadual</span><input [(ngModel)]="company.stateRegistration" placeholder=" " class="settings-input label-input__field" type="text"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">E-mail</span><input [(ngModel)]="company.email" placeholder=" " class="settings-input label-input__field" type="email"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">Telefone</span><input [(ngModel)]="company.phone" placeholder=" " class="settings-input label-input__field" type="tel"></label>
+              <label class="label-input label-input--sm block sm:col-span-2"><span class="settings-label label-input__label">Endereço</span><input [(ngModel)]="company.address" placeholder=" " class="settings-input label-input__field" type="text"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">Cidade</span><input [(ngModel)]="company.city" placeholder=" " class="settings-input label-input__field" type="text"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">UF</span><input [(ngModel)]="company.state" placeholder=" " class="settings-input label-input__field" type="text"></label>
+              <label class="label-input label-input--sm block"><span class="settings-label label-input__label">CEP</span><input [(ngModel)]="company.zipCode" placeholder=" " class="settings-input label-input__field" type="text"></label>
             </div>
           } @else {
             @if (currentConfiguration; as configuration) {
@@ -84,7 +77,7 @@
                   <h3 class="text-sm font-bold text-[#20242a]">Preferências</h3>
                   <div class="mt-4 grid gap-5 sm:grid-cols-2">
                     @for (select of configuration.selects; track select.id) {
-                      <label class="block"><span class="settings-label">{{ select.label }}</span><select [(ngModel)]="select.value" class="settings-input">@for (option of select.options; track option) {<option [value]="option">{{ option }}</option>}</select></label>
+                      <label class="label-input label-input--sm label-input--fixo block"><span class="settings-label label-input__label">{{ select.label }}</span><select [(ngModel)]="select.value" class="settings-input label-input__field">@for (option of select.options; track option) {<option [value]="option">{{ option }}</option>}</select></label>
                     }
                   </div>
                 </div>
@@ -98,5 +91,4 @@
         </section>
       </div>
     </div>
-  </main>
-</div>
+  </div>

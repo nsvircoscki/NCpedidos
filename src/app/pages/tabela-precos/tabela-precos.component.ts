@@ -1,25 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { TopHeaderComponent } from '../../components/top-header/top-header.component';
-import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
-import { SidebarService } from '../../services/sidebar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ItemTabelaPreco } from '../../models/tabela-preco.model';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-tabela-precos-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SidebarComponent, TopHeaderComponent, MobileNavigationComponent],
+  imports: [CommonModule, FormsModule, NgmMotionDirective],
   templateUrl: './tabela-precos.component.html'
 })
 export class TabelaPrecosPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly sidebarService = inject(SidebarService);
 
-  sidebarMinimizada = false;
   clienteId = Number(this.route.snapshot.paramMap.get('id'));
   clienteNome = this.obterNomeCliente(this.clienteId);
   itens: ItemTabelaPreco[] = [];
@@ -27,14 +22,13 @@ export class TabelaPrecosPageComponent {
   categoriasSelecionadas: string[] = [];
   statusSelecionados: string[] = [];
   coresSelecionadas: string[] = [];
+  categoriaMobileSelecionada = 'Todas';
+  filtrosAbertos = false;
   paginaAtual = 1;
   itensPorPagina = 10;
   itensSelecionados = new Set<number>();
 
   constructor() {
-    this.sidebarService.minimizada$.subscribe((estado) => {
-      this.sidebarMinimizada = estado;
-    });
     this.itens = this.obterTabelaDoCliente(this.clienteId);
   }
 
@@ -52,6 +46,10 @@ export class TabelaPrecosPageComponent {
 
   get cores(): string[] {
     return [...new Set(this.itens.map(item => item.cor))];
+  }
+
+  get categoriasMobile(): string[] {
+    return ['Todas', ...this.categorias];
   }
 
   get itensFiltrados(): ItemTabelaPreco[] {
@@ -83,12 +81,30 @@ export class TabelaPrecosPageComponent {
     );
   }
 
+  get totalFiltrosAtivos(): number {
+    return (this.termoBusca.trim() ? 1 : 0) +
+      (this.categoriasSelecionadas.length ? 1 : 0) +
+      (this.statusSelecionados.length ? 1 : 0) +
+      (this.coresSelecionadas.length ? 1 : 0);
+  }
+
   limparFiltros(): void {
     this.termoBusca = '';
     this.categoriasSelecionadas = [];
     this.statusSelecionados = [];
     this.coresSelecionadas = [];
+    this.categoriaMobileSelecionada = 'Todas';
     this.paginaAtual = 1;
+  }
+
+  selecionarCategoriaMobile(categoria: string): void {
+    this.categoriaMobileSelecionada = categoria;
+    this.categoriasSelecionadas = categoria === 'Todas' ? [] : [categoria];
+    this.paginaAtual = 1;
+  }
+
+  limparFiltrosMobile(): void {
+    this.limparFiltros();
   }
 
   alternarFiltro(tipo: 'categoria' | 'status' | 'cor', valor: string): void {

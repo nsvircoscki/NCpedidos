@@ -1,18 +1,15 @@
-import { Component, computed, inject, signal, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { Component, inject, signal, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { TopHeaderComponent } from '../../components/top-header/top-header.component';
-import { MobileHeaderComponent } from '../../components/mobile-header/mobile-header.component';
-import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
-import { SidebarService } from '../../services/sidebar';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { PedidoAcompanhamentoComponent } from '../../components/pedido-enviado/pedido-acompanhamento.component';
+import { PedidoAcompanhamentoComponent } from '../pedido-enviado/pedido-acompanhamento.component';
+import { ClienteOption } from '../../models/cliente.model';
 
 
 export interface Order {
     id: number;
+    clienteId: number;
     client: string;
     initials: string;
     avatar: 'blue' | 'orange';
@@ -29,33 +26,91 @@ export interface Order {
         CommonModule,
         FormsModule,
         RouterLink,
-        SidebarComponent,
-        TopHeaderComponent,
-        MobileHeaderComponent,
-        MobileNavigationComponent,
         NgmMotionDirective,
         PedidoAcompanhamentoComponent,
     ],
     templateUrl: './pedidos.component.html',
 })
 export class PedidosComponent implements AfterViewInit {
-    private sidebarService = inject(SidebarService);
-    sidebarMinimizada = false;
+    private route = inject(ActivatedRoute);
+
+    /**
+     * Filtro vindo da tela de clientes (/pedidos?clienteId=3).
+     * null = sem filtro, mostra os pedidos de todos os clientes.
+     */
+    readonly clienteIdFiltro: number | null = this.lerClienteIdFiltro();
+
+    private lerClienteIdFiltro(): number | null {
+        const valor = this.route.snapshot.queryParamMap.get('clienteId');
+        return valor ? Number(valor) : null;
+    }
+
+    readonly clientes: ClienteOption[] = [
+        { id: 1, nome: 'Casa Almeida Materiais', documento: '12.345.678/0001-90', limite: 10000 },
+        { id: 2, nome: 'Distribuidora Norte', documento: '98.765.432/0001-12', limite: 15000 },
+        { id: 3, nome: 'Materiais Construção RC', documento: '11.222.333/0001-44', limite: 8000 },
+        { id: 4, nome: 'Ferreira & Filhos Ltda', documento: '55.666.777/0001-88', limite: 20000 },
+    ];
+
+    clienteSelecionado: ClienteOption = this.clientes[0];
+    modalClienteAberto = false;
+    buscaCliente = '';
 
     readonly sent = signal(false);
     readonly pedidoSelecionado = signal<Order | null>(null);
     search = '';
     statusFilter = 'Todos';
+    filtrosAbertos = false;
+    readonly statusOptions = ['Todos', 'Em análise', 'Aprovado', 'Faturado'];
+
+    get totalFiltrosAtivos(): number {
+        return (this.statusFilter !== 'Todos' ? 1 : 0) + (this.search.trim() ? 1 : 0);
+    }
+
+    limparFiltros(): void {
+        this.search = '';
+        this.statusFilter = 'Todos';
+    }
+
+    abrirModalCliente(): void {
+        this.buscaCliente = '';
+        this.modalClienteAberto = true;
+    }
+
+    fecharModalCliente(): void {
+        this.modalClienteAberto = false;
+    }
+
+    selecionarCliente(cliente: ClienteOption): void {
+        this.clienteSelecionado = cliente;
+        this.fecharModalCliente();
+    }
+
+    get clientesFiltrados(): ClienteOption[] {
+        const termo = this.buscaCliente.toLowerCase().trim();
+        return this.clientes.filter(cliente =>
+            !termo ||
+            cliente.nome.toLowerCase().includes(termo) ||
+            cliente.documento.toLowerCase().includes(termo)
+        );
+    }
+
+
+    iniciais(nome: string): string {
+        return nome.split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
+    }
 
     private readonly orders = signal<Order[]>([
-        { id: 1047, client: 'Casa Almeida Materiais', initials: 'CA', avatar: 'blue',   date: '16 set.', volumes: 8,  total: 3240.00, status: 'Faturado'  },
-        { id: 1046, client: 'Distribuidora Norte',    initials: 'DN', avatar: 'orange', date: '15 set.', volumes: 12, total: 5870.50, status: 'Aprovado'  },
-        { id: 1045, client: 'Materiais Construção RC', initials: 'MC', avatar: 'blue',  date: '14 set.', volumes: 5,  total: 1920.00, status: 'Em análise' },
-        { id: 1044, client: 'Ferreira & Filhos Ltda', initials: 'FF', avatar: 'orange', date: '13 set.', volumes: 20, total: 9150.00, status: 'Faturado'  },
-        { id: 1043, client: 'Casa Almeida Materiais', initials: 'CA', avatar: 'blue',   date: '12 set.', volumes: 3,  total: 870.00,  status: 'Aprovado'  },
+        { id: 1047, clienteId: 1, client: 'Casa Almeida Materiais', initials: 'CA', avatar: 'blue',   date: '16 set.', volumes: 8,  total: 3240.00, status: 'Faturado'  },
+        { id: 1046, clienteId: 2, client: 'Distribuidora Norte',    initials: 'DN', avatar: 'orange', date: '15 set.', volumes: 12, total: 5870.50, status: 'Aprovado'  },
+        { id: 1045, clienteId: 3, client: 'Materiais Construção RC', initials: 'MC', avatar: 'blue',  date: '14 set.', volumes: 5,  total: 1920.00, status: 'Em análise' },
+        { id: 1044, clienteId: 4, client: 'Ferreira & Filhos Ltda', initials: 'FF', avatar: 'orange', date: '13 set.', volumes: 20, total: 9150.00, status: 'Faturado'  },
+        { id: 1043, clienteId: 1, client: 'Casa Almeida Materiais', initials: 'CA', avatar: 'blue',   date: '12 set.', volumes: 3,  total: 870.00,  status: 'Aprovado'  },
     ]);
 
-    readonly filteredOrders = computed(() => {
+    // Método (e não computed) porque search/statusFilter não são signals:
+    // um computed nunca recalcularia ao digitar ou trocar o status.
+    filteredOrders(): Order[] {
         const termo = this.search.toLowerCase().trim();
         return this.orders().filter((order) => {
             const matchSearch =
@@ -64,9 +119,11 @@ export class PedidosComponent implements AfterViewInit {
                 String(order.id).includes(termo);
             const matchStatus =
                 this.statusFilter === 'Todos' || order.status === this.statusFilter;
-            return matchSearch && matchStatus;
+            const matchCliente =
+                this.clienteIdFiltro === null || order.clienteId === this.clienteIdFiltro;
+            return matchSearch && matchStatus && matchCliente;
         });
-    });
+    }
 
     @ViewChild('filtersContainer') filtersContainer?: ElementRef<HTMLDivElement>;
     @ViewChild('filtersTrack') filtersTrack?: ElementRef<HTMLDivElement>;
@@ -78,11 +135,6 @@ export class PedidosComponent implements AfterViewInit {
         right: 0,
     });
 
-    constructor() {
-        this.sidebarService.minimizada$.subscribe((estado) => {
-            this.sidebarMinimizada = estado;
-        });
-    }
 
     ngAfterViewInit(): void {
         this.atualizarLimitesArrasto();

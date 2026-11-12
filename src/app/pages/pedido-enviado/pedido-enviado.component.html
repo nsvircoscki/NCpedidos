@@ -1,30 +1,32 @@
-<app-sidebar></app-sidebar>
-<main class="min-h-screen bg-[#f8fafc] text-[#0f172a] lg:ml-[265px] lg:px-8 lg:pb-10">
-  <div class="hidden lg:block"><app-top-header></app-top-header></div>
-  <div class="mx-auto min-h-screen max-w-5xl px-4 pb-24 pt-3 lg:px-0 lg:pb-10 lg:pt-8">
+<div class="mx-auto w-full max-w-5xl px-4 pt-3 lg:px-0">
   <!-- Topo / Header -->
   <header class="flex items-center justify-between pb-4 pt-2 lg:pb-6">
     <button
       type="button"
-      (click)="voltar.emit()"
+      (click)="voltarParaPedido()"
       aria-label="Voltar"
       class="grid h-10 w-10 place-items-center rounded-xl bg-[#edf3f7] text-lg font-bold text-[#153860] transition-colors hover:bg-[#e2ecf3]"
     >
       ‹
     </button>
 
-    <div class="ml-3 flex-1 lg:ml-0">
-      <h1 class="text-xl font-bold leading-tight text-[#0f172a] lg:text-3xl">Pedido enviado</h1>
-      <p class="text-xs text-[#64748b] lg:mt-1 lg:text-sm">Resumo e acompanhamento</p>
+    <div class="ml-3 flex-1 lg:ml-3">
+      <h1 class="text-xl font-bold leading-tight text-[#0f172a] lg:text-3xl">
+        {{ abaAtiva === 'resumo' ? 'Pedido enviado' : 'Acompanhamento do pedido' }}
+      </h1>
+      <p class="text-xs text-[#64748b] lg:mt-1 lg:text-sm">
+        {{ abaAtiva === 'resumo' ? 'Resumo e acompanhamento' : 'Acompanhe as etapas até a entrega' }}
+      </p>
     </div>
 
     <div class="text-right">
       <span class="block text-[10px] text-[#64748b]">Pedido</span>
-      <strong class="text-base font-bold text-[#153860]">#1048</strong>
+      <strong class="text-base font-bold text-[#153860]">#{{ numeroPedido }}</strong>
     </div>
   </header>
 
   <!-- Card de Sucesso -->
+  @if (abaAtiva === 'resumo') {
   <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#f1faf5] p-4 lg:mt-0 lg:p-5">
     <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#26835a] text-base font-bold text-white">
       ✓
@@ -35,33 +37,60 @@
       <p class="text-xs text-[#527965]">Enviado hoje, às 10:24 · Aguardando análise</p>
     </div>
   </div>
+  } @else {
+  <!-- Card de Status (Acompanhamento) -->
+  <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#FFF9EA] p-4 lg:mt-0 lg:p-5">
+    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F3A928] text-base font-medium text-white">
+      ◷
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold text-[#8A5A08]">Em análise comercial</h2>
+      <p class="text-xs text-[#765F32]">Seu pedido foi recebido e está sendo validado · Atualizado há 3 minutos</p>
+    </div>
+  </div>
+  }
 
   <!-- Abas (Resumo / Acompanhamento) -->
-  <div class="mt-4 flex rounded-xl bg-[#f1f5f9] p-1 lg:mt-6 lg:max-w-md">
-  <!-- Botão Resumo -->
+  <div role="tablist" aria-label="Detalhes do pedido" class="relative mx-auto mt-4 flex w-full items-center rounded-2xl bg-[#f1f5f9] p-1.5 lg:mt-6 lg:max-w-300">
+  <!-- Indicador deslizante da aba ativa -->
+  <div
+    ngmMotion
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-1.5 left-1.5 top-1.5 w-[calc(50%-6px)] rounded-xl bg-[#153860] shadow-sm"
+    [initial]="false"
+    [animate]="{ x: abaAtiva === 'resumo' ? '0%' : '100%' }"
+    [transition]="indicadorTransition"
+  ></div>
+
   <button
     type="button"
+    role="tab"
+    [attr.aria-selected]="abaAtiva === 'resumo'"
     (click)="selecionarAba('resumo')"
-    class="flex-1 py-2 rounded-xl text-center text-xs transition-all"
+    class="relative z-10 flex-1 rounded-xl py-3 text-center text-sm transition-colors duration-300"
     [ngClass]="abaAtiva === 'resumo'
-      ? 'bg-[#153860] font-semibold text-white shadow-sm'
-      : 'font-medium text-[#64748b] hover:text-[#153860] hover:shadow-sm'"
+      ? 'font-semibold text-white'
+      : 'font-medium text-[#64748b] hover:text-[#153860]'"
   >
     Resumo
   </button>
-  <!-- Botão Acompanhamento -->
+
   <button
     type="button"
+    role="tab"
+    [attr.aria-selected]="abaAtiva === 'acompanhamento'"
     (click)="selecionarAba('acompanhamento')"
-    class="flex-1 py-2 rounded-xl text-center text-xs transition-all"
+    class="relative z-10 flex-1 rounded-xl py-3 text-center text-sm transition-colors duration-300"
     [ngClass]="abaAtiva === 'acompanhamento'
-      ? 'bg-[#153860] font-semibold text-white shadow-sm'
-      : 'font-medium text-[#64748b] hover:text-[#153860] hover:shadow-sm'"
+      ? 'font-semibold text-white'
+      : 'font-medium text-[#64748b] hover:text-[#153860]'"
   >
     Acompanhamento
   </button>
 </div>
 
+  @if (abaAtiva === 'resumo') {
   <!-- Seção Cliente -->
   <section class="mt-6 lg:mt-8">
     <h3 class="mb-2 text-base font-bold text-[#0f172a] lg:text-lg">Cliente</h3>
@@ -139,14 +168,16 @@
     </div>
     <strong class="text-2xl font-bold text-[#0f172a]">R$ 715,06</strong>
   </div>
+  } @else {
+    <app-pedido-acompanhamento [embutido]="true" [numeroPedido]="numeroPedido"></app-pedido-acompanhamento>
+  }
 
   <!-- Botão Inferior de Ação -->
   <button
     type="button"
-    (click)="verAcompanhamento.emit()"
+    (click)="alternarAba()"
     class="mt-6 w-full rounded-xl bg-[#153860] py-3.5 text-center text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90 active:opacity-95 lg:mt-8 lg:w-auto lg:px-10"
   >
-    Ver acompanhamento
+    {{ abaAtiva === 'resumo' ? 'Ver acompanhamento' : 'Ver resumo do pedido' }}
   </button>
 </div>
-<app-mobile-navigation></app-mobile-navigation>

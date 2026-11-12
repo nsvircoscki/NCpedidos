@@ -1,0 +1,28 @@
+<div class="min-h-screen overflow-x-hidden bg-[#F8F8FF] text-[#0f172a]">
+  <app-sidebar></app-sidebar>
+
+  <!--
+    Área de conteúdo.
+    - lg:ml-*: abre espaço para a sidebar (acompanha quando ela é minimizada).
+    - pb-24 no mobile: espaço para a navegação fixa do rodapé não cobrir o conteúdo.
+    - lg:px-8 / lg:gap-6: espaçamento padrão do desktop entre header e página.
+      No mobile, cada página define o próprio espaçamento lateral (px-4).
+  -->
+  <main
+    class="flex min-h-screen min-w-0 flex-col pb-24 transition-[margin-left] duration-300 lg:gap-6 lg:px-8 lg:pb-8"
+    [class.lg:ml-[265px]]="!sidebarMinimizada()"
+    [class.lg:ml-[88px]]="sidebarMinimizada()"
+  >
+    <div class="px-4 lg:hidden">
+      <app-mobile-header></app-mobile-header>
+    </div>
+
+    <div class="hidden lg:block">
+      <app-top-header></app-top-header>
+    </div>
+
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-mobile-navigation></app-mobile-navigation>
+</div>
