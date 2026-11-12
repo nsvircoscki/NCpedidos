@@ -1,37 +1,40 @@
 <div class="flex min-w-0 flex-col gap-6 px-4 lg:px-0">
 
     <section class="pt-4">
-        <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">ADMINISTRAÇÃO</span>
-        <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Configurações</h1>
-        <p class="m-0 text-[13px] text-slate-400">Gerencie dados da empresa, usuários e regras comerciais.</p>
+        <span class="sobretitulo">ADMINISTRAÇÃO</span>
+        <h1 class="titulo-pagina my-1">Configurações</h1>
+        <p class="subtitulo-pagina">Gerencie dados da empresa, usuários e regras comerciais.</p>
     </section>
 
     <div class="mx-auto w-full max-w-[1440px]">
       <div class="mt-8 grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-        <nav class="rounded-2xl bg-white p-4 shadow-sm" aria-label="Seções de configurações">
+        <nav class="rounded-2xl bg-white p-4 shadow-sm dark:bg-noite-card" aria-label="Seções de configurações">
           <div class="flex gap-2 overflow-x-auto lg:block">
             @for (section of sections; track section.name) {
               <button
                 type="button"
                 (click)="selectSection(section.name)"
-                class="flex min-w-[190px] items-center gap-3 rounded-xl px-3 py-3 text-left text-slate-600 transition hover:bg-slate-50 lg:w-full"
+                class="flex min-w-[190px] items-center gap-3 rounded-xl px-3 py-3 text-left text-slate-600 transition hover:bg-slate-50 lg:w-full dark:hover:bg-noite-sutil"
                 [class.bg-[#eef3f8]]="activeSection === section.name"
-                [class.text-[#153860]]="activeSection === section.name">
-                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-[10px] font-extrabold" [class.bg-[#dce8f4]]="activeSection === section.name">{{ section.initials }}</span>
+                [class.text-[#153860]]="activeSection === section.name"
+                [class.dark:text-slate-300]="!(activeSection === section.name)"
+                [class.dark:bg-noite-sutil]="activeSection === section.name"
+                [class.dark:text-noite-marca]="activeSection === section.name">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-[10px] font-extrabold" [class.bg-[#dce8f4]]="activeSection === section.name" [class.dark:bg-noite-sutil-forte]="!(activeSection === section.name)" [class.dark:bg-[#172e45]]="activeSection === section.name">{{ section.initials }}</span>
                 <span class="min-w-0">
                   <strong class="block truncate text-xs">{{ section.name }}</strong>
-                  <small class="mt-1 block truncate text-[10px] text-slate-400">{{ section.description }}</small>
+                  <small class="mt-1 block truncate text-[10px] text-slate-500 dark:text-noite-suave">{{ section.description }}</small>
                 </span>
               </button>
             }
           </div>
         </nav>
 
-        <section class="min-w-0 rounded-2xl bg-white p-6 shadow-sm sm:p-9">
+        <section class="cartao min-w-0 p-6 sm:p-9">
           @if (activeSection === 'Geral') {
-            <div class="border-b border-slate-200 pb-5">
-              <h2 class="text-xl font-bold text-[#20242a]">Dados da empresa</h2>
-              <p class="mt-1 text-xs text-slate-400">Mantenha os dados institucionais atualizados.</p>
+            <div class="border-b border-slate-200 pb-5 dark:border-noite-borda">
+              <h2 class="titulo-secao">Dados da empresa</h2>
+              <p class="mt-1 text-xs text-slate-500 dark:text-noite-suave">Mantenha os dados institucionais atualizados.</p>
             </div>
             <div class="mt-6 grid gap-5 sm:grid-cols-2">
               <label class="label-input label-input--sm block sm:col-span-2"><span class="settings-label label-input__label">Razão social</span><input [(ngModel)]="company.companyName" placeholder=" " class="settings-input label-input__field" type="text"></label>
@@ -47,14 +50,14 @@
             </div>
           } @else {
             @if (currentConfiguration; as configuration) {
-              <div class="border-b border-slate-200 pb-5">
-                <h2 class="text-xl font-bold text-[#20242a]">{{ activeSection }}</h2>
-                <p class="mt-1 text-xs text-slate-400">{{ configuration.description }}</p>
+              <div class="border-b border-slate-200 pb-5 dark:border-noite-borda">
+                <h2 class="titulo-secao">{{ activeSection }}</h2>
+                <p class="mt-1 text-xs text-slate-500 dark:text-noite-suave">{{ configuration.description }}</p>
               </div>
               <div class="mt-6 space-y-3">
                 @for (option of configuration.options; track option.id) {
-                  <div class="flex items-start justify-between gap-4 rounded-xl border border-slate-200 p-4 transition hover:border-slate-300">
-                    <span class="min-w-0"><strong class="block text-xs font-bold text-[#20242a]">{{ option.title }}</strong><small class="mt-1 block text-[11px] leading-5 text-slate-400">{{ option.description }}</small></span>
+                  <div class="flex items-start justify-between gap-4 rounded-xl border border-slate-200 p-4 transition hover:border-slate-300 dark:border-noite-borda dark:hover:border-noite-borda">
+                    <span class="min-w-0"><strong class="block text-xs font-bold text-[#20242a] dark:text-noite-texto">{{ option.title }}</strong><small class="mt-1 block text-[11px] leading-5 text-slate-500 dark:text-noite-suave">{{ option.description }}</small></span>
                     <button
                       type="button"
                       role="switch"
@@ -63,9 +66,10 @@
                       (click)="toggleOption(option)"
                       class="relative mt-1 h-6 w-11 shrink-0 rounded-full transition"
                       [class.bg-[#153860]]="option.enabled"
-                      [class.bg-slate-300]="!option.enabled">
+                      [class.bg-slate-300]="!option.enabled"
+                      [class.dark:bg-noite-borda]="!option.enabled">
                       <span
-                        class="absolute top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-[left]"
+                        class="absolute top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-[left] dark:bg-noite-card"
                         [class.left-6]="option.enabled"
                         [class.left-1]="!option.enabled"></span>
                     </button>
@@ -73,8 +77,8 @@
                 }
               </div>
               @if (configuration.selects.length) {
-                <div class="mt-7 border-t border-slate-200 pt-6">
-                  <h3 class="text-sm font-bold text-[#20242a]">Preferências</h3>
+                <div class="mt-7 border-t border-slate-200 pt-6 dark:border-noite-borda">
+                  <h3 class="text-sm font-bold text-[#20242a] dark:text-noite-texto">Preferências</h3>
                   <div class="mt-4 grid gap-5 sm:grid-cols-2">
                     @for (select of configuration.selects; track select.id) {
                       <label class="label-input label-input--sm label-input--fixo block"><span class="settings-label label-input__label">{{ select.label }}</span><select [(ngModel)]="select.value" class="settings-input label-input__field">@for (option of select.options; track option) {<option [value]="option">{{ option }}</option>}</select></label>
@@ -84,8 +88,8 @@
               }
             }
           }
-          <div class="mt-8 flex items-center justify-end gap-3 border-t border-slate-200 pt-5">
-            @if (saved) { <span class="text-xs font-semibold text-emerald-700">Alterações salvas</span> }
+          <div class="mt-8 flex items-center justify-end gap-3 border-t border-slate-200 pt-5 dark:border-noite-borda">
+            @if (saved) { <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-200">Alterações salvas</span> }
             <button type="button" (click)="save()" class="rounded-xl bg-[#153860] px-5 py-3 text-xs font-bold text-white transition hover:bg-[#0e2947]">Salvar alterações</button>
           </div>
         </section>

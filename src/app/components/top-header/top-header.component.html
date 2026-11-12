@@ -1,72 +1,164 @@
-<header class="relative flex min-h-[70px] w-full items-center justify-center rounded-b-[15px] bg-white px-8 py-[15px]">
+<header class="relative flex min-h-[70px] w-full items-center justify-center rounded-b-[15px] bg-white px-8 py-[15px] dark:bg-noite-card">
   <button
+    #botaoPesquisa
     type="button"
     (click)="abrirPesquisa()"
     aria-haspopup="dialog"
-    [attr.aria-expanded]="pesquisaAberta"
-    class="flex h-10 w-[400px] max-w-full items-center gap-2 rounded-full bg-[#f6f9fc] px-4 text-left text-sm font-semibold text-[#64748b] hover:bg-[#e8eef5] hover:text-[#153860]"
+    [attr.aria-expanded]="pesquisaAberta()"
+    [attr.aria-keyshortcuts]="Mac ? 'Meta+K' : 'Control+K'"
+    class="group flex h-10 w-[400px] max-w-full items-center gap-2 rounded-full border border-transparent bg-[#f6f9fc] px-4 text-left text-sm font-semibold text-[#64748b] transition-colors duration-200 hover:border-[#153860]/25 hover:text-[#153860] dark:bg-noite-sutil dark:text-noite-suave dark:hover:border-noite-marca/25 dark:hover:text-noite-marca"
   >
     <img src="assets/img/searchIcon.svg" alt="" class="h-4 w-4" />
-    <span>Pesquisar</span>
+
+    <!--
+      "Pesquisar" letra por letra: ao passar o mouse, cada letra sobe de baixo, uma depois
+      da outra (o atraso cresce com o índice). O overflow-hidden do pai esconde a letra
+      enquanto ela está abaixo da linha, como uma máscara.
+      O leitor de tela lê o texto inteiro do sr-only, não as letras soltas.
+    -->
+    <span class="sr-only">Pesquisar</span>
+    <span aria-hidden="true" class="flex flex-1 overflow-hidden">
+      @for (letra of letrasPesquisar; track $index) {
+        <span
+          class="inline-block group-hover:animate-subir-letra motion-reduce:animate-none"
+          [style.animation-delay.ms]="$index * 35"
+        >{{ letra }}</span>
+      }
+    </span>
+    <kbd class="rounded-md border border-slate-200 bg-white px-1.5 py-0.5 font-sans text-[11px] font-semibold text-slate-500 dark:border-noite-borda dark:bg-noite-card dark:text-slate-400">
+      {{ atalho }}
+    </kbd>
+  </button>
+
+  <!-- Alterna entre modo claro e escuro (TemaService) -->
+  <button
+    type="button"
+    (click)="tema.alternar($event)"
+    [attr.aria-label]="tema.escuro() ? 'Ativar modo claro' : 'Ativar modo escuro'"
+    [attr.aria-pressed]="tema.escuro()"
+    class="absolute right-20 grid h-10 w-10 place-items-center rounded-full text-slate-500 hover:bg-slate-100 dark:text-noite-suave dark:hover:bg-noite-sutil"
+  >
+    @if (tema.escuro()) {
+      <!-- Sol: clicar volta para o claro -->
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      </svg>
+    } @else {
+      <!-- Lua: clicar vai para o escuro -->
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+    }
   </button>
 
   <a
     routerLink="/notificacoes"
     aria-label="Notificações"
-    class="absolute right-8 grid h-10 w-10 place-items-center rounded-full text-slate-500 hover:bg-slate-100"
+    class="absolute right-8 grid h-10 w-10 place-items-center rounded-full text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-noite-sutil-forte"
   >
     <img src="assets/notificationIcon.svg" alt="" class="h-6 w-6" />
   </a>
 </header>
-
-@if (pesquisaAberta) {
+@if (pesquisaAberta()) {
+  <!--
+    Fundo escuro com desfoque. Clicar nele fecha a pesquisa.
+    Slide up: o fundo surge, depois a caixa sobe e o conteúdo vem subindo em sequência
+    (cada parte com um animation-delay maior). motion-reduce desliga para quem pediu menos movimento.
+  -->
   <div
-    class="fixed inset-0 z-50 bg-slate-900/30 p-4 pt-24"
+    class="fixed inset-0 z-50 animate-surgir-fundo bg-slate-900/40 p-4 pt-[12vh] backdrop-blur-sm motion-reduce:animate-none"
     (click)="fecharPesquisa()"
   >
     <section
       role="dialog"
       aria-modal="true"
-      aria-label="Pesquisar"
-      class="relative mx-auto w-full max-w-2xl rounded-xl bg-white p-4 shadow-lg"
+      aria-label="Pesquisar no sistema"
       (click)="$event.stopPropagation()"
+      class="mx-auto flex max-h-[70vh] w-full max-w-2xl animate-subir flex-col overflow-hidden rounded-2xl bg-white shadow-2xl motion-reduce:animate-none dark:bg-noite-card"
     >
-      <div class="flex items-center gap-3 rounded-xl bg-[#f6f9fc] px-4">
+      <!-- Campo de pesquisa -->
+      <div
+        class="flex animate-subir items-center gap-3 border-b border-slate-100 px-4 [animation-delay:100ms] motion-reduce:animate-none dark:border-noite-borda"
+      >
         <img src="assets/img/searchIcon.svg" alt="" class="h-4 w-4" />
 
         <input
-          type="search"
-          [(ngModel)]="termoPesquisa"
+          #campoPesquisa
+          type="text"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="true"
+          aria-controls="lista-pesquisa"
+          [attr.aria-activedescendant]="resultados().length ? 'opcao-pesquisa-' + indiceAtivo() : null"
+          [value]="termo()"
+          (input)="atualizarTermo($event)"
+          (keydown)="aoPressionarTeclaNoCampo($event)"
           placeholder="O que você está buscando?"
-          class="h-10 min-w-0 flex-1 bg-transparent text-sm outline-none"
+          class="h-14 min-w-0 flex-1 bg-transparent text-sm text-slate-800 outline-none dark:text-slate-100"
         />
 
-        @if (termoPesquisa.trim()) {
-        <div class="absolute left-0 right-0 top-full z-10 mt-2 rounded-xl border border-slate-100 bg-white p-2 pt-2 shadow-lg">
-            @for (pagina of paginasFiltradas; track pagina.rota) {
-            <a
-                [routerLink]="pagina.rota"
-                (click)="fecharPesquisa()"
-                class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
-            >
-                {{ pagina.nome }}
-            </a>
-            } @empty {
-            <p class="px-3 py-2 text-sm text-slate-500">
-                Nenhuma página encontrada.
-            </p>
-            }
-        </div>
-        }
-        
         <button
           type="button"
           (click)="fecharPesquisa()"
-          class="rounded-full px-2 py-1 text-sm text-[#64748b] hover:bg-[#e8eef5]"
+          aria-label="Fechar pesquisa"
+          class="rounded-md border border-slate-200 px-1.5 py-0.5 text-[11px] font-semibold text-slate-500 hover:bg-slate-50 dark:border-noite-borda dark:text-slate-400 dark:hover:bg-noite-sutil"
         >
-          Fechar
+          Esc
         </button>
       </div>
+
+      <!-- Resultados, separados por grupo -->
+      <ul id="lista-pesquisa" role="listbox" aria-label="Funcionalidades" class="flex-1 overflow-y-auto p-2">
+        @for (grupo of grupos(); track grupo.nome) {
+          <li role="presentation">
+            <p
+              class="animate-subir px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-noite-suave motion-reduce:animate-none"
+              [style.animation-delay.ms]="160 + $index * 60"
+            >
+              {{ grupo.nome }}
+            </p>
+
+            <ul role="group" [attr.aria-label]="grupo.nome">
+              @for (item of grupo.itens; track item.titulo) {
+                @let indice = indiceDe(item);
+
+                <li
+                  [id]="'opcao-pesquisa-' + indice"
+                  role="option"
+                  [attr.aria-selected]="indice === indiceAtivo()"
+                  (click)="abrirFuncionalidade(item)"
+                  (mousemove)="indiceAtivo.set(indice)"
+                  [style.animation-delay.ms]="180 + (indice < 10 ? indice : 10) * 35"
+                  class="animate-subir motion-reduce:animate-none group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-slate-800 aria-selected:bg-[#153860] aria-selected:text-white dark:text-slate-100"
+                >
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm font-semibold">{{ item.titulo }}</p>
+                    <p class="truncate text-xs text-slate-500 group-aria-selected:text-white/80 dark:text-slate-400">
+                      {{ item.descricao }}
+                    </p>
+                  </div>
+
+                  <span aria-hidden="true" class="hidden text-sm group-aria-selected:block">↵</span>
+                </li>
+              }
+            </ul>
+          </li>
+        } @empty {
+          <li class="px-3 py-10 text-center text-sm text-slate-500 dark:text-slate-400">
+            Nenhum resultado para "{{ termo() }}".
+          </li>
+        }
+      </ul>
+
+      <!-- Dicas de teclado, como no site do Tailwind -->
+      <footer
+        class="flex animate-subir gap-4 border-t border-slate-100 px-4 py-2 text-xs text-slate-500 [animation-delay:250ms] motion-reduce:animate-none dark:border-noite-borda dark:text-slate-400"
+      >
+        <span><kbd class="font-sans font-semibold">↵</kbd> abrir</span>
+        <span><kbd class="font-sans font-semibold">↑</kbd> <kbd class="font-sans font-semibold">↓</kbd> navegar</span>
+        <span><kbd class="font-sans font-semibold">esc</kbd> fechar</span>
+      </footer>
     </section>
   </div>
 }

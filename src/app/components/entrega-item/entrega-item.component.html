@@ -1,16 +1,16 @@
-<article class="grid min-h-[52px] grid-cols-[34px_12px_minmax(0,1fr)_auto] items-center gap-1 border-b border-[#eef2f6] font-['Manrope'] text-[#0f172a]">
+<article class="grid min-h-[52px] grid-cols-[34px_12px_minmax(0,1fr)_auto] items-center gap-1 border-b border-[#eef2f6] font-['Manrope'] text-[#0f172a] dark:border-noite-borda dark:text-noite-texto">
     <time class="text-[9px] font-semibold">{{ entrega.horario }}</time>
 
-    <div class="flex h-full items-start justify-center border-l border-[#dce4ea] pt-3.5">
-        <span class="ml-[-3px] h-[7px] w-[5px] rounded bg-slate-300" [class.bg-slate-700]="entrega.cor === 'azul'" [class.bg-amber-600]="entrega.cor === 'amarelo'"></span>
+    <div class="flex h-full items-start justify-center border-l border-[#dce4ea] pt-3.5 dark:border-noite-borda">
+        <span class="ml-[-3px] h-[7px] w-[5px] rounded bg-slate-300" [class.bg-slate-700]="entrega.cor === 'azul'" [class.bg-amber-600]="entrega.cor === 'amarelo'" [class.dark:bg-noite-borda]="!(entrega.cor === 'azul') && !(entrega.cor === 'amarelo')"></span>
     </div>
 
     <div class="flex min-w-0 flex-col gap-1">
         <strong class="overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold">{{ entrega.cliente }}</strong>
-        <small class="text-[7px] text-slate-500">{{ entrega.endereco }}</small>
+        <small class="text-[7px] text-slate-500 dark:text-slate-400">{{ entrega.endereco }}</small>
     </div>
 
-    <span class="whitespace-nowrap rounded-[11px] px-2 py-1.5 text-[8px] font-semibold text-slate-500" [class.bg-slate-100]="entrega.cor === 'azul'" [class.text-slate-700]="entrega.cor === 'azul'" [class.bg-amber-100]="entrega.cor === 'amarelo'" [class.text-amber-800]="entrega.cor === 'amarelo'">
+    <span class="whitespace-nowrap rounded-[11px] px-2 py-1.5 text-[8px] font-semibold text-slate-500" [class.bg-slate-100]="entrega.cor === 'azul'" [class.text-slate-700]="entrega.cor === 'azul'" [class.bg-amber-100]="entrega.cor === 'amarelo'" [class.text-amber-800]="entrega.cor === 'amarelo'" [class.dark:text-slate-400]="!(entrega.cor === 'azul') && !(entrega.cor === 'amarelo')" [class.dark:bg-noite-sutil-forte]="entrega.cor === 'azul'" [class.dark:text-slate-200]="entrega.cor === 'azul'" [class.dark:bg-amber-950]="entrega.cor === 'amarelo'" [class.dark:text-amber-100]="entrega.cor === 'amarelo'">
         {{ entrega.status }}
     </span>
 </article>

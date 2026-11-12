@@ -1,3 +1,8 @@
+import { SeletorClienteComponent } from '../../components/seletor-cliente/seletor-cliente.component';
+import { CLIENTES_SELECAO } from '../../data/clientes';
+import { ClienteSelecao } from '../../models/cliente.model';
+import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
+import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +14,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 @Component({
     selector: 'app-produtos-page',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, NgmMotionDirective],
+    imports: [SeletorClienteComponent, FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, RouterLink, NgmMotionDirective],
     templateUrl: './produtos.component.html',
 })
 export class ProdutosPageComponent { 
@@ -23,14 +28,8 @@ export class ProdutosPageComponent {
 
     }
 
-    clienteSelecionado = '';
-    seletorClientesAberto = false;
-
-    clientes = [
-      { id: 'casa-almeida', nome: 'Casa Almeida Materiais' },
-      { id: 'joao-silva', nome: 'João da Silva' },
-      { id: 'constrular', nome: 'Constrular Materiais' },
-    ];
+    readonly clientes = CLIENTES_SELECAO;
+    clienteSelecionado: ClienteSelecao | null = null;
 
     filtrosAbertos = false;
 
@@ -52,7 +51,6 @@ export class ProdutosPageComponent {
     @HostListener('document:keydown.escape')
     fecharModais(): void {
       this.fecharFiltros();
-      this.fecharSeletorClientes();
     }
 
     fecharFiltros(): void {
@@ -121,60 +119,6 @@ export class ProdutosPageComponent {
       return status === 'ATIVO' ? 'Ativo' : 'Inativo';
     }
 
-    get iniciaisCliente(): string {
-      const cliente = this.clientes.find((item) => item.id === this.clienteSelecionado);
-
-      if (!cliente) {
-        return '—';
-      }
-
-      return cliente.nome
-        .split(' ')
-        .slice(0, 2)
-        .map((parte) => parte[0])
-        .join('')
-        .toUpperCase();
-    }
-
-    get nomeClienteSelecionado(): string {
-      return this.clientes.find((cliente) => cliente.id === this.clienteSelecionado)?.nome
-        ?? 'Selecione um cliente';
-    }
-
-    /** Texto digitado no campo "Pesquisar cliente" do modal. */
-    buscaCliente = '';
-
-    get clientesFiltrados() {
-      const termo = this.normalizar(this.buscaCliente.trim());
-      if (!termo) {
-        return this.clientes;
-      }
-      return this.clientes.filter((cliente) => this.normalizar(cliente.nome).includes(termo));
-    }
-
-    abrirSeletorClientes(): void {
-      this.seletorClientesAberto = true;
-    }
-
-    fecharSeletorClientes(): void {
-      this.seletorClientesAberto = false;
-      this.buscaCliente = '';
-    }
-
-    selecionarCliente(clienteId: string): void {
-      this.clienteSelecionado = clienteId;
-      this.fecharSeletorClientes();
-    }
-
-    iniciaisDoNome(nome: string): string {
-      return nome
-        .split(' ')
-        .slice(0, 2)
-        .map((parte) => parte[0])
-        .join('')
-        .toUpperCase();
-    }
-
     categoriasSelecionadas: string[] = [];
 
     get categorias(): string[] {
@@ -188,7 +132,7 @@ export class ProdutosPageComponent {
         return produto.preco;
       }
 
-      return produto.precosPorCliente?.[this.clienteSelecionado] ?? produto.preco;
+      return produto.precosPorCliente?.[this.clienteSelecionado.id] ?? produto.preco;
     }
 
     get produtosMobile(): Produto[] {

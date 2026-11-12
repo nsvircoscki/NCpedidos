@@ -1,3 +1,5 @@
+import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
+import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +10,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 @Component({
   selector: 'app-tabela-precos-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgmMotionDirective],
+  imports: [FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, NgmMotionDirective],
   templateUrl: './tabela-precos.component.html'
 })
 export class TabelaPrecosPageComponent {

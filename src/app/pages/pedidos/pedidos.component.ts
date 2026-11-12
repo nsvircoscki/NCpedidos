@@ -1,3 +1,7 @@
+import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
+import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
+import { PedidoResumo } from '../../models/pedido.model';
+import { PEDIDOS_EXEMPLO } from '../../data/pedidos';
 import { Component, inject, signal, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,22 +11,11 @@ import { PedidoAcompanhamentoComponent } from '../pedido-enviado/pedido-acompanh
 import { ClienteOption } from '../../models/cliente.model';
 
 
-export interface Order {
-    id: number;
-    clienteId: number;
-    client: string;
-    initials: string;
-    avatar: 'blue' | 'orange';
-    date: string;
-    volumes: number;
-    total: number;
-    status: string;
-}
 
 @Component({
     selector: 'app-pedidos',
     standalone: true,
-    imports: [
+    imports: [FiltroModalComponent, FiltroChipsComponent, 
         CommonModule,
         FormsModule,
         RouterLink,
@@ -57,19 +50,37 @@ export class PedidosComponent implements AfterViewInit {
     buscaCliente = '';
 
     readonly sent = signal(false);
-    readonly pedidoSelecionado = signal<Order | null>(null);
+    readonly pedidoSelecionado = signal<PedidoResumo | null>(null);
     search = '';
-    statusFilter = 'Todos';
+    statusSelecionados: string[] = [];
     filtrosAbertos = false;
-    readonly statusOptions = ['Todos', 'Em análise', 'Aprovado', 'Faturado'];
+    readonly statusPedido = ['Em análise', 'Aprovado', 'Faturado'];
+    readonly statusOptions = ['Todos', ...this.statusPedido];
 
     get totalFiltrosAtivos(): number {
-        return (this.statusFilter !== 'Todos' ? 1 : 0) + (this.search.trim() ? 1 : 0);
+        return this.statusSelecionados.length + (this.search.trim() ? 1 : 0);
+    }
+
+    alternarStatus(status: string): void {
+        this.statusSelecionados = this.statusSelecionados.includes(status)
+            ? this.statusSelecionados.filter(item => item !== status)
+            : [...this.statusSelecionados, status];
+    }
+
+    // No mobile os chips escolhem um status por vez; "Todos" limpa a escolha.
+    escolherStatusMobile(status: string): void {
+        this.statusSelecionados = status === 'Todos' ? [] : [status];
+    }
+
+    statusMobileAtivo(status: string): boolean {
+        return status === 'Todos'
+            ? this.statusSelecionados.length === 0
+            : this.statusSelecionados.includes(status);
     }
 
     limparFiltros(): void {
         this.search = '';
-        this.statusFilter = 'Todos';
+        this.statusSelecionados = [];
     }
 
     abrirModalCliente(): void {
@@ -100,17 +111,11 @@ export class PedidosComponent implements AfterViewInit {
         return nome.split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
     }
 
-    private readonly orders = signal<Order[]>([
-        { id: 1047, clienteId: 1, client: 'Casa Almeida Materiais', initials: 'CA', avatar: 'blue',   date: '16 set.', volumes: 8,  total: 3240.00, status: 'Faturado'  },
-        { id: 1046, clienteId: 2, client: 'Distribuidora Norte',    initials: 'DN', avatar: 'orange', date: '15 set.', volumes: 12, total: 5870.50, status: 'Aprovado'  },
-        { id: 1045, clienteId: 3, client: 'Materiais Construção RC', initials: 'MC', avatar: 'blue',  date: '14 set.', volumes: 5,  total: 1920.00, status: 'Em análise' },
-        { id: 1044, clienteId: 4, client: 'Ferreira & Filhos Ltda', initials: 'FF', avatar: 'orange', date: '13 set.', volumes: 20, total: 9150.00, status: 'Faturado'  },
-        { id: 1043, clienteId: 1, client: 'Casa Almeida Materiais', initials: 'CA', avatar: 'blue',   date: '12 set.', volumes: 3,  total: 870.00,  status: 'Aprovado'  },
-    ]);
+    private readonly orders = signal<PedidoResumo[]>(PEDIDOS_EXEMPLO);
 
-    // Método (e não computed) porque search/statusFilter não são signals:
+    // Método (e não computed) porque search/statusSelecionados não são signals:
     // um computed nunca recalcularia ao digitar ou trocar o status.
-    filteredOrders(): Order[] {
+    filteredOrders(): PedidoResumo[] {
         const termo = this.search.toLowerCase().trim();
         return this.orders().filter((order) => {
             const matchSearch =
@@ -118,7 +123,7 @@ export class PedidosComponent implements AfterViewInit {
                 order.client.toLowerCase().includes(termo) ||
                 String(order.id).includes(termo);
             const matchStatus =
-                this.statusFilter === 'Todos' || order.status === this.statusFilter;
+                this.statusSelecionados.length === 0 || this.statusSelecionados.includes(order.status);
             const matchCliente =
                 this.clienteIdFiltro === null || order.clienteId === this.clienteIdFiltro;
             return matchSearch && matchStatus && matchCliente;
@@ -155,7 +160,7 @@ export class PedidosComponent implements AfterViewInit {
         this.dragConstraints.set({ top: 0, bottom: 0, left: -maxScroll, right: 0 });
     }
 
-    abrirAcompanhamento(order: Order): void {
+    abrirAcompanhamento(order: PedidoResumo): void {
         this.pedidoSelecionado.set(order);
     }
 

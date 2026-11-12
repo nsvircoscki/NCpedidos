@@ -6,6 +6,17 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!--
+    Aplica o modo escuro antes do Angular carregar, para a tela não piscar em branco.
+    Mesma regra do TemaService (src/app/services/tema.ts): escolha salva ou, sem escolha, o sistema.
+  -->
+  <script>
+    try {
+      var tema = localStorage.getItem('tema');
+      var escuro = tema === 'escuro' || ((!tema || tema === 'sistema') && matchMedia('(prefers-color-scheme: dark)').matches);
+      if (escuro) document.documentElement.classList.add('dark');
+    } catch (e) {}
+  </script>
 </head>
 <body>
   <app-root></app-root>

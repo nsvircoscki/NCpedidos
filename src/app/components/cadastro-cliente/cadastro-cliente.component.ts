@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { TipoCadastro } from '../../models/cliente.model';
 
 @Component({
   selector: 'app-cadastro-cliente',
@@ -12,6 +13,7 @@ export class CadastroClienteComponent implements OnInit {
   @Input() cliente: Record<string, any> = {};
   @Output() valorAlterado = new EventEmitter<{ campo: string; valor: string }>();
   @Output() proximo = new EventEmitter<void>();
+  @Output() voltar = new EventEmitter<void>();
   @Output() cancelar = new EventEmitter<void>();
 
 
@@ -87,7 +89,8 @@ export class CadastroClienteComponent implements OnInit {
         }
       }
 
-  tipoCadastro: 'PJ' | 'PF' = 'PJ';
+  /** PJ ou PF: vem da página, que pergunta antes de abrir o formulário. Aqui não muda. */
+  readonly tipoCadastro = input.required<TipoCadastro>();
   carregandoCNPJ = false;
   mensagemErroCNPJ = '';
 
@@ -170,9 +173,6 @@ export class CadastroClienteComponent implements OnInit {
       this.cancelar.emit();
     }
 
-    selecionarTipo(tipo: 'PJ' | 'PF'): void {
-      this.tipoCadastro = tipo;
-    }
 
   ngOnInit(): void {
     this.carregarTodasCidades();

@@ -1,0 +1,89 @@
+import { Funcionalidade } from '../models/funcionalidade.model';
+
+export const funcionalidades: Funcionalidade[] = [
+    {
+        titulo: 'Visão geral',
+        descricao: 'Resumo das principais informações do sistema',
+        rota: '/dashboard',
+        grupo: 'Visão geral',
+        palavrasChave: ['visao', 'geral', 'resumo', 'metas', 'painel'],
+    },
+    {
+        grupo: 'Pedidos',
+        titulo: 'Pedidos',
+        descricao: 'Lista de todos os pedidos com status, valores e filtros',
+        rota: '/pedidos',
+        palavrasChave: ['vendas', 'lista', 'pedidos', 'status'],
+    },
+    {
+        grupo : 'Pedidos',
+        titulo: 'Novo pedido',
+        descricao: 'Formulário para criar novo pedido, selecionar cliente, produtos e condições de pagamento',
+        rota: '/pedidos/novo',
+        palavrasChave: ['novo', 'pedido', 'venda', 'formulario', 'cadastrar', 'cadastro'],
+    },
+    {
+        grupo: 'Pedidos',
+        titulo: 'Detalhes do pedido',
+        descricao: 'Visualizar detalhes de um pedido específico, incluindo produtos, cliente e status',
+        rota: '/pedidos/:1047',
+        palavrasChave: ['detalhes', 'pedido', 'visualizar', 'informacoes'],
+    },
+    {
+        grupo: 'Pedidos',
+        titulo: 'Acompanhamento do pedido',
+        descricao: 'Acompanhar o status de um pedido em tempo real, incluindo envio e entrega',
+        rota: '/pedidos/:1047/acompanhamento',
+        palavrasChave: ['acompanhamento', 'pedido', 'status', 'envio', 'entrega'],
+    },
+    {
+        grupo: 'Produtos',
+        titulo: 'Produtos e precos',
+        descricao: 'Lista de produtos disponíveis, com preços, estoque e categorias, permite fltrar por cliente',
+        rota: '/produtos',
+        palavrasChave: ['produtos', 'precos', 'estoque', 'categorias', 'lista', 'tabela'],
+    },
+    {
+        grupo: 'Produtos',
+        titulo: 'Cadastrar produto',
+        descricao: 'Formulário para cadastrar um novo produto, incluindo nome, preço, estoque e categoria',
+        rota: '/produtos/novo',
+        palavrasChave: ['cadastrar', 'produto', 'novo', 'formulario', 'cadastro'],
+    },
+    {
+        grupo: 'Clientes',
+        titulo: 'Clientes',
+        descricao: 'Lista de clientes com busca, filtros por tipo, status e cidade, e ordenação',
+        rota: '/clientes',
+        palavrasChave: ['carteira', 'lista', 'filtro', 'ordenar'],
+    },
+    {
+        grupo: 'Clientes',
+        titulo: 'Pré-cadastro de cliente',
+        descricao: 'Formulário de cadastro de cliente, posteriormente enviado para análise.',
+        rota: '/clientes/novo',
+        palavrasChave: ['cadastrar', 'cliente', 'novo', 'formulario', 'cadastro'],
+    },
+    {
+        grupo: 'Clientes',
+        titulo: 'Análise de clientes',
+        descricao: 'Avalie os pré-cadastros de clientes, aprove ou rejeite com base nas informações.',
+        rota: '/clientes/analise',
+        palavrasChave: ['analise', 'clientes', 'pre-cadastro', 'avaliacao'],
+    },
+    {
+        grupo: 'Clientes',
+        titulo: 'Tabela de precos do cliente',
+        descricao: 'Visualize a tabela de preços específica para um cliente, com descontos e condições especiais.',
+        rota: '/clientes/:1047/tabela-precos',
+        palavrasChave: ['tabela', 'precos', 'cliente', 'descontos', 'condicoes'],
+    },
+    {
+        grupo: 'Sistema',
+        titulo: 'Configurações',
+        descricao: 'Ajuste as configurações do sistema, incluindo preferências de usuário e parâmetros gerais.',
+        rota: '/configuracoes',
+        palavrasChave: ['configuracoes', 'sistema', 'preferencias', 'parametros', 'tema', 'claro', 'escuro'],
+    },
+];
+

@@ -4,7 +4,7 @@
     <div class="relative min-w-[220px] flex-1">
       <svg
         aria-hidden="true"
-        class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+        class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 dark:text-noite-suave"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -18,163 +18,41 @@
         [(ngModel)]="termoBusca"
         (ngModelChange)="paginaAtual = 1"
         placeholder="Pesquisar por nome, CPF/CNPJ ou e-mail"
-        class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400"
+        class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400 dark:bg-noite-sutil dark:text-slate-200"
       />
     </div>
 
-    <!--
-      Botão hambúrguer: abre um painel com ordenação + filtros (tipo, status, cidade).
-      O número no canto mostra quantos filtros estão ativos.
-    -->
-    <div class="relative">
-      <button
-        type="button"
-        (click)="alternarFiltros()"
-        aria-label="Abrir filtros e ordenação"
-        aria-haspopup="dialog"
-        [attr.aria-expanded]="filtrosAbertos"
-        class="relative grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[#A9B6C5] bg-white text-[#153860] transition hover:border-[#153860]"
-        [class.border-[#153860]]="filtrosAbertos">
-        <span aria-hidden="true" class="flex w-4 flex-col gap-1">
-          <span class="h-0.5 w-full rounded-full bg-current"></span>
-          <span class="h-0.5 w-full rounded-full bg-current"></span>
-          <span class="h-0.5 w-full rounded-full bg-current"></span>
-        </span>
-        @if (totalFiltrosAtivos > 0) {
-          <span class="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#153860] px-1 text-[10px] font-bold text-white">
-            {{ totalFiltrosAtivos }}
-          </span>
-        }
-      </button>
-
-    </div>
-
-
-    <!--
-      Modal de filtros: centralizado, abre com pop-in e pode ser puxado para os lados, mas sempre volta ao meio.
-      Fica sempre no HTML; o ngmMotion anima entre aberto e fechado.
-      Fechado: invisível, sem cliques (pointer-events-none) e fora do Tab (inert).
-    -->
-    <div
-      class="fixed inset-0 z-[60] flex items-center justify-center p-4"
-      [class.pointer-events-none]="!filtrosAbertos"
-      [attr.inert]="filtrosAbertos ? null : ''"
-      [attr.aria-hidden]="!filtrosAbertos">
-
-      <!-- Fundo escuro (fade): clicar nele fecha -->
-      <div
-        (click)="fecharFiltros()"
-        ngmMotion
-        [initial]="false"
-        [animate]="{ opacity: filtrosAbertos ? 1 : 0 }"
-        [transition]="{ duration: 0.2, ease: 'easeOut' }"
-        class="absolute inset-0 bg-black/40"
-      ></div>
-
-      <!-- Camada 1: pop-in (abre crescendo com mola, fecha encolhendo rápido) -->
-      <div
-        ngmMotion
-        [initial]="false"
-        [animate]="{ opacity: filtrosAbertos ? 1 : 0, scale: filtrosAbertos ? 1 : 0.6 }"
-        [transition]="filtrosAbertos
-          ? { type: 'spring', stiffness: 380, damping: 18, mass: 0.8, opacity: { duration: 0.15 } }
-          : { duration: 0.15, ease: 'easeIn' }"
-        class="relative w-full max-w-lg">
-
-        <!-- Camada 2: puxa para os lados com efeito gelatina e volta sozinho para o meio ao soltar -->
-        <section
-          role="dialog"
-          aria-modal="true"
-          aria-label="Filtros e ordenação"
-          ngmMotion
-          #modalFiltros
-          drag="x"
-          [dragX]="arrastoX"
-          [dragConstraints]="limitesArrasto()"
-          [dragElastic]="0.1"
-          [dragSnapToOrigin]="true"
-          [style]="estiloArrasto"
-          [whileDrag]="{ boxShadow: '0 22px 52px rgba(21, 56, 96, 0.28)' }"
-          class="max-h-[85vh] cursor-grab touch-pan-y select-none overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl active:cursor-grabbing">
-
-          <div class="mb-4 flex items-center justify-between">
-            <h2 class="text-[16px] font-bold text-[#101b2b]">Filtros</h2>
-            <button
-              type="button"
-              (click)="fecharFiltros()"
-              aria-label="Fechar filtros"
-              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]">
-              ✕
-            </button>
-          </div>
-
-          <!-- Ordenação: uma opção por vez -->
-          <h3 class="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-400">Ordenar por</h3>
-          <div class="grid gap-1">
-            @for (opcao of opcoesOrdenacao; track opcao.valor) {
-              <button
-                type="button"
-                (click)="selecionarOrdenacao(opcao.valor)"
-                [attr.aria-pressed]="ordenacao === opcao.valor"
-                class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors hover:bg-slate-100"
-                [class.bg-[#eef3f8]]="ordenacao === opcao.valor"
-                [class.font-semibold]="ordenacao === opcao.valor"
-                [class.text-[#153860]]="ordenacao === opcao.valor">
-                {{ opcao.texto }}
-                @if (ordenacao === opcao.valor) {
-                  <span aria-hidden="true">✓</span>
-                }
-              </button>
+    <app-filtro-modal
+      [totalAtivos]="totalFiltrosAtivos"
+      [totalResultados]="clientesFiltrados.length"
+      nomeResultados="clientes"
+      (limpar)="limparFiltrosDoPainel()">
+      <h3 class="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-noite-suave">Ordenar por</h3>
+      <div class="grid gap-1">
+        @for (opcao of opcoesOrdenacao; track opcao.valor) {
+          <button
+            type="button"
+            (click)="selecionarOrdenacao(opcao.valor)"
+            [attr.aria-pressed]="ordenacao === opcao.valor"
+            class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs text-slate-700 transition-colors hover:bg-slate-100 dark:hover:bg-noite-sutil-forte"
+            [class.bg-[#eef3f8]]="ordenacao === opcao.valor"
+            [class.font-semibold]="ordenacao === opcao.valor"
+            [class.text-[#153860]]="ordenacao === opcao.valor"
+            [class.dark:text-slate-200]="!(ordenacao === opcao.valor)"
+            [class.dark:bg-noite-sutil]="ordenacao === opcao.valor"
+            [class.dark:text-noite-marca]="ordenacao === opcao.valor">
+            {{ opcao.texto }}
+            @if (ordenacao === opcao.valor) {
+              <span aria-hidden="true">✓</span>
             }
-          </div>
-
-          <!--
-            Molde dos grupos de filtro (Tipo, Status, Cidade): título + chips.
-            É escrito uma vez e usado três vezes com o *ngTemplateOutlet logo abaixo.
-            Clicar no chip já marcado desmarca (volta para "todos").
-          -->
-          <ng-template #grupoChips let-tipo="tipo" let-titulo="titulo" let-opcoes="opcoes">
-            <h3 class="mb-2 mt-5 text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ titulo }}</h3>
-            <div class="flex flex-wrap gap-2">
-              @for (opcao of opcoes; track opcao) {
-                <button
-                  type="button"
-                  (click)="selecionarFiltro(tipo, opcao)"
-                  [attr.aria-pressed]="valorSelecionado(tipo) === opcao"
-                  class="rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors"
-                  [class.border-[#153860]]="valorSelecionado(tipo) === opcao"
-                  [class.bg-[#153860]]="valorSelecionado(tipo) === opcao"
-                  [class.text-white]="valorSelecionado(tipo) === opcao"
-                  [class.border-slate-200]="valorSelecionado(tipo) !== opcao"
-                  [class.text-slate-600]="valorSelecionado(tipo) !== opcao"
-                  [class.hover:bg-slate-50]="valorSelecionado(tipo) !== opcao">
-                  {{ tipo === 'status' ? textoStatus(opcao) : opcao }}
-                </button>
-              }
-            </div>
-          </ng-template>
-
-          <ng-container *ngTemplateOutlet="grupoChips; context: { tipo: 'tipo', titulo: 'Tipo', opcoes: tiposCliente }"></ng-container>
-          <ng-container *ngTemplateOutlet="grupoChips; context: { tipo: 'status', titulo: 'Status', opcoes: status }"></ng-container>
-          <ng-container *ngTemplateOutlet="grupoChips; context: { tipo: 'cidade', titulo: 'Cidade', opcoes: cidades }"></ng-container>
-
-          <div class="mt-6 flex gap-2">
-            <button
-              type="button"
-              (click)="limparFiltrosDoPainel()"
-              class="flex-1 rounded-full border border-slate-200 py-2.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">
-              Limpar filtros
-            </button>
-            <button
-              type="button"
-              (click)="fecharFiltros()"
-              class="flex-1 rounded-full bg-[#153860] py-2.5 text-xs font-semibold text-white transition hover:bg-[#0f2947]">
-              Ver {{ clientesFiltrados.length }} clientes
-            </button>
-          </div>
-        </section>
+          </button>
+        }
       </div>
-    </div>
+
+      <app-filtro-chips titulo="Tipo" [opcoes]="tiposCliente" [selecionados]="tipoSelecionado ? [tipoSelecionado] : []" (alternar)="selecionarFiltro('tipo', $event)" />
+      <app-filtro-chips titulo="Status" [opcoes]="status" [selecionados]="statusSelecionado ? [statusSelecionado] : []" [textoDe]="textoStatus" (alternar)="selecionarFiltro('status', $event)" />
+      <app-filtro-chips titulo="Cidade" [opcoes]="cidades" [selecionados]="cidadeSelecionada ? [cidadeSelecionada] : []" (alternar)="selecionarFiltro('cidade', $event)" />
+    </app-filtro-modal>
 
     @if (possuiFiltrosAtivos) {
       <button
@@ -182,7 +60,7 @@
         (click)="limparFiltros()"
         aria-label="Limpar filtros"
         title="Limpar filtros"
-        class="p-1 text-slate-400 transition hover:text-slate-600">
+        class="p-1 text-slate-500 dark:text-noite-suave transition hover:text-slate-600 dark:hover:text-slate-300">
         <svg aria-hidden="true" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18" />
         </svg>
@@ -192,12 +70,12 @@
 
   <!-- Resumo da lista -->
   <div class="mb-3 flex items-center justify-between px-4">
-    <span class="text-[10px] text-slate-500">
+    <span class="text-[10px] text-slate-500 dark:text-slate-400">
       {{ clientesFiltrados.length }} cliente(s) encontrado(s)
     </span>
 
     @if (clientesSelecionados.size > 0) {
-      <span class="text-[10px] font-bold text-[#153860]">
+      <span class="text-[10px] font-bold text-[#153860] dark:text-noite-marca">
         {{ clientesSelecionados.size }} selecionado(s)
       </span>
     }
@@ -207,7 +85,7 @@
   <div class="w-full overflow-x-auto">
     <table class="w-full min-w-[1050px] border-collapse text-left">
       <thead>
-        <tr class="bg-slate-50 text-[10px] font-bold leading-none text-slate-400">
+        <tr class="bg-slate-50 text-[10px] font-bold leading-none text-slate-500 dark:text-noite-suave dark:bg-noite-sutil">
           <th class="w-12 px-4 py-4 uppercase">
             <span class="sr-only">Selecionar</span>
           </th>
@@ -222,12 +100,13 @@
         </tr>
       </thead>
 
-      <tbody class="divide-y divide-slate-100">
+      <tbody class="divide-y divide-slate-100 dark:divide-noite-borda">
         @for (cliente of clientesDaPagina; track cliente.id) {
           <tr
-            class="cursor-pointer transition hover:bg-slate-50"
+            class="cursor-pointer transition hover:bg-slate-50 dark:hover:bg-noite-sutil"
             [class.bg-[#edf3f7]]="clienteEstaSelecionado(cliente)"
-            (click)="selecionarCliente(cliente)">
+            (click)="selecionarCliente(cliente)"
+            [class.dark:bg-noite-sutil]="clienteEstaSelecionado(cliente)">
             <!-- Checkbox -->
             <td class="px-4 py-4">
               <input
@@ -235,24 +114,24 @@
                 [checked]="clienteEstaSelecionado(cliente)"
                 (click)="$event.stopPropagation()"
                 (change)="selecionarCliente(cliente)"
-                class="h-4 w-4 cursor-pointer accent-[#2D486F]"
+                class="h-4 w-4 cursor-pointer accent-[#2D486F] dark:accent-noite-marca"
                 [attr.aria-label]="'Selecionar ' + cliente.nome"
               />
             </td>
 
             <!-- Nome / Iniciais e Documento -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               <div class="flex items-center gap-3">
                 <!-- Avatar com Iniciais do Nome -->
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F0F4F8] text-xs font-bold text-[#153860]">
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F0F4F8] text-xs font-bold text-[#153860] dark:bg-noite-sutil dark:text-noite-marca">
                   {{ obterIniciais(cliente.nome) }}
                 </div>
 
                 <div>
-                  <div class="text-[13px] font-bold text-slate-800">
+                  <div class="text-[13px] font-bold text-slate-800 dark:text-slate-100">
                     {{ cliente.nome }}
                   </div>
-                  <div class="mt-0.5 text-[10px] text-slate-500">
+                  <div class="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">
                     {{ cliente.cpfcnpj }} <!-- CPF ou CNPJ -->
                   </div>
                 </div>
@@ -260,62 +139,62 @@
             </td>
 
             <!-- Contato -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
-              <div class="text-xs font-medium text-slate-700">{{ cliente.telefone }}</div>
-              <div class="text-[10px] text-slate-400">{{ cliente.email }}</div>
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
+              <div class="text-xs font-medium text-slate-700 dark:text-slate-200">{{ cliente.telefone }}</div>
+              <div class="text-[10px] text-slate-500 dark:text-noite-suave">{{ cliente.email }}</div>
             </td>
 
             <!-- Cidade / UF -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               {{ cliente.cidade }} / {{ cliente.uf }}
             </td>
 
             <!-- Tipo de Cliente -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
-              <span class="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-600">
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
+              <span class="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-600 dark:bg-noite-sutil-forte dark:text-slate-300">
                 {{ cliente.tipo }}
               </span>
             </td>
 
             <!-- Total Comprado -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               {{ cliente.totalComprado | currency: 'BRL' }}
             </td>
 
             <!-- Data da Última Compra -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               {{ cliente.ultimaCompra ? (cliente.ultimaCompra | date: 'dd/MM/yyyy') : 'Nunca comprou' }}
             </td>
 
             <!-- Status -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               @if (cliente.status === 'ATIVO') {
-                <span class="rounded-xl bg-[#ECF8F2] px-3 py-1.5 text-[10px] font-bold text-[#267253]">
+                <span class="rounded-xl bg-[#ECF8F2] px-3 py-1.5 text-[10px] font-bold text-[#267253] dark:bg-noite-sutil dark:text-[#94dbbe]">
                   Ativo
                 </span>
               } @else {
-                <span class="rounded-xl bg-red-50 px-3 py-1.5 text-[10px] font-bold text-red-600">
+                <span class="rounded-xl bg-red-50 px-3 py-1.5 text-[10px] font-bold text-red-600 dark:bg-red-950 dark:text-red-300">
                   Inativo
                 </span>
               }
             </td>
 
             <!-- Ações -->
-            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700">
+            <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               <div class="relative flex items-center gap-2">
                 <button
                   type="button"
-                  class="rounded-lg px-2 py-2 text-sm font-bold text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                  class="rounded-lg px-2 py-2 text-sm font-bold text-slate-500 dark:text-noite-suave transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-noite-sutil-forte dark:hover:text-slate-200"
                   (click)="$event.stopPropagation(); alternarMenuAcoes(cliente)"
                   [attr.aria-label]="'Mais ações para ' + cliente.nome">
                   ⋯
                 </button>
 
                 @if (menuAcoesAberto === cliente.id) {
-                  <div class="absolute right-0 top-10 z-30 w-44 rounded-xl bg-white p-1.5 text-left shadow-xl ring-1 ring-slate-200">
-                    <button type="button" (click)="$event.stopPropagation(); editarCliente(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Editar cliente</button>
-                    <button type="button" (click)="$event.stopPropagation(); verTabelaDePrecos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Tabela de preços</button>
-                    <button type="button" (click)="$event.stopPropagation(); verPedidos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100">Pedidos</button>
+                  <div class="absolute right-0 top-10 z-30 w-44 rounded-xl bg-white p-1.5 text-left shadow-xl ring-1 ring-slate-200 dark:bg-noite-card dark:ring-noite-borda">
+                    <button type="button" (click)="$event.stopPropagation(); editarCliente(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-noite-sutil-forte">Editar cliente</button>
+                    <button type="button" (click)="$event.stopPropagation(); verTabelaDePrecos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-noite-sutil-forte">Tabela de preços</button>
+                    <button type="button" (click)="$event.stopPropagation(); verPedidos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-noite-sutil-forte">Pedidos</button>
                   </div>
                 }
               </div>
@@ -323,7 +202,7 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="9" class="px-4 py-12 text-center text-sm text-slate-400">
+            <td colspan="9" class="px-4 py-12 text-center text-sm text-slate-500 dark:text-noite-suave">
               Nenhum cliente encontrado.
             </td>
           </tr>
@@ -333,8 +212,8 @@
   </div>
 
   <!-- Paginação -->
-  <div class="mt-6 flex items-center justify-between border-t border-slate-100 px-4 pt-4">
-    <span class="text-xs text-slate-500">
+  <div class="mt-6 flex items-center justify-between border-t border-slate-100 px-4 pt-4 dark:border-noite-borda">
+    <span class="text-xs text-slate-500 dark:text-slate-400">
       Página {{ paginaAtual }} de {{ totalPaginas }}
     </span>
 
@@ -343,7 +222,7 @@
         type="button"
         (click)="paginaAnterior()"
         [disabled]="paginaAtual === 1"
-        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40">
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-noite-borda dark:text-slate-300 dark:hover:bg-noite-sutil">
         Anterior
       </button>
 
@@ -351,7 +230,7 @@
         type="button"
         (click)="proximaPagina()"
         [disabled]="paginaAtual === totalPaginas"
-        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40">
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-noite-borda dark:text-slate-300 dark:hover:bg-noite-sutil">
         Próxima
       </button>
     </div>

@@ -1,13 +1,34 @@
-<header class="flex h-[72px] items-center justify-between border-b rounded-xl px-4 border-slate-200 bg-white lg:hidden">
-            <img src="assets/img/logo.svg" alt="Logo NC Tintas" class="h-[54px] w-[136px] max-w-[42%] object-contain object-left">
+<header class="flex h-[72px] items-center justify-between border-b rounded-xl px-4 border-slate-200 bg-white lg:hidden dark:border-noite-borda dark:bg-noite-card">
+            <img src="assets/logo-nc-tintas.svg" alt="Logo NC Tintas" class="h-[54px] w-[136px] max-w-[42%] object-contain object-left">
 
             <div class="flex items-center gap-4">
-                <button type="button" aria-label="Notificações" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] text-[#475569]">
+                <!-- Alterna entre modo claro e escuro (TemaService) -->
+                <button
+                    type="button"
+                    (click)="tema.alternar($event)"
+                    [attr.aria-label]="tema.escuro() ? 'Ativar modo claro' : 'Ativar modo escuro'"
+                    [attr.aria-pressed]="tema.escuro()"
+                    class="grid h-[38px] w-[38px] place-items-center rounded-[10px] text-[#475569] dark:text-noite-suave">
+                    @if (tema.escuro()) {
+                      <!-- Sol: clicar volta para o claro -->
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5">
+                        <circle cx="12" cy="12" r="4" />
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                      </svg>
+                    } @else {
+                      <!-- Lua: clicar vai para o escuro -->
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                      </svg>
+                    }
+                </button>
+
+                <button type="button" aria-label="Notificações" class="grid h-[38px] w-[38px] place-items-center rounded-[10px] text-[#475569] dark:text-noite-suave">
                     <img src="assets/notificationIcon.svg" alt="" class="h-[22px] w-[22px]">
                 </button>
 
 
-                <div class="grid h-[38px] w-[38px] place-items-center rounded-full bg-[#b9cce3] text-[11px] font-semibold text-[#153860]">
+                <div class="grid h-[38px] w-[38px] place-items-center rounded-full bg-[#b9cce3] text-[11px] font-semibold text-[#153860] dark:bg-[#394b60] dark:text-noite-marca">
                     CA
                 </div>
             </div>

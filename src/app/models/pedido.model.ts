@@ -15,5 +15,15 @@ export interface Pedido {
     status: 'PENDENTE' | 'APROVADO' | 'CANCELADO' | 'RASCUNHO';
 }
 
-
-
+/** Pedido como aparece nas listas (tela de Pedidos e dashboard). */
+export interface PedidoResumo {
+    id: number;
+    clienteId: number;
+    client: string;
+    initials: string;
+    avatar: 'blue' | 'orange';
+    date: string;
+    volumes: number;
+    total: number;
+    status: string;
+}

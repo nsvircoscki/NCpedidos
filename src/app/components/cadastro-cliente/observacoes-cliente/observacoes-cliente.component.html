@@ -1,9 +1,9 @@
-<section class="bg-transparent lg:rounded-xl lg:bg-white lg:shadow-[0px_8px_4px_#00000003]">
+<section class="bg-transparent lg:rounded-2xl lg:bg-white lg:shadow-sm dark:lg:bg-noite-card">
   <div class="px-4 pb-[116px] pt-6 lg:px-11 lg:py-8">
     <header class="hidden items-center gap-3 lg:flex">
       <div class="h-7 w-7 shrink-0 rounded-full bg-[#183869]"></div>
       <div>
-        <h2 class="text-2xl font-bold text-slate-900">Observações sobre o cliente</h2>
+        <h2 class="titulo-secao">Observações sobre o cliente</h2>
         <p class="text-sm font-bold text-[#A0ADC0]">Registre informações importantes para o atendimento.</p>
       </div>
     </header>
@@ -11,49 +11,49 @@
     <div class="mt-0 lg:mt-8">
       <fieldset class="mb-6 grid gap-3 lg:grid-cols-2">
         <legend class="sr-only">Perfil comercial</legend>
-        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61]">
-          <input type="checkbox" [(ngModel)]="perfil.trabalhaComOutrasMarcas" class="mr-3 h-5 w-5 accent-[#183869]">
+        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61] dark:border-noite-borda dark:text-noite-suave">
+          <input type="checkbox" [(ngModel)]="perfil.trabalhaComOutrasMarcas" class="mr-3 h-5 w-5 accent-[#183869] dark:accent-noite-marca">
           Já trabalha com outras marcas
         </label>
-        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61]">
-          <input type="checkbox" [(ngModel)]="perfil.buscaMelhoresCondicoes" class="mr-3 h-5 w-5 accent-[#183869]">
+        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61] dark:border-noite-borda dark:text-noite-suave">
+          <input type="checkbox" [(ngModel)]="perfil.buscaMelhoresCondicoes" class="mr-3 h-5 w-5 accent-[#183869] dark:accent-noite-marca">
           Busca melhores condições comerciais
         </label>
-        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61]">
-          <input type="checkbox" [(ngModel)]="perfil.entregaRecorrente" class="mr-3 h-5 w-5 accent-[#183869]">
+        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61] dark:border-noite-borda dark:text-noite-suave">
+          <input type="checkbox" [(ngModel)]="perfil.entregaRecorrente" class="mr-3 h-5 w-5 accent-[#183869] dark:accent-noite-marca">
           Precisa de entrega recorrente
         </label>
-        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61]">
-          <input type="checkbox" [(ngModel)]="perfil.interessePreparacao" class="mr-3 h-5 w-5 accent-[#183869]">
+        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61] dark:border-noite-borda dark:text-noite-suave">
+          <input type="checkbox" [(ngModel)]="perfil.interessePreparacao" class="mr-3 h-5 w-5 accent-[#183869] dark:accent-noite-marca">
           Interesse em materiais de preparação
         </label>
-        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61] lg:col-span-2">
-          <input type="checkbox" [(ngModel)]="perfil.novoEmpredimento" class="mr-3 h-5 w-5 accent-[#183869]">
+        <label class="flex min-h-12 cursor-pointer items-center rounded-[10px] border border-slate-200 px-3 text-[11px] text-[#595C61] lg:col-span-2 dark:border-noite-borda dark:text-noite-suave">
+          <input type="checkbox" [(ngModel)]="perfil.novoEmpredimento" class="mr-3 h-5 w-5 accent-[#183869] dark:accent-noite-marca">
           Está abrindo um novo empreendimento
         </label>
       </fieldset>
 
       <div class="mb-2 flex items-center justify-between">
-        <label for="observacaoInterna" class="text-[10px] font-semibold text-[#334155] lg:text-sm">Observação interna</label>
+        <label for="observacaoInterna" class="text-[10px] font-semibold text-[#334155] lg:text-sm dark:text-noite-texto">Observação interna</label>
         <span class="text-[9px] text-[#94A3B8] lg:text-xs">Opcional</span>
       </div>
 
-      <div class="rounded-[12px] border border-[#e2e8f0] bg-white px-3.5 py-3.5">
+      <div class="rounded-[12px] border border-[#e2e8f0] bg-white px-3.5 py-3.5 dark:border-noite-borda dark:bg-noite-card">
         <textarea
           id="observacaoInterna"
           name="observacaoInterna"
           [(ngModel)]="observacoes.texto"
           [maxlength]="limiteCaracteres"
           placeholder="Ex.: Cliente prefere entregas pela manhã, possui espaço limitado para estoque e costuma comprar no início do mês."
-          class="min-h-[153px] w-full resize-none border-0 p-0 text-[11px] leading-4 text-[#334155] outline-none placeholder:text-[#94A3B8] lg:min-h-40 lg:text-sm"></textarea>
-        <div class="mt-2 border-t border-[#e2e8f0] pt-2 text-right text-[9px] text-[#94A3B8]">
+          class="min-h-[153px] w-full resize-none border-0 p-0 text-[11px] leading-4 text-[#334155] outline-none placeholder:text-[#94A3B8] lg:min-h-40 lg:text-sm dark:text-noite-texto"></textarea>
+        <div class="mt-2 border-t border-[#e2e8f0] pt-2 text-right text-[9px] text-[#94A3B8] dark:border-noite-borda">
           {{ observacoes.texto.length }} / {{ limiteCaracteres }}
         </div>
       </div>
     </div>
 
     <fieldset class="mt-8">
-      <legend class="text-[10px] font-semibold text-[#334155] lg:text-sm">Categoria da observação</legend>
+      <legend class="text-[10px] font-semibold text-[#334155] lg:text-sm dark:text-noite-texto">Categoria da observação</legend>
       <div class="mt-3 flex gap-2 overflow-x-auto">
         @for (categoria of ['Perfil comercial', 'Entrega', 'Pagamento']; track categoria) {
           <label
@@ -61,7 +61,11 @@
             [class.bg-[#edf3f7]]="observacoes.categoria === categoria"
             [class.text-[#153860]]="observacoes.categoria === categoria"
             [class.bg-white]="observacoes.categoria !== categoria"
-            [class.text-[#64748b]]="observacoes.categoria !== categoria">
+            [class.text-[#64748b]]="observacoes.categoria !== categoria"
+            [class.dark:bg-noite-sutil]="observacoes.categoria === categoria"
+            [class.dark:text-noite-marca]="observacoes.categoria === categoria"
+            [class.dark:bg-noite-card]="observacoes.categoria !== categoria"
+            [class.dark:text-noite-suave]="observacoes.categoria !== categoria">
             <input
               type="radio"
               name="categoriaObservacao"
@@ -74,45 +78,45 @@
       </div>
     </fieldset>
 
-    <label class="mt-6 flex min-h-[62px] cursor-pointer items-center gap-3 rounded-[12px] bg-white px-3">
+    <label class="mt-6 flex min-h-[62px] cursor-pointer items-center gap-3 rounded-[12px] bg-white px-3 dark:bg-noite-card">
       <input
         type="checkbox"
         name="destacarObservacao"
         [(ngModel)]="observacoes.destacar"
-        class="h-[18px] w-[18px] shrink-0 rounded accent-[#153860]">
+        class="h-[18px] w-[18px] shrink-0 rounded accent-[#153860] dark:accent-noite-marca">
       <span>
-        <strong class="block text-[10px] font-semibold text-[#0f172a]">Destacar no perfil do cliente</strong>
-        <small class="mt-1 block text-[9px] text-[#64748b]">Exibir esta observação no topo do cadastro.</small>
+        <strong class="block text-[10px] font-semibold text-[#0f172a] dark:text-noite-texto">Destacar no perfil do cliente</strong>
+        <small class="mt-1 block text-[9px] text-[#64748b] dark:text-noite-suave">Exibir esta observação no topo do cadastro.</small>
       </span>
     </label>
 
-    <aside class="mt-8 flex min-h-[84px] gap-3 rounded-[12px] bg-[#fffbeb] px-4 py-4">
-      <span class="grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full bg-[#fef3c7] text-sm font-bold text-[#d97706]">!</span>
+    <aside class="mt-8 flex min-h-[84px] gap-3 rounded-[12px] bg-[#fffbeb] px-4 py-4 dark:bg-[#3f3718]">
+      <span class="grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full bg-[#fef3c7] text-sm font-bold text-[#d97706] dark:bg-[#453c17] dark:text-[#edbb82]">!</span>
       <div>
-        <strong class="text-[10px] font-semibold text-[#92400e]">Evite dados sensíveis</strong>
-        <p class="mt-1 text-[9px] leading-[14px] text-[#a16207]">Não inclua senhas, dados bancários ou informações pessoais sem necessidade comercial.</p>
+        <strong class="text-[10px] font-semibold text-[#92400e] dark:text-[#edab82]">Evite dados sensíveis</strong>
+        <p class="mt-1 text-[9px] leading-[14px] text-[#a16207] dark:text-[#edc182]">Não inclua senhas, dados bancários ou informações pessoais sem necessidade comercial.</p>
       </div>
     </aside>
 
     <button
       type="button"
-      class="mt-32 flex h-[52px] w-full items-center justify-center rounded-[11px] border border-[#e2e8f0] bg-white text-[11px] font-semibold text-[#153860] lg:mt-8"
+      class="botao-pop mt-32 flex h-[52px] w-full items-center justify-center rounded-[11px] border border-[#e2e8f0] bg-white text-[11px] font-semibold text-[#153860] lg:mt-8 dark:border-noite-borda dark:bg-noite-card dark:text-noite-marca"
       (click)="observacoes.texto = ''">
       + Adicionar outra observação
     </button>
   </div>
 
-  <footer class="fixed bottom-0 left-0 z-[5] flex h-[100px] w-full items-center gap-3 border-t border-[#e2e8f0] bg-white px-4 lg:static lg:h-auto lg:justify-end lg:border-0 lg:px-11 lg:pb-8">
+  <footer class="fixed bottom-0 left-0 z-[5] flex h-[100px] w-full items-center gap-3 border-t border-[#e2e8f0] bg-white px-4 lg:static lg:h-auto lg:justify-end lg:border-0 lg:px-11 lg:pb-8 dark:border-noite-borda dark:bg-noite-card">
     <button
       type="button"
-      (click)="cancelarCadastro()"
-      class="h-[52px] w-[118px] rounded-[11px] border border-[#e2e8f0] bg-white text-[5px] font-semibold text-[#334155]">
+      (click)="voltarEtapa()"
+      class="h-[52px] w-[118px] rounded-[11px] border border-[#e2e8f0] bg-white text-[12px] font-semibold lg:w-[160px] lg:text-sm text-[#334155] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto">
       Voltar
     </button>
     <button
       type="button"
       (click)="salvarObservacoes()"
-      class="h-[52px] flex-1 rounded-[11px] bg-[#153860] text-[10px] font-semibold text-white lg:max-w-[228px]">
+      class="h-[52px] flex-1 rounded-[11px] bg-[#153860] text-[12px] font-semibold text-white lg:max-w-[228px] lg:text-sm">
       Enviar pré-cadastro
     </button>
   </footer>

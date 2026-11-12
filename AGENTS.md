@@ -30,6 +30,9 @@ ou explicar como fazer algo:
 5. Quando o pedido for "me ensine", **não altere os arquivos**: mostre o código para a
    pessoa escrever, a menos que ela peça para aplicar.
 
+**Código legível para humanos:** nomes claros em português, funções curtas e poucos
+comentários. Comente só o que não dá para entender lendo o código (o porquê, não o quê).
+
 Mesmo quando a tarefa for implementar (não ensinar), ao final liste os arquivos alterados
 e o motivo de cada alteração. Responda em português.
 
@@ -51,6 +54,35 @@ e o motivo de cada alteração. Responda em português.
 - Textos da interface e nomes no código em português.
 - Conferir o build: `npx ng build`. O aviso NG8113 (`PedidoAcompanhamentoComponent` não usado)
   já existia e não é erro.
+
+## Modo escuro
+
+- O `TemaService` (`src/app/services/tema.ts`) coloca a classe `dark` no `<html>`. A escolha
+  (claro, escuro ou sistema) fica no `localStorage` com a chave `tema`. O script no
+  `src/index.html` aplica o tema antes do Angular carregar, para a tela não piscar.
+- As cores do escuro são tokens em `src/styles.scss` (`@theme`): `noite-fundo`, `noite-card`,
+  `noite-sutil`, `noite-sutil-forte`, `noite-borda`, `noite-texto`, `noite-suave`, `noite-marca`.
+- **Todo elemento novo com cor clara precisa da classe `dark:` correspondente**, de preferência
+  com os tokens: `bg-white` → `dark:bg-noite-card`, texto escuro → `dark:text-noite-texto`,
+  `text-[#153860]` → `dark:text-noite-marca`, bordas claras → `dark:border-noite-borda`.
+- Em `[class.x]="cond"` que troca a cor, a cor base do escuro também precisa ser condicional
+  (`[class.dark:...]="!(cond)"`). Senão o `dark:` da base vence a cor ativa.
+
+## Componentes e classes padrão
+
+- **Tipografia das telas** (`@utility` em `src/styles.scss`): `sobretitulo` (texto pequeno acima
+  do título), `titulo-pagina` (h1, 32px), `subtitulo-pagina` (texto de apoio do h1),
+  `titulo-secao` (h2, 20px). No celular, ajuste com variante no HTML (`max-lg:text-xl`).
+- **Cartões** (blocos brancos): `cartao` (rounded-2xl, branco, shadow-sm, escuro incluso).
+  Modais e gavetas não usam `cartao` (têm sombra maior).
+- **Texto de apoio**: `text-slate-500 dark:text-noite-suave`. Não use `text-slate-400` em texto
+  sobre branco: fica abaixo do contraste AA.
+- **Botões de ação** (criar, salvar, editar, enviar): `class="botao-acao botao-pop flex"`
+  (ou `inline-flex`). Secundário (cancelar, ver lista): `botao-acao-secundario`. Ficam em
+  `src/styles.scss` como `@utility`; não repita cores e tamanhos no HTML. O display fica no HTML.
+- **Escolher cliente**: `<app-seletor-cliente [clientes] [(selecionado)] [destaque]>`
+  (`components/seletor-cliente/`), com a lista em `data/clientes.ts`.
+- **Filtros no desktop**: `<app-filtro-modal>` + `<app-filtro-chips>` (`components/filtro-modal/`).
 
 ## Armadilhas conhecidas
 

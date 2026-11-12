@@ -1,6 +1,73 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
+/* ============================================================================
+   Modo escuro
+   - O TemaService coloca a classe "dark" no <html>; a variante dark: do Tailwind
+     passa a valer para tudo dentro dele.
+   - As cores "noite-*" viram classes do Tailwind (bg-noite-card, text-noite-texto...).
+     Para ajustar o modo escuro do sistema inteiro, mude os valores aqui.
+   ========================================================================== */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-noite-fundo: #18181a;       /* fundo da página */
+    --color-noite-card: #222224;        /* cards, modais, header (o "branco" do claro) */
+    --color-noite-sutil: #2a2a2d;       /* áreas internas e hover (o slate-50 do claro) */
+    --color-noite-sutil-forte: #333337; /* destaque um pouco mais forte */
+    --color-noite-borda: #3d3d42;       /* bordas e divisórias */
+    --color-noite-texto: #ececee;       /* títulos e texto principal */
+    --color-noite-suave: #a6a6ad;       /* texto secundário */
+    --color-noite-marca: #8fb8e8;       /* azul da marca para texto e borda no escuro */
+}
+
+/*
+  Animação da troca de tema (TemaService.alternar): o navegador tira uma "foto" da tela antes
+  e outra depois, e o TemaService revela a nova num círculo que cresce a partir do botão.
+  Aqui só desligamos o fade padrão do navegador, para o círculo aparecer nítido.
+*/
+.trocando-tema::view-transition-old(root),
+.trocando-tema::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+/* Diz ao navegador que a página está escura: barras de rolagem, autofill e campos nativos acompanham. */
+.dark {
+    color-scheme: dark;
+}
+
+.dark body {
+    background-color: var(--color-noite-fundo);
+}
+
+/* Ícones SVG escuros (azul-marinho/cinza) ficam claros no modo escuro. */
+.dark img[src*="Icon"] {
+    filter: brightness(0) invert(0.75);
+}
+
+/*
+  Ícones do dashboard (totalPedidos, novosPedidos, loading, complete) têm um círculo claro
+  atrás do desenho. O filtro acima pintaria tudo de uma cor só, e eles virariam uma bola branca.
+  Aqui as cores são invertidas: o círculo fica escuro e o desenho cinza fica claro.
+  O hue-rotate(180deg) desfaz a troca de tom que o invert causa, e o cinza-azulado continua azulado.
+*/
+.dark img[src*="totalPedidosIcon"],
+.dark img[src*="novosPedidosIcon"],
+.dark img[src*="loadingIcon"],
+.dark img[src*="completeIcon"] {
+    filter: invert(0.88) hue-rotate(180deg) brightness(1.2);
+}
+
+/*
+  O logo é azul-escuro e sumiria no fundo escuro: no modo escuro ele vira branco.
+  Só funciona com logo de fundo transparente (logoLogin.svg e logo-minimizada.svg).
+  O assets/img/logo.svg tem fundo branco e viraria um retângulo branco, por isso não é mais usado.
+*/
+.dark img[src*="logo"] {
+    filter: brightness(0) invert(1);
+}
+
 @keyframes dropdown-enter {
   from {
     opacity: 0;
@@ -15,6 +82,57 @@
 
 @utility animate-dropdown {
   animation: dropdown-enter 150ms ease-out;
+}
+
+/*
+  Slide up text (top-header).
+  - subir-letra: cada letra do botão "Pesquisar" sobe de baixo; o pai tem overflow-hidden,
+    então a letra fica escondida até entrar (efeito de máscara).
+  - subir: o modal de pesquisa e o conteúdo dele deslizam para cima em sequência
+    (cada parte com um animation-delay maior).
+*/
+@keyframes subir-letra {
+  from {
+    transform: translateY(110%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes surgir-fundo {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-subir-letra {
+  animation: subir-letra 450ms cubic-bezier(0.2, 0.65, 0.3, 0.9) both;
+}
+
+@utility animate-surgir-fundo {
+  animation: surgir-fundo 250ms ease-out both;
+}
+
+@utility animate-subir {
+  animation: subir 500ms cubic-bezier(0.2, 0.65, 0.3, 0.9) both;
 }
 
 * {
@@ -152,9 +270,107 @@ body {
     filter: brightness(0) saturate(100%) invert(20%) sepia(24%) saturate(1160%) hue-rotate(174deg) brightness(88%) contrast(93%);
 }
 
+/* ---- Modo escuro das classes escritas à mão neste arquivo ---- */
+
+/* Ícone ativo da sidebar: azul claro (noite-marca) em vez do azul-marinho. */
+.dark .sidebar-link.active img {
+    filter: brightness(0) saturate(100%) invert(76%) sepia(13%) saturate(1014%) hue-rotate(181deg) brightness(95%) contrast(91%);
+}
+
+.dark .settings-label {
+    color: var(--color-noite-suave);
+}
+
+.dark .settings-input {
+    border-color: var(--color-noite-borda);
+    background: var(--color-noite-card);
+    color: var(--color-noite-texto);
+}
+
+.dark .settings-input:focus {
+    border-color: var(--color-noite-marca);
+}
+
+.dark .label-input__label {
+    background: var(--label-input-bg-escuro, var(--color-noite-card));
+    color: var(--color-noite-suave);
+}
+
+.dark .label-input:focus-within .label-input__label {
+    color: var(--color-noite-marca);
+}
+
 button,
 input,
 textarea,
 select {
     font-family: inherit;
+}
+
+/*
+  Tipografia das telas. Escala: página 32 > seção 20 > cartão 16 > corpo 14 > apoio 13 > sobretítulo 11.
+  Para mudar o tamanho no celular, use variante no HTML (max-lg:text-xl), que vence a utility.
+*/
+@utility sobretitulo {
+    @apply text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860] dark:text-noite-marca;
+}
+
+@utility titulo-pagina {
+    @apply text-[32px] font-bold leading-tight text-[#0f172a] dark:text-noite-texto;
+}
+
+@utility subtitulo-pagina {
+    @apply text-[13px] text-[#64748b] dark:text-noite-suave;
+}
+
+@utility titulo-secao {
+    @apply text-xl font-bold leading-tight text-[#0f172a] dark:text-noite-texto;
+}
+
+/* Bloco branco das telas (cartões, painéis, tabelas). Modais usam sombra maior e não entram aqui. */
+@utility cartao {
+    @apply rounded-2xl bg-white shadow-sm dark:bg-noite-card;
+}
+
+/*
+  Botões de ação: mesmo visual do "Novo pedido" da Visão geral.
+  O display (flex, inline-flex, hidden...) fica no HTML, para não brigar com lg:hidden e afins.
+*/
+@utility botao-acao {
+    @apply items-center justify-center gap-2 rounded-xl border border-transparent bg-[#2d486f] px-4 py-2 text-[14px] font-semibold text-white hover:bg-[#153860] disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-[#3a5a85];
+}
+
+@utility botao-acao-secundario {
+    @apply items-center justify-center gap-2 rounded-xl border border-[#2d486f] bg-white px-4 py-2 text-[14px] font-semibold text-[#2d486f] hover:bg-[#f2f6fa] dark:border-noite-marca dark:bg-noite-card dark:text-noite-marca dark:hover:bg-noite-sutil;
+}
+
+/*
+  Pop dos botões de criar (Novo pedido, Novo cliente, Cadastrar produto, Adicionar...).
+  Ao pressionar, o botão encolhe rápido; ao soltar, volta passando um pouco do tamanho
+  normal (a curva cubic-bezier com 1.8 "passa do ponto") e assenta: isso é o pop.
+  Usa a propriedade `scale` (e não `transform`) para não brigar com -translate-* do Tailwind.
+  A lista de transition também cobre cor, fundo e opacidade, porque esta regra substitui
+  as classes transition/transition-opacity que alguns desses botões já tinham.
+*/
+.botao-pop {
+    transition:
+        scale 450ms cubic-bezier(0.34, 1.8, 0.64, 1),
+        color 150ms ease,
+        background-color 150ms ease,
+        border-color 150ms ease,
+        opacity 150ms ease;
+}
+
+.botao-pop:active {
+    scale: 0.92;
+    transition-duration: 90ms;
+    transition-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .botao-pop,
+    .botao-pop:active {
+        scale: 1;
+        transition: none;
+    }
 }

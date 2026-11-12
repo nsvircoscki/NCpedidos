@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { TemaService } from '../../services/tema';
 
 @Component({
     selector: 'app-mobile-header',
-    standalone: true,
     templateUrl: './mobile-header.component.html',
 })
 export class MobileHeaderComponent {
-    
+    readonly tema = inject(TemaService);
 }

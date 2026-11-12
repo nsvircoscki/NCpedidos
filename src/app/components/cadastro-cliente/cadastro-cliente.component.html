@@ -1,105 +1,57 @@
-<section class="w-full overflow-hidden bg-transparent lg:rounded-xl lg:bg-white lg:shadow-[0_8px_4px_rgba(0,0,0,0.02)]">
-  <div class="px-4 pb-8 pt-7 lg:px-7 lg:pb-10 lg:pt-7">
-    <header class="mb-[34px] hidden items-center gap-3 lg:flex">
+<section class="w-full overflow-hidden bg-transparent lg:rounded-2xl lg:bg-white lg:shadow-sm dark:lg:bg-noite-card">
+  <div class="px-4 pb-6 pt-4 lg:px-7 lg:pb-10 lg:pt-7">
+    <header class="mb-5 flex items-center gap-3 lg:mb-[34px]">
       <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
       <div>
-        <h2 class="text-2xl font-extrabold leading-none text-[#0f172a]">Dados do cliente</h2>
-        <p class="mt-1 text-sm font-semibold text-[#a0adc0]">
-          Escolha o tipo de cadastro antes de preencher os dados.
+        <h2 class="titulo-secao max-lg:text-[16px]">Dados do cliente</h2>
+        <p class="mt-1 text-[10px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0] dark:text-noite-suave">
+          Preencha os dados para análise do time administrativo.
         </p>
       </div>
     </header>
 
-    <div class="mb-[18px] grid grid-cols-2 gap-0 rounded-[10px] border border-[#e2e8f0] bg-white p-1 lg:grid-cols-2 lg:gap-5 lg:border-0 lg:bg-transparent lg:p-0">
-  
-      <!-- Botão PJ -->
-      <button
-        type="button"
-        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left transition-colors duration-300"
-        [class.border-[#183869]]="tipoCadastro === 'PJ'"
-        [class.border-[#b5b5b5]]="tipoCadastro !== 'PJ'"
-        [class.bg-[#183869]]="tipoCadastro === 'PJ'" 
-        [class.bg-transparent]="tipoCadastro !== 'PJ'"
-        (click)="selecionarTipo('PJ')">
-        <span
-          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold lg:flex transition-colors duration-300"
-          [class.bg-white]="tipoCadastro === 'PJ'"
-          [class.text-[#183869]]="tipoCadastro === 'PJ'"
-          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PJ'"
-          [class.text-white]="tipoCadastro !== 'PJ'">PJ</span>
-        <span class="ml-0 lg:ml-4">
-          <strong 
-            class="block text-[10px] font-semibold lg:text-xl transition-colors duration-300" 
-            [class.text-white]="tipoCadastro === 'PJ'"
-            [class.text-black]="tipoCadastro !== 'PJ'">
-            Pessoa jurídica
-          </strong>
-          <small 
-            class="hidden text-sm font-semibold lg:block transition-colors duration-300"
-            [class.text-white]="tipoCadastro === 'PJ'"
-            [class.text-[#a0adc0]]="tipoCadastro !== 'PJ'">
-            Empresa com CNPJ
-          </small>
-        </span>
-      </button>
-
-      <!-- Botão PF -->
-      <button
-        type="button"
-        class="flex h-9 items-center justify-center rounded-[8px] border-0 px-2 text-center lg:h-[102px] lg:justify-start lg:rounded-[50px] lg:border-[1.5px] lg:px-[30px] lg:text-left transition-colors duration-300"
-        [class.border-[#183869]]="tipoCadastro === 'PF'"
-        [class.border-[#b5b5b5]]="tipoCadastro !== 'PF'"
-        [class.bg-[#183869]]="tipoCadastro === 'PF'"
-        [class.bg-transparent]="tipoCadastro !== 'PF'"
-        (click)="selecionarTipo('PF')">
-        <span
-          class="hidden h-11 w-[47px] shrink-0 items-center justify-center rounded-full text-xl font-semibold lg:flex transition-colors duration-300"
-          [class.bg-white]="tipoCadastro === 'PF'"
-          [class.text-[#183869]]="tipoCadastro === 'PF'"
-          [class.bg-[#b5b5b5]]="tipoCadastro !== 'PF'"
-          [class.text-white]="tipoCadastro !== 'PF'">PF</span>
-        <span class="ml-0 lg:ml-4">
-          <strong 
-            class="block text-[10px] font-semibold lg:text-xl transition-colors duration-300" 
-            [class.text-white]="tipoCadastro === 'PF'"
-            [class.text-black]="tipoCadastro !== 'PF'">
-            Pessoa física
-          </strong>
-          <small 
-            class="hidden text-sm font-semibold lg:block transition-colors duration-300"
-            [class.text-white]="tipoCadastro === 'PF'"
-            [class.text-[#a0adc0]]="tipoCadastro !== 'PF'">
-            Profissional com CPF
-          </small>
-        </span>
-      </button>
-
+    <!--
+      Tipo escolhido na tela anterior: só mostra, não deixa trocar aqui
+      (evita mudar sem querer no meio do preenchimento). Para trocar, use o Voltar.
+    -->
+    <div class="mb-[18px] flex items-center gap-3 rounded-[12px] bg-[#edf3f7] px-4 py-3 lg:rounded-[50px] lg:px-6 dark:bg-noite-sutil">
+      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#183869] text-[12px] font-bold text-white">
+        {{ tipoCadastro() }}
+      </span>
+      <span class="min-w-0">
+        <strong class="block text-[12px] font-semibold text-[#153860] lg:text-base dark:text-noite-marca">
+          {{ tipoCadastro() === 'PJ' ? 'Pessoa jurídica' : 'Pessoa física' }}
+        </strong>
+        <small class="block text-[10px] text-[#64748b] lg:text-sm dark:text-noite-suave">
+          {{ tipoCadastro() === 'PJ' ? 'Empresa com CNPJ' : 'Profissional com CPF' }}
+        </small>
+      </span>
     </div>
 
-    @if (tipoCadastro === 'PF') {
+    @if (tipoCadastro() === 'PF') {
     <div class="label-input mb-[22px]">
-      <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="cpf">CPF *</label>
+      <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="cpf">CPF *</label>
       <input id="cpf" placeholder="000.000.000-00" [value]="cliente['cpf'] || ''" (input)="emitirValor('cpf', $event)"
-        class="label-input__field h-12 w-full max-w-[761px] rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+        class="label-input__field h-12 w-full max-w-[761px] rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
     </div>
 
     <div class="label-input mb-[38px]">
-      <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="nomeCompleto">Nome completo</label>
+      <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeCompleto">Nome completo</label>
       <input id="nomeCompleto" placeholder="Nome completo do cliente" [value]="cliente['nomeCompleto'] || ''" (input)="emitirValor('nomeCompleto', $event)"
-        class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-7 lg:text-base" />
+        class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-7 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
     </div>
     } @else {
     <div class="mb-[22px]">
       <div class="flex flex-col gap-3 lg:flex-row">
         <div class="label-input w-full">
-          <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="cnpj">CNPJ</label>
+          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cnpj">CNPJ</label>
           <input id="cnpj" placeholder="Digite o CNPJ" [value]="cliente['cnpj'] || ''" (input)="emitirValor('cnpj', $event)"
-          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
         <button type="button"
           (click)="consultarCNPJ()"
           [disabled]="carregandoCNPJ"
-          class="h-12 shrink-0 rounded-[10px] border border-[#e2e8f0] bg-[#f5f9ff] px-4 text-[11px] font-bold text-black transition-opacity hover:bg-[#e8f1fc] disabled:cursor-not-allowed disabled:opacity-60 lg:h-[68px] lg:rounded-[41px] lg:px-10 lg:text-base">
+          class="h-12 shrink-0 rounded-[10px] border border-[#e2e8f0] bg-[#f5f9ff] px-4 text-[11px] font-bold text-[#153860] transition-opacity hover:bg-[#e8f1fc] disabled:cursor-not-allowed disabled:opacity-60 lg:h-[68px] lg:rounded-[41px] lg:px-10 lg:text-base dark:border-noite-borda dark:bg-noite-sutil dark:text-noite-marca dark:hover:bg-[#18293f]">
           @if (carregandoCNPJ) {
             Consultando...
           } @else {
@@ -112,20 +64,20 @@
       }
     </div>
     <div class="label-input mb-[14px]">
-      <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="razaoSocial">Razão social</label>
+      <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="razaoSocial">Razão social</label>
       <input id="razaoSocial" placeholder="Nome empresarial" [value]="cliente['razaoSocial'] || ''" (input)="emitirValor('razaoSocial', $event)"
-        class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+        class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
     </div>
     <div class="mb-[38px] grid gap-5 lg:grid-cols-2">
       <div class="label-input">
-        <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="nomeFantasia">Nome fantasia</label>
+        <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="nomeFantasia">Nome fantasia</label>
         <input id="nomeFantasia" placeholder="Como a empresa é conhecida" [value]="cliente['nomeFantasia'] || ''" (input)="emitirValor('nomeFantasia', $event)"
-          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
       </div>
       <div class="label-input label-input--fixo">
-        <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="segmento">Segmento</label>
+        <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="segmento">Segmento</label>
         <select id="segmento" (change)="emitirValor('segmento', $event)"
-          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base">
+          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca">
           <option value="">Selecione</option>
         </select>
       </div>
@@ -134,37 +86,37 @@
 
     <section class="mb-[18px] lg:mb-[18px]">
       <header class="mb-[18px] flex items-center gap-3">
-        <span class="h-[27px] w-[29px] rounded-full bg-[#183869]"></span>
+        <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
         <div>
-          <h2 class="text-[14px] font-semibold text-[#0f172a] lg:text-2xl lg:font-extrabold">Contato Principal</h2>
-          <p class="mt-1 text-[10px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0]">Pessoa responsável pelas compras e aprovações.</p>
+          <h2 class="titulo-secao max-lg:text-[14px] max-lg:font-semibold">Contato Principal</h2>
+          <p class="mt-1 text-[10px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0] dark:text-noite-suave">Pessoa responsável pelas compras e aprovações.</p>
         </div>
       </header>
 
       <div class="grid grid-cols-2 gap-4 lg:gap-5">
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base" for="nomeResponsavel">Nome do contato *</label>
+          <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeResponsavel">Nome do contato *</label>
           <input id="nomeResponsavel" placeholder="Nome completo" [value]="cliente['nomeResponsavel'] || ''" (input)="emitirValor('nomeResponsavel', $event)"
-            class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+            class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="telefone">Telefone ou Whatsapp</label>
+          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="telefone">Telefone ou Whatsapp</label>
           <input id="telefone" placeholder="(00) 00000-0000" [value]="cliente['telefone'] || ''" (input)="emitirValor('telefone', $event)"
-            class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+            class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
       </div>
       <div class="label-input mt-[18px]">
-        <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="email">E-mail</label>
+        <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="email">E-mail</label>
         <input id="email" placeholder="contato@empresa,com.br" [value]="cliente['email'] || ''" (input)="emitirValor('email', $event)"
-          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base" />
+          class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
       </div>
     </section>
 
     <section class="mb-[77px] hidden lg:block">
       <header class="mb-[18px] flex items-center gap-3">
-        <span class="h-[27px] w-[29px] rounded-full bg-[#183869]"></span>
+        <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
         <div>
-          <h2 class="text-2xl font-extrabold leading-none text-[#0f172a]">Localização e potencial</h2>
+          <h2 class="titulo-secao">Localização e potencial</h2>
           <p class="mt-1 text-sm font-semibold text-[#a0adc0]">Dados sobre a localização e potencial de compra.</p>
         </div>
       </header>
@@ -172,23 +124,23 @@
       <div class="grid gap-5 lg:grid-cols-[1fr_2fr_1fr]">
         <div>
           <div class="label-input">
-            <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="cep">CEP</label>
+            <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cep">CEP</label>
             <input id="cep" placeholder="00000-000" [value]="cliente['cep'] || ''" (input)="emitirValor('cep', $event)" (blur)="consultarCEP()"
-            class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869]" />
+            class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           </div>
              @if (mensagemErroCEP) {
                 <p class="mt-2 text-xs font-semibold text-red-500">{{ mensagemErroCEP }}</p>
               }
         </div>
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="endereco">Endereço</label>
+          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="endereco">Endereço</label>
           <input id="endereco" placeholder="Rua, avenida e número" [value]="cliente['endereco'] || ''" (input)="emitirValor('endereco', $event)"
-            class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869]" />
+            class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]" for="bairro">Bairro</label>
+          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="bairro">Bairro</label>
           <input id="bairro" placeholder="Digite o bairro" [value]="cliente['bairro'] || ''" (input)="emitirValor('bairro', $event)"
-            class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869]" />
+            class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
       </div>
 
@@ -196,20 +148,20 @@
   
   <!-- Coluna Cidade -->
         <div class="label-input label-input--fixo">
-          <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]">Cidade</label>
+          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto">Cidade</label>
           <div class="relative">
       
           <!-- Botão Gatilho - Cidade -->
           <button 
             type="button"
             (click)="dropdownCidadeAberto = !dropdownCidadeAberto"
-            class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869]">
+            class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca">
             <span [class.text-[#94a3b8]]="!cliente['cidade']">
               {{ cliente['cidade'] || 'Buscar e selecionar cidade' }}
             </span>
 
             <svg
-              class="h-5 w-5 text-[#64748b] transition-transform duration-200"
+              class="h-5 w-5 text-[#64748b] transition-transform duration-200 dark:text-noite-suave"
               [class.rotate-180]="dropdownCidadeAberto"
               fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -218,29 +170,29 @@
 
           <!-- Menu com animação Dropdown e Campo de Busca -->
           @if (dropdownCidadeAberto) {
-          <div class="absolute left-0 bottom-[calc(100%+8px)] z-50 flex max-h-80 w-[320px] flex-col overflow-hidden rounded-[20px] border border-[#e2e8f0] bg-white shadow-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2">
+          <div class="absolute left-0 bottom-[calc(100%+8px)] z-50 flex max-h-80 w-[320px] flex-col overflow-hidden rounded-[20px] border border-[#e2e8f0] bg-white shadow-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2 dark:border-noite-borda dark:bg-noite-card">
             
             <!-- CAMPO DE PESQUISA -->
-            <div class="border-b border-[#e2e8f0] p-3">
+            <div class="border-b border-[#e2e8f0] p-3 dark:border-noite-borda">
               <input 
                 type="text" 
                 placeholder="Digite o nome da cidade..." 
                 (input)="filtrarCidades($event)"
-                class="h-10 w-full rounded-[12px] bg-[#f8fafc] px-4 text-sm text-[#0f172a] outline-none transition-colors focus:bg-[#f1f5f9]">
+                class="h-10 w-full rounded-[12px] bg-[#f8fafc] px-4 text-sm text-[#0f172a] outline-none transition-colors focus:bg-[#f1f5f9] dark:bg-noite-sutil dark:text-noite-texto dark:focus:bg-noite-sutil">
             </div>
 
             <!-- LISTA DE CIDADES -->
             <div class="flex-1 overflow-y-auto p-2">
               @if (carregandoCidades) {
-                <div class="flex items-center justify-center py-4 text-sm text-[#64748b]">
-                  <svg class="mr-2 h-5 w-5 animate-spin text-[#183869]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <div class="flex items-center justify-center py-4 text-sm text-[#64748b] dark:text-noite-suave">
+                  <svg class="mr-2 h-5 w-5 animate-spin text-[#183869] dark:text-noite-marca" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                   Carregando dados...
                 </div>
               } @else if (cidadesFiltradas.length === 0) {
-                <div class="px-4 py-4 text-center text-sm text-[#64748b]">
+                <div class="px-4 py-4 text-center text-sm text-[#64748b] dark:text-noite-suave">
                   Nenhuma cidade encontrada
                 </div>
               } @else {
@@ -248,13 +200,14 @@
                   <button 
                     type="button"
                     (click)="selecionarCidade(cidade)"
-                    class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9]"
+                    class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9] dark:text-noite-texto dark:hover:bg-noite-sutil"
                     [class.bg-[#f1f5f9]]="cliente['cidade'] === cidade.nome"
-                    [class.font-bold]="cliente['cidade'] === cidade.nome">
-                    <span>{{ cidade.nome }} <small class="font-normal text-[#94a3b8]">- {{ cidade.uf }}</small></span>
+                    [class.font-bold]="cliente['cidade'] === cidade.nome"
+                    [class.dark:bg-noite-sutil]="cliente['cidade'] === cidade.nome">
+                    <span>{{ cidade.nome }} <small class="font-normal text-slate-500 dark:text-noite-suave">- {{ cidade.uf }}</small></span>
                     
                     @if (cliente['cidade'] === cidade.nome) {
-                      <span class="text-[#183869]">✓</span>
+                      <span class="text-[#183869] dark:text-noite-marca">✓</span>
                     }
                   </button>
                 }
@@ -267,20 +220,20 @@
 
   <!-- Coluna UF -->
   <div class="label-input label-input--fixo">
-    <label class="label-input__label mb-1 block text-base font-semibold text-[#414750]">UF</label>
+    <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto">UF</label>
     <div class="relative">
       
       <!-- Botão Gatilho - UF -->
       <button 
         type="button"
         (click)="dropdownUfAberto = !dropdownUfAberto"
-        class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869]">
+        class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca">
         <span [class.text-[#94a3b8]]="!cliente['uf']">
           {{ cliente['uf'] || 'Selecione a UF' }}
         </span>
         
         <svg 
-          class="h-5 w-5 text-[#64748b] transition-transform duration-200"
+          class="h-5 w-5 text-[#64748b] transition-transform duration-200 dark:text-noite-suave"
           [class.rotate-180]="dropdownUfAberto"
           fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -288,21 +241,21 @@
       </button>
 
       @if (dropdownUfAberto) {
-        <div class="absolute left-0 bottom-[calc(100%+8px)] z-50 flex max-h-80 w-[200px] flex-col overflow-hidden rounded-[20px] border border-[#e2e8f0] bg-white shadow-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2">
+        <div class="absolute left-0 bottom-[calc(100%+8px)] z-50 flex max-h-80 w-[200px] flex-col overflow-hidden rounded-[20px] border border-[#e2e8f0] bg-white shadow-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2 dark:border-noite-borda dark:bg-noite-card">
           
           <!-- CAMPO DE PESQUISA -->
-          <div class="border-b border-[#e2e8f0] p-3">
+          <div class="border-b border-[#e2e8f0] p-3 dark:border-noite-borda">
             <input 
               type="text" 
               placeholder="Buscar UF..." 
               (input)="filtrarUfs($event)"
-              class="h-10 w-full rounded-[12px] bg-[#f8fafc] px-4 text-sm text-[#0f172a] outline-none transition-colors focus:bg-[#f1f5f9]">
+              class="h-10 w-full rounded-[12px] bg-[#f8fafc] px-4 text-sm text-[#0f172a] outline-none transition-colors focus:bg-[#f1f5f9] dark:bg-noite-sutil dark:text-noite-texto dark:focus:bg-noite-sutil">
           </div>
 
           <!-- LISTA DE UFS -->
           <div class="flex-1 overflow-y-auto p-2">
             @if (ufsFiltradas.length === 0) {
-              <div class="px-4 py-4 text-center text-sm text-[#64748b]">
+              <div class="px-4 py-4 text-center text-sm text-[#64748b] dark:text-noite-suave">
                 UF não encontrada
               </div>
             } @else {
@@ -310,12 +263,13 @@
                 <button 
                   type="button"
                   (click)="selecionarOpcao('uf', uf)"
-                  class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9]"
+                  class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9] dark:text-noite-texto dark:hover:bg-noite-sutil"
                   [class.bg-[#f1f5f9]]="cliente['uf'] === uf"
-                  [class.font-bold]="cliente['uf'] === uf">
+                  [class.font-bold]="cliente['uf'] === uf"
+                  [class.dark:bg-noite-sutil]="cliente['uf'] === uf">
                   {{ uf }}
                   @if (cliente['uf'] === uf) {
-                    <span class="text-[#183869]">✓</span>
+                    <span class="text-[#183869] dark:text-noite-marca">✓</span>
                   }
                 </button>
               }
@@ -331,49 +285,49 @@
 
     <section class="mb-8 lg:hidden">
       <header class="mb-[18px] flex items-center gap-3">
-        <span class="h-[27px] w-[29px] rounded-full bg-[#183869]"></span>
+        <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
         <div>
-          <h2 class="text-[14px] font-semibold text-[#0f172a]">Endereço</h2>
-          <p class="mt-1 text-[10px] text-[#64748b]">Informe o endereço principal do cliente.</p>
+          <h2 class="text-[14px] font-semibold text-[#0f172a] dark:text-noite-texto">Endereço</h2>
+          <p class="mt-1 text-[10px] text-[#64748b] dark:text-noite-suave">Informe o endereço principal do cliente.</p>
         </div>
       </header>
 
       <div class="grid gap-4">
         <div>
-          <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="cepMobile">CEP</label>
+          <label class="mb-1 block text-[10px] font-semibold text-[#414750] dark:text-noite-texto" for="cepMobile">CEP</label>
           <input id="cepMobile" placeholder="00000-000" [value]="cliente['cep'] || ''" (input)="emitirValor('cep', $event)" (blur)="consultarCEP()"
-            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
 
         <div>
-          <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="enderecoMobile">Logradouro</label>
+          <label class="mb-1 block text-[10px] font-semibold text-[#414750] dark:text-noite-texto" for="enderecoMobile">Logradouro</label>
           <input id="enderecoMobile" placeholder="Rua, avenida e número" [value]="cliente['endereco'] || ''" (input)="emitirValor('endereco', $event)"
-            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+            class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="bairroMobile">Bairro</label>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750] dark:text-noite-texto" for="bairroMobile">Bairro</label>
             <input id="bairroMobile" placeholder="Bairro" [value]="cliente['bairro'] || ''" (input)="emitirValor('bairro', $event)"
-              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
           </div>
           <div>
-            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="numeroMobile">Número</label>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750] dark:text-noite-texto" for="numeroMobile">Número</label>
             <input id="numeroMobile" placeholder="Nº" [value]="cliente['numero'] || ''" (input)="emitirValor('numero', $event)"
-              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
           </div>
         </div>
 
         <div class="grid grid-cols-[1fr_88px] gap-3">
           <div>
-            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="cidadeMobile">Cidade</label>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750] dark:text-noite-texto" for="cidadeMobile">Cidade</label>
             <input id="cidadeMobile" placeholder="Cidade" [value]="cliente['cidade'] || ''" (input)="emitirValor('cidade', $event)"
-              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869]" />
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
           </div>
           <div>
-            <label class="mb-1 block text-[10px] font-semibold text-[#414750]" for="ufMobile">UF</label>
+            <label class="mb-1 block text-[10px] font-semibold text-[#414750] dark:text-noite-texto" for="ufMobile">UF</label>
             <input id="ufMobile" maxlength="2" placeholder="UF" [value]="cliente['uf'] || ''" (input)="emitirValor('uf', $event)"
-              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#183869]" />
+              class="h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
           </div>
         </div>
       </div>
@@ -381,7 +335,7 @@
 
     <div class="hidden items-center justify-between gap-5 px-7 lg:flex">
       <button type="button" (click)="cancelarCadastro()"
-        class="h-[67px] w-full max-w-[380px] rounded-[41px] border-[1.5px] border-[#b5b5b5] text-base font-bold text-black transition hover:bg-slate-50">
+        class="h-[67px] w-full max-w-[380px] rounded-[41px] border-[1.5px] border-[#b5b5b5] text-base font-bold text-black transition hover:bg-slate-50 dark:text-noite-texto dark:hover:bg-noite-sutil">
         Cancelar
       </button>
       <button type="button" (click)="irParaProximaEtapa()"
@@ -393,17 +347,18 @@
   </div>
 </section>
 
-<footer class="mt-8 flex gap-3 border-t border-[#e2e8f0] bg-white px-4 py-4 lg:hidden">
+<footer class="flex gap-3 border-t border-[#e2e8f0] bg-white px-4 py-4 lg:hidden dark:border-noite-borda dark:bg-noite-card">
   <button
     type="button"
-    class="h-12 flex-1 rounded-[10px] border border-[#dbe4ed] bg-white text-[8px] font-semibold text-[#153860]">
+    (click)="voltar.emit()"
+    class="h-12 flex-1 rounded-[10px] border border-[#dbe4ed] bg-white text-[12px] font-semibold text-[#153860] dark:border-noite-borda dark:bg-noite-card dark:text-noite-marca">
     Voltar
   </button>
 
   <button
     type="button"
     (click)="irParaProximaEtapa()"
-    class="h-12 flex-[2] rounded-[10px] bg-[#153860] text-[10px] font-semibold text-white">
+    class="h-12 flex-[2] rounded-[10px] bg-[#153860] text-[12px] font-semibold text-white">
     Avançar ›
   </button>
 </footer>

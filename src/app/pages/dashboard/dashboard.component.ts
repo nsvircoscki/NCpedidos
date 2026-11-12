@@ -1,9 +1,7 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { Pedido } from '../../models/pedido.model';
-import { PedidoService } from '../../services/pedido';
-import { Observable, map } from 'rxjs';
+import { Router, RouterModule } from '@angular/router';
+import { PEDIDOS_EXEMPLO } from '../../data/pedidos';
 import { NgmMotionDirective, type Transition } from '@scripttype/ng-motion';
 
 @Component({
@@ -83,34 +81,21 @@ export class DashboardComponent {
         this.posicoes = [];
     }
 
-    private pedidoService = inject(PedidoService);
+    private readonly router = inject(Router);
+    private readonly pedidos = PEDIDOS_EXEMPLO;
 
-    pedidosRecentes$!: Observable<Pedido[]>;
-    totalPedidos$!: Observable<number>;
-    novosPedidos$!: Observable<number>;
-    emProcessamento$!: Observable<number>;
-    completos$!: Observable<number>;
-    valorTotalPeriodo$!: Observable<number>;
+    readonly pedidosRecentes = this.pedidos.slice(0, 5);
+    readonly totalPedidos = this.pedidos.length;
+    readonly novosPedidos = this.contarPorStatus('Em análise');
+    readonly emProcessamento = this.contarPorStatus('Aprovado');
+    readonly completos = this.contarPorStatus('Faturado');
     dataAtual = new Date();
 
-    ngOnInit(): void {
-        this.pedidosRecentes$ = this.pedidoService.pedidos$.pipe(
-            map(pedidos => pedidos.slice(0,5))
-        );
-        this.totalPedidos$ = this.pedidoService.pedidos$.pipe(
-            map(pedidos => pedidos.length)
-        );
-        this.novosPedidos$ = this.pedidoService.pedidos$.pipe(
-            map(pedidos => pedidos.filter(pedido => pedido.status === 'RASCUNHO').length)
-        );
-        this.emProcessamento$ = this.pedidoService.pedidos$.pipe(
-            map(pedidos => pedidos.filter(pedido => pedido.status === 'PENDENTE').length)
-        );
-        this.completos$ = this.pedidoService.pedidos$.pipe(
-            map(pedidos => pedidos.filter(pedido => pedido.status === 'APROVADO').length)
-        );
-        this.valorTotalPeriodo$ = this.pedidoService.pedidos$.pipe(
-            map(pedidos => pedidos.reduce((acc, curr) => acc + curr.valorTotal, 0))
-        );
+    abrirPedido(id: number): void {
+        this.router.navigate(['/pedidos', id]);
+    }
+
+    private contarPorStatus(status: string): number {
+        return this.pedidos.filter(pedido => pedido.status === status).length;
     }
 }

@@ -21,3 +21,17 @@ export interface ClienteOption {
     documento: string;   // CPF ou CNPJ
     limite: number;      // limite de crédito disponível
 }
+
+/** Cliente como aparece no seletor de cliente (novo pedido e produtos). */
+export interface ClienteSelecao {
+    id: string;
+    nome: string;
+    documento: string;
+    limite: number;
+    bairro: string;
+    cidade: string;
+    uf: string;
+}
+
+/** Tipo do pré-cadastro: escolhido antes de preencher, define quais campos aparecem. */
+export type TipoCadastro = 'PJ' | 'PF';

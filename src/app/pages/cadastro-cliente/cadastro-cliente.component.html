@@ -1,194 +1,104 @@
 <div class="flex min-w-0 flex-col lg:gap-6">
 
+  <section class="hidden pt-4 lg:block">
+    <span class="sobretitulo">
+      CLIENTES
+    </span>
+    <h1 class="titulo-pagina my-1">
+      Pré-cadastrar cliente
+    </h1>
+    <p class="subtitulo-pagina">
+      Envie os dados iniciais para análise do time administrativo.
+    </p>
+  </section>
 
-    <section class="hidden pt-4 lg:block">
-      <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
-        CLIENTES
-      </span>
+  <header class="flex min-w-0 items-center px-4 pt-4 lg:hidden">
+    <button
+      type="button"
+      (click)="voltar()"
+      aria-label="Voltar"
+      class="grid h-[38px] w-[38px] place-items-center rounded-[10px] bg-[#edf3f7] text-lg text-[#153860] dark:bg-noite-sutil dark:text-noite-marca">
+      ‹
+    </button>
+    <div class="ml-3 min-w-0">
+      <h1 class="truncate text-[16px] font-bold leading-tight text-[#0f172a] dark:text-noite-texto">Novo cliente</h1>
+      <p class="text-[10px] text-[#64748b] dark:text-noite-suave">Pré-cadastro · rascunho</p>
+    </div>
+  </header>
 
-      <h1 class="my-1 text-[32px] font-bold text-[#08111c]">
-        Pré-cadastrar cliente
-      </h1>
+  <!-- Barra de progresso (desktop e mobile) -->
+  <nav
+    aria-label="Etapas do cadastro"
+    class="mx-4 mt-4 flex items-center justify-center rounded-xl bg-[#F6F9FC] px-4 py-3 lg:mx-0 lg:mt-0 lg:rounded-none lg:px-6 dark:bg-noite-sutil">
+    <ol class="flex w-full max-w-[650px] items-center">
+      @for (etapa of etapas; track etapa.numero) {
+        @if (!$first) {
+          <li
+            aria-hidden="true"
+            class="mx-3 h-px min-w-6 flex-1 transition-colors duration-300 lg:mx-4 lg:min-w-16"
+            [class.bg-[#1A3A68]]="etapa.numero <= etapaAtual"
+            [class.bg-[#B0C0D0]]="etapa.numero > etapaAtual"
+            [class.dark:bg-noite-marca]="etapa.numero <= etapaAtual"
+            [class.dark:bg-noite-borda]="etapa.numero > etapaAtual">
+          </li>
+        }
 
-      <p class="m-0 text-[13px] text-slate-400">
-        Envie os dados iniciais para análise do time administrativo.
-      </p>
-    </section>
-
-    <div class="hidden items-center justify-center bg-[#F6F9FC] px-6 py-3 lg:flex">
-      <div class="flex w-full max-w-[650px] items-center justify-center">
-        <div class="flex items-center gap-3">
-          <div
-            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-medium transition-colors duration-300"
-            [class.bg-[#1A3A68]]="etapaAtual >= 1"
-            [class.text-white]="etapaAtual >= 1"
-            [class.border]="etapaAtual < 1"
-            [class.border-[#B0C0D0]]="etapaAtual < 1"
-            [class.text-[#152536]]="etapaAtual < 1">
-            1
-          </div>
-          <div>
-            <h3 class="text-base font-bold leading-tight text-[#152536]">Dados</h3>
-            <p class="mt-1 text-xs text-slate-500">Empresa e contato</p>
-          </div>
-        </div>
-
-        <div
-          class="mx-4 h-px min-w-16 flex-1 transition-colors duration-300"
-          [class.bg-[#1A3A68]]="etapaAtual >= 2"
-          [class.bg-[#B0C0D0]]="etapaAtual < 2">
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div
-            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-medium transition-colors duration-300"
-            [class.bg-[#1A3A68]]="etapaAtual >= 2"
-            [class.text-white]="etapaAtual >= 2"
-            [class.border]="etapaAtual < 2"
-            [class.border-[#B0C0D0]]="etapaAtual < 2"
-            [class.text-[#152536]]="etapaAtual < 2">
-            @if (etapaAtual >= 2) {
-              <svg
-                aria-hidden="true"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2">
+        <li
+          class="flex items-center gap-2 lg:gap-3"
+          [attr.aria-current]="etapa.numero === etapaAtual ? 'step' : null">
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-medium transition-colors duration-300 lg:h-14 lg:w-14 lg:text-lg"
+            [class.bg-[#1A3A68]]="etapa.numero <= etapaAtual"
+            [class.text-white]="etapa.numero <= etapaAtual"
+            [class.border]="etapa.numero > etapaAtual"
+            [class.border-[#B0C0D0]]="etapa.numero > etapaAtual"
+            [class.text-[#152536]]="etapa.numero > etapaAtual"
+            [class.dark:border-noite-borda]="etapa.numero > etapaAtual"
+            [class.dark:text-noite-texto]="etapa.numero > etapaAtual">
+            @if (etapa.numero < etapaAtual) {
+              <svg aria-hidden="true" class="h-4 w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m6 12 4 4 8-8" />
               </svg>
             } @else {
-              2
+              {{ etapa.numero }}
             }
-          </div>
-          <div>
-            <h3 class="text-base font-bold leading-tight text-[#152536]">Observações</h3>
-            <p class="mt-1 text-xs text-slate-500">Perfil comercial</p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </span>
+          <span>
+            <strong class="block text-[12px] font-bold leading-tight text-[#152536] lg:text-base dark:text-noite-texto">
+              {{ etapa.titulo }}
+            </strong>
+            <small class="mt-0.5 block text-[10px] text-slate-500 lg:mt-1 lg:text-xs dark:text-slate-400">
+              {{ etapa.descricao }}
+            </small>
+          </span>
+        </li>
+      }
+    </ol>
+  </nav>
 
-    @if (etapaAtual === 1) {
-    <div class="hidden lg:block"> 
-      <app-cadastro-cliente
-        [cliente]="cliente"
-        (valorAlterado)="atualizarCliente($event)"
-        (proximo)="irParaProximaEtapa()"
-        (cancelar)="cancelar()">
-      </app-cadastro-cliente>
-    </div>
-    }
+  @if (etapaAtual === 1 && !tipoCadastro) {
+    <app-escolha-tipo-cliente (escolher)="definirTipo($event)"></app-escolha-tipo-cliente>
+  }
 
-    @if (etapaAtual === 2) {
-      <div class="hidden lg:block">
-        <app-observacoes-cliente
-          [observacoes]="cliente.observacoes"
-          [perfil]="cliente.perfil"
-          (voltar)="voltarEtapa()"
-          (salvar)="salvarCadastro()"
-          (cancelar)="cancelar()">
-        </app-observacoes-cliente>
-      </div>
-    }
+  @if (etapaAtual === 1 && tipoCadastro) {
+    <app-cadastro-cliente
+      [cliente]="cliente"
+      [tipoCadastro]="tipoCadastro"
+      (valorAlterado)="atualizarCliente($event)"
+      (proximo)="irParaProximaEtapa()"
+      (voltar)="voltarParaEscolha()"
+      (cancelar)="cancelar()">
+    </app-cadastro-cliente>
+  }
 
-    @if (etapaAtual === 1) {
-    <section class="lg:hidden">
-      <div class="flex items-center px-4 pt-4">
-        <button type="button" (click)="cancelar()" aria-label="Voltar" class="grid h-10 w-10 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl text-[#153860]">
-         ‹ 
-        </button>
+  @if (etapaAtual === 2) {
+    <app-observacoes-cliente
+      [observacoes]="cliente.observacoes"
+      [perfil]="cliente.perfil"
+      (voltar)="voltarEtapa()"
+      (salvar)="salvarCadastro()"
+      (cancelar)="cancelar()">
+    </app-observacoes-cliente>
+  }
 
-        <div class="ml-3">
-          <h1 class="text-[18px] font-semibold leading-none text-[#0f172a]">
-            Novo cliente
-          </h1>
-
-          <p class="mt-1 text-[10px] text-[#64748b]">
-            Pré-cadastro comercial
-          </p>
-        </div>
-
-        <span class="ml-auto rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">
-          RASCUNHO
-        </span>
-      </div>
-
-      <div class="flex items-center justify-between px-4 pt-5">
-        <span class="rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">
-          PRÉ-CADASTRO
-        </span>
-
-        <span class="text-[9px] font-semibold text-[#64748b]">
-          ETAPA 1 DE 2
-        </span>
-      </div>
-
-      <nav class="mx-4 mt-4 grid h-12 grid-cols-2 rounded-[12px] border border-[#e2e8f0] bg-white p-1">
-        <button
-          type="button"
-          class="rounded-[9px] bg-[#edf3f7] text-[10px] font-semibold text-[#153860]">
-          Dados
-        </button>
-
-        <button
-          type="button"
-          disabled 
-          class="text-[10px] font-semibold text-[#64748b]">
-          Observações
-        </button>
-      </nav>
-
-
-      <div class="px-4 pt-6">
-        <h2 class="text-[17px] font-semibold text-[#0f172a]">
-          Dados do cliente
-        </h2>
-
-        <p class="mt-1 text-[10px] text-[#64748b]">
-          Preencha os dados iniciais para análise do time administrativo.
-        </p>
-      </div>
-
-      <app-cadastro-cliente
-        [cliente]="cliente"
-        (valorAlterado)="atualizarCliente($event)"
-        (proximo)="irParaProximaEtapa()"
-        (cancelar)="cancelar()">
-      </app-cadastro-cliente>
-    </section>
-    }
-
-    @if (etapaAtual === 2) {
-    <section class="lg:hidden">
-      <div class="flex items-center px-4 pt-4">
-        <button type="button" (click)="voltarEtapa()" aria-label="Voltar"
-          class="grid h-10 w-10 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl text-[#153860]">‹</button>
-        <div class="ml-3">
-          <h1 class="text-[18px] font-semibold leading-none text-[#0f172a]">Novo cliente</h1>
-          <p class="mt-1 text-[10px] text-[#64748b]">Pré-cadastro comercial</p>
-        </div>
-        <span class="ml-auto rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">RASCUNHO</span>
-      </div>
-
-      <div class="flex items-center justify-between px-4 pt-5">
-        <span class="rounded-full bg-[#edf3f7] px-4 py-2 text-[9px] font-semibold text-[#153860]">PRÉ-CADASTRO</span>
-        <span class="text-[9px] font-semibold text-[#64748b]">ETAPA 2 DE 2</span>
-      </div>
-
-      <nav class="mx-4 mt-4 grid h-12 grid-cols-2 rounded-[12px] border border-[#e2e8f0] bg-white p-1">
-        <button type="button" (click)="voltarEtapa()" class="text-[10px] font-semibold text-[#64748b]">Dados</button>
-        <button type="button" class="rounded-[9px] bg-[#edf3f7] text-[10px] font-semibold text-[#153860]">Observações</button>
-      </nav>
-
-      <app-observacoes-cliente
-        [observacoes]="cliente.observacoes"
-        [perfil]="cliente.perfil"
-        (voltar)="voltarEtapa()"
-        (salvar)="salvarCadastro()"
-        (cancelar)="cancelar()">
-      </app-observacoes-cliente>
-    </section>
-    }
-
-  </div>
+</div>

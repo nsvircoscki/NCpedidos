@@ -6,161 +6,70 @@
        type="button"
        (click)="fechar()"
        aria-label="Fechar pedido"
-       class="grid h-[38px] w-[38px] place-items-center rounded-[10px] bg-[#edf3f7] text-lg text-[#153860]">
+       class="grid h-[38px] w-[38px] place-items-center rounded-[10px] bg-[#edf3f7] text-lg text-[#153860] dark:bg-noite-sutil dark:text-noite-marca">
        ×
       </button>
 
       <div class="mr-auto ml-3 min-w-0 sm:ml-4">
-        <h1 class="truncate text-[16px] font-bold leading-tight text-[#0f172a]">Novo pedido</h1>
-        <p class="text-[10px] text-[#64748b]">Rascunho salvo</p>
+        <h1 class="truncate text-[16px] font-bold leading-tight text-[#0f172a] dark:text-noite-texto">Novo pedido</h1>
+        <p class="text-[10px] text-[#64748b] dark:text-noite-suave">Rascunho salvo</p>
       </div>
 
       <div class="text-right">
-        <p class="text-[9px] text-[#64748b]">Pedido</p>
-        <strong class="text-[13px] text-[#153860]">#1048</strong>
+        <p class="text-[9px] text-[#64748b] dark:text-noite-suave">Pedido</p>
+        <strong class="text-[13px] text-[#153860] dark:text-noite-marca">#1048</strong>
       </div>
     </div>
 
 
     <section class="hidden pt-4 lg:block">
       <section>
-        <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">PEDIDOS</span>
-        <h1 class="my-1 text-[32px] font-bold text-[#08111c]">Novo pedido</h1>
-        <p class="m-0 text-[13px] text-slate-400">Monte o pedido e confira as condições antes de enviar.</p>
+        <span class="sobretitulo">PEDIDOS</span>
+        <h1 class="titulo-pagina my-1">Novo pedido</h1>
+        <p class="subtitulo-pagina">Monte o pedido e confira as condições antes de enviar.</p>
       </section>
     </section>
 
-    <form (ngSubmit)="submitOrder()" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0
-                 lg:max-w-6xl lg:gap-4
-                 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
+    <form (ngSubmit)="submitOrder()" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0 lg:max-w-6xl lg:gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
       <div class="min-w-0 space-y-4">
-        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
-          <div class="mb-3 flex items-center justify-between gap-4">
-            <h2 class="text-xl font-bold text-[#20242a]">Cliente</h2>
-            <button type="button" (click)="abrirModalCliente()" class="text-xs font-bold text-[#153860]">Alterar cliente</button>
-          </div>
-          <button type="button" (click)="abrirModalCliente()" class="grid min-w-0 w-full grid-cols-[3.25rem_minmax(0,1fr)_1rem] items-center gap-3 rounded-[14px] border border-slate-200 p-3 text-left transition hover:border-slate-300">
-            <span class="grid h-12 w-12 place-items-center rounded-full bg-[#edf6f3] text-xs font-bold text-[#153860]">
-              {{ iniciais(clienteSelecionado.nome) }}
-            </span>
-            <span class="flex min-w-0 flex-col">
-              <strong class="truncate text-sm">{{ clienteSelecionado.nome }}</strong>
-              <small class="mt-1 text-[10px] text-slate-500">{{ clienteSelecionado.documento }}</small>
-              <span class="mt-2 w-fit rounded-md bg-[#edf6f3] px-2 py-1 text-[9px] font-semibold text-emerald-700">
-                ●&nbsp; Limite disponível: {{ clienteSelecionado.limite | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-              </span>
-            </span>
-            <span class="text-2xl text-slate-400" aria-hidden="true">›</span>
-          </button>
+        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
+          <app-seletor-cliente
+            [clientes]="clientes"
+            [(selecionado)]="clienteSelecionado"
+            [destaque]="clienteSelecionado ? 'Limite disponível: ' + (clienteSelecionado.limite | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR') : ''" />
         </section>
 
-        <!-- Modal: selecionar cliente -->
-        <!--
-          O modal fica sempre no HTML e o ngmMotion anima entre "aberto" e "fechado".
-          Fechado: invisível, sem cliques (pointer-events-none) e fora do Tab (inert).
-          A centralização é feita pelo flex do contêiner, e não por translate,
-          porque o ngmMotion controla o "transform" da caixa durante a animação.
-        -->
-        <div
-          class="fixed inset-0 z-[60] flex items-center justify-center p-4"
-          [class.pointer-events-none]="!modalClienteAberto"
-          [attr.inert]="modalClienteAberto ? null : ''"
-          [attr.aria-hidden]="!modalClienteAberto"
-        >
-          <!-- Fundo escuro (fade): clicar nele fecha o modal -->
-          <div
-            class="absolute inset-0 bg-black/40"
-            (click)="fecharModalCliente()"
-            ngmMotion
-            [initial]="false"
-            [animate]="{ opacity: modalClienteAberto ? 1 : 0 }"
-            [transition]="{ duration: 0.2, ease: 'easeOut' }"
-          ></div>
-
-          <!--
-            Caixa do modal com "pop-in": nasce pequena (scale 0.6), passa um pouco
-            do tamanho final e volta, efeito de mola (spring).
-            Ao fechar usa uma saída rápida e suave, sem o "quique".
-          -->
-          <section role="dialog" aria-modal="true" aria-label="Selecionar cliente"
-            ngmMotion
-            [initial]="false"
-            [animate]="{
-              opacity: modalClienteAberto ? 1 : 0,
-              scale: modalClienteAberto ? 1 : 0.6
-            }"
-            [transition]="modalClienteAberto
-              ? { type: 'spring', stiffness: 380, damping: 18, mass: 0.8, opacity: { duration: 0.15 } }
-              : { duration: 0.15, ease: 'easeIn' }"
-            class="relative max-h-[85vh] w-full max-w-[440px] overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl">
-
-            <div class="flex items-center justify-between">
-              <h2 class="text-[16px] font-bold text-[#101b2b]">Selecionar cliente</h2>
-              <button type="button" (click)="fecharModalCliente()" aria-label="Fechar"
-                class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]">✕</button>
-            </div>
-
-            <!-- Busca -->
-            <input type="search" [(ngModel)]="buscaCliente" name="buscaCliente"
-              placeholder="Buscar nome, CPF ou CNPJ" aria-label="Buscar cliente"
-              class="mt-4 h-10 w-full rounded-[12px] border border-[#e0e7ed] bg-[#f8fafc] px-3 text-[12px] outline-none focus:border-[#153d65]" />
-
-            <!-- Lista -->
-            <div class="mt-3 space-y-2">
-              @for (cliente of clientesFiltrados; track cliente.id) {
-                <button type="button" (click)="selecionarCliente(cliente)"
-                  class="flex w-full items-center gap-3 rounded-xl border p-3 text-left transition hover:bg-[#f8fafc]"
-                  [class.border-[#153d65]]="cliente.id === clienteSelecionado.id"
-                  [class.border-[#e0e7ed]]="cliente.id !== clienteSelecionado.id">
-                  <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#edf6f3] text-[11px] font-bold text-[#153860]">
-                    {{ iniciais(cliente.nome) }}
-                  </span>
-                  <span class="min-w-0 flex-1">
-                    <strong class="block truncate text-[13px]">{{ cliente.nome }}</strong>
-                    <small class="text-[10px] text-slate-500">{{ cliente.documento }}</small>
-                  </span>
-                  @if (cliente.id === clienteSelecionado.id) {
-                    <span class="font-bold text-emerald-600">✓</span>
-                  }
-                </button>
-              } @empty {
-                <p class="py-6 text-center text-xs text-slate-400">Nenhum cliente encontrado.</p>
-              }
-            </div>
-          </section>
-        </div>
-
-        <section class="border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
+        <section class="border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
           <div class="mb-3 flex items-start justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-[#20242a]">Itens do pedido</h2>
-              <p class="mt-1 text-[10px] text-slate-400">{{ itemCount }} unidades selecionadas</p>
+              <h2 class="titulo-secao">Itens do pedido</h2>
+              <p class="mt-1 text-[10px] text-slate-500 dark:text-noite-suave">{{ itemCount }} unidades selecionadas</p>
             </div>
-            <button type="button" class="text-xs font-bold text-[#153860]">+ Adicionar</button>
+            <button type="button" class="botao-pop text-xs font-bold text-[#153860] dark:text-noite-marca">+ Adicionar</button>
           </div>
 
           <div class="space-y-1">
             @for (product of products; track product.id) {
-              <article class="grid min-w-0 grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-2 rounded-[12px] border border-[#e2e8f0] bg-white p-2.5 sm:gap-3 sm:p-3">
-                <div class="relative flex h-14 items-center justify-center rounded-lg bg-slate-50">
+              <article class="grid min-w-0 grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-2 rounded-[12px] border border-[#e2e8f0] bg-white p-2.5 sm:gap-3 sm:p-3 dark:border-noite-borda dark:bg-noite-card">
+                <div class="relative flex h-14 items-center justify-center rounded-lg bg-slate-50 dark:bg-noite-sutil">
                   <div class="relative h-10 w-8">
-                    <span class="absolute left-1/2 top-0 h-4 w-6 -translate-x-1/2 rounded-t-full border-2 border-b-0 border-slate-300"></span>
-                    <span class="absolute left-0 top-2 h-2 w-8 rounded-full border border-slate-300 bg-slate-200"></span>
-                    <span class="absolute left-0.5 top-3 h-7 w-7 rounded-b-md border border-slate-300 bg-white">
+                    <span class="absolute left-1/2 top-0 h-4 w-6 -translate-x-1/2 rounded-t-full border-2 border-b-0 border-slate-300 dark:border-noite-borda"></span>
+                    <span class="absolute left-0 top-2 h-2 w-8 rounded-full border border-slate-300 bg-slate-200 dark:border-noite-borda dark:bg-noite-borda"></span>
+                    <span class="absolute left-0.5 top-3 h-7 w-7 rounded-b-md border border-slate-300 bg-white dark:border-noite-borda dark:bg-noite-card">
                       <span class="mt-2 block h-2 w-full" [style.background-color]="product.color"></span>
                       <span class="block text-center text-[6px] font-extrabold">CORA</span>
                     </span>
                   </div>
-                  <span class="absolute bottom-1 right-1 rounded bg-white px-1 py-0.5 text-[7px] text-slate-500 shadow-sm">{{ product.unit }}</span>
+                  <span class="absolute bottom-1 right-1 rounded bg-white px-1 py-0.5 text-[7px] text-slate-500 shadow-sm dark:bg-noite-card dark:text-slate-400">{{ product.unit }}</span>
                 </div>
                 <div class="min-w-0 flex flex-col overflow-hidden">
                   <strong class="truncate text-xs font-bold">{{ product.name }}</strong>
-                  <small class="mt-1 truncate text-[10px] text-slate-500">{{ product.description }}</small>
-                  <strong class="mt-2 text-xs text-[#153860]">{{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong>
+                  <small class="mt-1 truncate text-[10px] text-slate-500 dark:text-slate-400">{{ product.description }}</small>
+                  <strong class="mt-2 text-xs text-[#153860] dark:text-noite-marca">{{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong>
                 </div>
-                <div class="grid h-8 w-[6.25rem] shrink-0 grid-cols-[1.75rem_2rem_1.75rem] overflow-hidden rounded-lg border border-slate-200">
-                  <button type="button" class="grid place-items-center text-sm text-slate-500 transition hover:bg-slate-50" (click)="changeQuantity(product.id, -1)">−</button>
-                  <output class="grid place-items-center border-x border-slate-200 text-[10px] font-bold">{{ quantities[product.id] }}</output>
+                <div class="grid h-8 w-[6.25rem] shrink-0 grid-cols-[1.75rem_2rem_1.75rem] overflow-hidden rounded-lg border border-slate-200 dark:border-noite-borda">
+                  <button type="button" class="grid place-items-center text-sm text-slate-500 transition hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-noite-sutil" (click)="changeQuantity(product.id, -1)">−</button>
+                  <output class="grid place-items-center border-x border-slate-200 text-[10px] font-bold dark:border-noite-borda">{{ quantities[product.id] }}</output>
                   <button type="button" class="grid place-items-center bg-[#153860] text-sm text-white transition hover:bg-[#0e2947]" (click)="changeQuantity(product.id, 1)">+</button>
                 </div>
               </article>
@@ -168,52 +77,52 @@
           </div>
         </section>
 
-        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-5 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
-          <h2 class="text-xl font-bold text-[#20242a]">Condições comerciais</h2>
+        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-5 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
+          <h2 class="titulo-secao">Condições comerciais</h2>
           <fieldset class="mt-4">
-            <legend class="mb-2 text-[10px] font-semibold text-slate-600">Condição de pagamento</legend>
+            <legend class="mb-2 text-[10px] font-semibold text-slate-600 dark:text-slate-300">Condição de pagamento</legend>
             <div class="grid min-w-0 grid-cols-3 gap-2">
               @for (option of paymentOptions; track option) {
-                <button type="button" class="min-h-10 rounded border px-2 text-[10px] font-bold transition" [class.border-[#153860]]="payment === option" [class.bg-[#153860]]="payment === option" [class.text-white]="payment === option" [class.border-slate-200]="payment !== option" [class.bg-white]="payment !== option" [class.text-slate-600]="payment !== option" (click)="selectPayment(option)">{{ option }}</button>
+                <button type="button" class="min-h-10 rounded border px-2 text-[10px] font-bold transition" [class.border-[#153860]]="payment === option" [class.bg-[#153860]]="payment === option" [class.text-white]="payment === option" [class.border-slate-200]="payment !== option" [class.bg-white]="payment !== option" [class.text-slate-600]="payment !== option" (click)="selectPayment(option)" [class.dark:border-noite-marca]="payment === option" [class.dark:border-noite-borda]="payment !== option" [class.dark:bg-noite-card]="payment !== option" [class.dark:text-slate-300]="payment !== option">{{ option }}</button>
               }
             </div>
           </fieldset>
           <label class="mt-5 block">
-            <span class="mb-2 block text-[10px] font-semibold text-slate-600">Previsão de entrega</span>
+            <span class="mb-2 block text-[10px] font-semibold text-slate-600 dark:text-slate-300">Previsão de entrega</span>
             <div class="relative">
-              <button type="button" class="flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 px-3 text-left text-xs text-slate-700">
+              <button type="button" class="flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 px-3 text-left text-xs text-slate-700 dark:border-noite-borda dark:text-slate-200">
                 <span>{{ deliveryDate || 'Informado pela empresa.' }}</span>
-                <span class="text-xl text-slate-400">›</span>
+                <span class="text-xl text-slate-500 dark:text-noite-suave">›</span>
               </button>
               <input type="date" name="deliveryDate" [(ngModel)]="deliveryDate" aria-label="Previsão de entrega" class="sr-only">
             </div>
           </label>
           <label class="mt-5 block">
-            <span class="mb-2 block text-[10px] font-semibold text-slate-600">Observação para o faturamento</span>
-            <textarea name="notes" [(ngModel)]="notes" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860]"></textarea>
+            <span class="mb-2 block text-[10px] font-semibold text-slate-600 dark:text-slate-300">Observação para o faturamento</span>
+            <textarea name="notes" [(ngModel)]="notes" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
           </label>
         </section>
       </div>
 
-      <aside class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0">
-        <section class="bg-transparent lg:rounded-2xl lg:bg-white lg:px-5 lg:py-5 lg:shadow-sm">
+      <aside class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0 dark:border-noite-borda dark:bg-noite-card">
+        <section class="bg-transparent lg:rounded-2xl lg:bg-white lg:px-5 lg:py-5 lg:shadow-sm dark:lg:bg-noite-card">
           <div class="flex items-center justify-between">
-            <h2 class="text-xl font-bold text-[#20242a]">Resumo do pedido</h2>
-            <span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-[#153860]">{{ itemCount }} un.</span>
+            <h2 class="titulo-secao">Resumo do pedido</h2>
+            <span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-[#153860] dark:bg-blue-950 dark:text-noite-marca">{{ itemCount }} un.</span>
           </div>
           <dl class="mt-4">
-            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Subtotal</dt><dd class="font-semibold">{{ subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
-            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Desconto comercial</dt><dd class="font-semibold text-emerald-700">− {{ discount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
-            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Frete</dt><dd class="font-semibold">Grátis</dd></div>
-            <div class="flex min-h-20 items-center justify-between"><dt class="flex flex-col"><strong class="text-sm">Total</strong><span class="mt-1 text-[9px] text-slate-400">Faturado em {{ payment | lowercase }}</span></dt><dd class="text-xl font-extrabold">{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
+            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Subtotal</dt><dd class="font-semibold">{{ subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
+            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Desconto comercial</dt><dd class="font-semibold text-emerald-700 dark:text-emerald-200">− {{ discount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
+            <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Frete</dt><dd class="font-semibold">Grátis</dd></div>
+            <div class="flex min-h-20 items-center justify-between"><dt class="flex flex-col"><strong class="text-sm">Total</strong><span class="mt-1 text-[9px] text-slate-500 dark:text-noite-suave">Faturado em {{ payment | lowercase }}</span></dt><dd class="text-xl font-extrabold">{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
           </dl>
-          <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500"><input type="checkbox" name="confirmed" [(ngModel)]="confirmed" class="mt-0.5 h-4 w-4 accent-[#153860]"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
-          <button type="submit" [disabled]="!confirmed" class="mt-4 flex min-h-12 w-full items-center justify-between rounded-lg bg-[#153860] px-4 text-xs font-bold text-white shadow-lg transition hover:bg-[#0e2947] disabled:cursor-not-allowed disabled:opacity-50"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
+          <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500 dark:bg-noite-sutil dark:text-slate-400"><input type="checkbox" name="confirmed" [(ngModel)]="confirmed" class="mt-0.5 h-4 w-4 accent-[#153860] dark:accent-noite-marca"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
+          <button type="submit" [disabled]="!confirmed" class="botao-acao botao-pop mt-4 flex min-h-12 w-full justify-between! shadow-lg"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
           @if (submitted) {
-            <div role="status" class="mt-4 flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3"><span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span><strong class="text-xs text-emerald-800">Pedido enviado com sucesso</strong></div>
+            <div role="status" class="mt-4 flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-950"><span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span><strong class="text-xs text-emerald-800 dark:text-emerald-100">Pedido enviado com sucesso</strong></div>
           }
         </section>
-        <p class="mx-auto mt-4 max-w-sm text-center text-[9px] leading-4 text-slate-400">✓&nbsp; Os preços e o estoque serão validados antes do faturamento.</p>
+        <p class="mx-auto mt-4 max-w-sm text-center text-[9px] leading-4 text-slate-500 dark:text-noite-suave">✓&nbsp; Os preços e o estoque serão validados antes do faturamento.</p>
       </aside>
     </form>
   </div>

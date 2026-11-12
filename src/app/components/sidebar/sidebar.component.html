@@ -3,10 +3,7 @@
   [initial]="{ width: 265 }"
   [animate]="minimizada ? { width: 88 } : { width: 265 }"
   [transition]="sidebarAnimation"
-  class="fixed left-0 top-0 z-10 hidden h-dvh flex-col
-         border-r border-slate-200 bg-white p-6
-         transition-[padding] duration-300 ease-in-out
-         lg:flex"
+  class="fixed left-0 top-0 z-10 hidden h-dvh flex-col border-r border-slate-200 bg-white p-6 transition-[padding] duration-300 ease-in-out lg:flex dark:border-noite-borda dark:bg-noite-card"
   [class.px-3]="minimizada"
   [class.px-6]="!minimizada"
   >
@@ -22,8 +19,8 @@
                 ? { scale: 0.75, opacity: 0 }
                 : { scale: 1, opacity: 1 }"
               [transition]="sidebarAnimation"
-              class="absolute h-auto w-[220px] object-contain"
-              src="assets/img/logo.svg"
+              class="absolute h-auto w-[180px] object-contain"
+              src="assets/logo-nc-tintas.svg"
               alt="Logo NC Tintas">
             <img
               class="absolute h-auto w-[42px] object-contain"
@@ -40,49 +37,49 @@
 
     <nav class="my-0 -mx-6 flex flex-col gap-6">
         <div class="flex flex-col gap-1 px-6">
-            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/dashboard" routerLinkActive="active">
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860] dark:text-slate-400 dark:hover:text-slate-200 dark:[&.active]:text-noite-marca" [class.justify-center]="minimizada" routerLink="/dashboard" routerLinkActive="active">
                 <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/dashboardIcon.svg" alt="Ícone de Dashboard"></span>
                 <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Visão geral</span>
             </a>
-            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/produtos" routerLinkActive="active">
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860] dark:text-slate-400 dark:hover:text-slate-200 dark:[&.active]:text-noite-marca" [class.justify-center]="minimizada" routerLink="/produtos" routerLinkActive="active">
                 <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/productIcon.svg" alt="Ícone de Produto"></span>
                 <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Produtos</span>
             </a>
-            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/pedidos" routerLinkActive="active">
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860] dark:text-slate-400 dark:hover:text-slate-200 dark:[&.active]:text-noite-marca" [class.justify-center]="minimizada" routerLink="/pedidos" routerLinkActive="active">
                 <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/pedidoIcon.svg" alt="" aria-hidden="true"></span>
                 <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Pedidos</span>
             </a>
-            <!--<a class="relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:bg-[#e8eef5] [&.active]:text-[#153860]" routerLink="/calendario" routerLinkActive="active">
+            <!--<a class="relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:bg-[#e8eef5] [&.active]:text-[#153860] dark:text-slate-400 dark:hover:bg-noite-sutil-forte dark:hover:text-slate-200 dark:[&.active]:bg-[#1c2d40] dark:[&.active]:text-noite-marca" routerLink="/calendario" routerLinkActive="active">
                 <span class="grid h-5 w-5 shrink-0 place-items-center"><img src="assets/dateIcon.svg" alt="Ícone de Calendário"></span>
                 <span>Calendário</span>
             </a> -->
-            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/clientes" routerLinkActive="active">
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860] dark:text-slate-400 dark:hover:text-slate-200 dark:[&.active]:text-noite-marca" [class.justify-center]="minimizada" routerLink="/clientes" routerLinkActive="active">
                 <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/clientIcon.svg" alt="Ícone de Clientes"></span>
                 <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Clientes</span>
             </a>
-            <!--<a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/entregas" routerLinkActive="active">
+            <!--<a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:text-[#153860] dark:text-slate-400 dark:hover:bg-noite-sutil-forte dark:hover:text-slate-200 dark:[&.active]:text-noite-marca" [class.justify-center]="minimizada" routerLink="/entregas" routerLinkActive="active">
                 <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/deliveryIcon.svg" alt="Ícone de Entregas"></span>
                 <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Entregas</span>
             </a>
-            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/relatorios" routerLinkActive="active">
+            <a class="sidebar-link relative flex h-11 items-center gap-3 rounded-full px-4 py-3 text-sm font-extrabold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 [&.active]:text-[#153860] dark:text-slate-400 dark:hover:bg-noite-sutil-forte dark:hover:text-slate-200 dark:[&.active]:text-noite-marca" [class.justify-center]="minimizada" routerLink="/relatorios" routerLinkActive="active">
                 <span class="grid h-6 w-6 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/reportIcon.svg" alt="Ícone de Relatórios"></span>
                 <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Relatórios</span>
             </a> -->
         </div>
 
-        <div class="mx-6 h-px bg-slate-200"></div>
+        <div class="mx-6 h-px bg-slate-200 dark:bg-noite-borda"></div>
 
     </nav>
 
     <div class="mt-auto">
         <div class="flex flex-col gap-1 px-0">
-            <a class="sidebar-link relative mb-3 flex h-9 items-center gap-2.5 rounded-full px-0 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860]" [class.justify-center]="minimizada" routerLink="/configuracoes" routerLinkActive="active">
+            <a class="sidebar-link relative mb-3 flex h-9 items-center gap-2.5 rounded-full px-0 text-sm font-extrabold text-slate-500 transition hover:text-slate-700 [&.active]:text-[#153860] dark:text-slate-400 dark:hover:text-slate-200 dark:[&.active]:text-noite-marca" [class.justify-center]="minimizada" routerLink="/configuracoes" routerLinkActive="active">
                 <span class="grid h-9 w-9 shrink-0 place-items-center"><img class="h-6 w-6 object-contain" src="assets/configurationIcon.svg" alt="Ícone de Configurações"></span>
                 <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.w-auto]="!minimizada" [class.opacity-100]="!minimizada">Configurações</span>
             </a>
         </div>
 
-        <div class="flex items-center gap-2.5 text-sm font-extrabold text-slate-600" [class.justify-center]="minimizada">
+        <div class="flex items-center gap-2.5 text-sm font-extrabold text-slate-600 dark:text-slate-300" [class.justify-center]="minimizada">
             <div class="grid h-9 w-9 place-items-center rounded-full bg-blue-600 font-bold text-white">U</div>
             <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.opacity-100]="!minimizada">Usuário Teste</span>
         </div>

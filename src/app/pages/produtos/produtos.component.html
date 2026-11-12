@@ -4,15 +4,15 @@
 
     <!-- SEÇÃO DESKTOP -->
     <section class="hidden pt-4 lg:block">
-      <span class="text-[11px] font-bold uppercase tracking-[0.05em] text-[#153860]">
+      <span class="sobretitulo">
         PRODUTOS
       </span>
 
-      <h1 class="my-1 text-[32px] font-bold text-[#08111c]">
+      <h1 class="titulo-pagina my-1">
         Produtos e preços
       </h1>
 
-      <p class="m-0 text-[13px] text-slate-400">
+      <p class="subtitulo-pagina">
         Acompanhe os produtos e preços cadastrados na NC Tintas.
       </p>
     </section>
@@ -20,145 +20,36 @@
     <div class="hidden justify-end lg:flex">
       <a
         routerLink="/produtos/novo"
-        class="rounded-lg bg-[#153860] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#1d4a78]"
+        class="botao-acao botao-pop flex"
       >
-        + Cadastrar produto
+        <svg aria-hidden="true" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" /></svg>
+        Cadastrar produto
       </a>
     </div>
 
     <!-- SEÇÃO MOBILE -->
     <section class="w-full">
       <div class="w-full px-4 pt-4 lg:px-0 lg:pt-0">
-        <p class="text-[8px] font-bold tracking-wide text-[#8997a7] lg:hidden">
+        <p class="text-[8px] font-bold tracking-wide text-slate-500 dark:text-noite-suave lg:hidden">
           OLÁ, RAFAEL
         </p>
 
-        <h1 class="mt-1 text-[22px] font-bold leading-tight text-[#101b2b] lg:hidden">
+        <h1 class="mt-1 text-[22px] font-bold leading-tight text-[#101b2b] lg:hidden dark:text-noite-texto">
           O que vamos vender hoje?
         </h1>
 
-        <!-- Cliente e tabela de preço -->
-        <div class="mt-5">
-          <button
-            type="button"
-            aria-haspopup="dialog"
-            [attr.aria-expanded]="seletorClientesAberto"
-            (click)="abrirSeletorClientes()"
-            class="flex min-h-[68px] w-full items-center gap-3 rounded-[15px] bg-[#eef5fa] p-3 text-left transition hover:bg-[#e6f0f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#153d65]"
-          >
-            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#153d65] text-[10px] font-bold text-white">
-              {{ iniciaisCliente }}
-            </span>
-
-            <span class="min-w-0 flex-1">
-              <span class="block text-[7px] text-[#8997a7]">VENDENDO PARA</span>
-              <span class="mt-1 block truncate text-[12px] font-semibold text-[#101b2b]">
-                {{ nomeClienteSelecionado }}
-              </span>
-              <span class="mt-1 block text-[8px] font-semibold text-[#16815f]">
-                {{ clienteSelecionado ? 'Preço personalizado' : 'Preço base do catálogo' }}
-              </span>
-            </span>
-
-            <span aria-hidden="true" class="text-xl text-[#153d65]">›</span>
-          </button>
-
-        </div>
-
-        <!-- Modal: selecionar cliente (centralizado, com pop-in) -->
-        <div
-          class="fixed inset-0 z-[60] flex items-center justify-center p-4"
-          [class.pointer-events-none]="!seletorClientesAberto"
-          [attr.inert]="seletorClientesAberto ? null : ''"
-          [attr.aria-hidden]="!seletorClientesAberto"
-        >
-          <!-- Fundo escuro (fade): clicar nele fecha o modal -->
-          <div
-            class="absolute inset-0 bg-black/40"
-            (click)="fecharSeletorClientes()"
-            ngmMotion
-            [initial]="false"
-            [animate]="{ opacity: seletorClientesAberto ? 1 : 0 }"
-            [transition]="{ duration: 0.2, ease: 'easeOut' }"
-          ></div>
-
-          <section
-            role="dialog"
-            aria-modal="true"
-            aria-label="Selecionar cliente"
-            ngmMotion
-            [initial]="false"
-            [animate]="{
-              opacity: seletorClientesAberto ? 1 : 0,
-              scale: seletorClientesAberto ? 1 : 0.6
-            }"
-            [transition]="seletorClientesAberto
-              ? { type: 'spring', stiffness: 380, damping: 18, mass: 0.8, opacity: { duration: 0.15 } }
-              : { duration: 0.15, ease: 'easeIn' }"
-            class="relative max-h-[85vh] w-full max-w-[440px] overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl"
-          >
-          <div class="flex items-center justify-between">
-            <h2 class="text-[16px] font-bold text-[#101b2b]">Selecionar cliente</h2>
-            <button
-              type="button"
-              (click)="fecharSeletorClientes()"
-              aria-label="Fechar seleção de cliente"
-              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]"
-            >
-              ✕
-            </button>
-          </div>
-
-          <label class="mt-4 flex h-10 items-center gap-2 rounded-[12px] border border-[#e0e7ed] bg-[#f8fafc] px-3 focus-within:border-[#153d65]">
-            <img src="assets/img/searchIcon.svg" alt="" aria-hidden="true" class="h-4 w-4" />
-            <input
-              type="search"
-              [(ngModel)]="buscaCliente"
-              placeholder="Pesquisar cliente"
-              aria-label="Pesquisar cliente"
-              class="min-w-0 flex-1 bg-transparent text-[12px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
-            />
-          </label>
-
-          <div role="listbox" aria-label="Clientes" class="mt-4 flex flex-col gap-1">
-            @for (cliente of clientesFiltrados; track cliente.id) {
-              <button
-                type="button"
-                role="option"
-                [attr.aria-selected]="clienteSelecionado === cliente.id"
-                (click)="selecionarCliente(cliente.id)"
-                class="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-[#153860] transition hover:bg-[#f2f6fa]"
-                [class.bg-[#eef5fa]]="clienteSelecionado === cliente.id"
-              >
-                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eef3f8] text-[10px] font-bold text-[#153d65]">
-                  {{ iniciaisDoNome(cliente.nome) }}
-                </span>
-                <span class="min-w-0 flex-1 truncate">{{ cliente.nome }}</span>
-                @if (clienteSelecionado === cliente.id) {
-                  <span aria-hidden="true" class="font-bold text-[#16815f]">✓</span>
-                }
-              </button>
-            } @empty {
-              <p class="w-full py-3 text-center text-[11px] text-[#8997a7]">Nenhum cliente encontrado.</p>
-            }
-          </div>
-
-          @if (clienteSelecionado) {
-            <button
-              type="button"
-              (click)="selecionarCliente('')"
-              class="mt-6 w-full rounded-full border border-[#e0e7ed] py-3 text-[12px] font-semibold text-[#68788c]"
-            >
-              Remover seleção e usar preço base
-            </button>
-          }
-          </section>
-        </div>
+        <section class="cartao mt-5 p-4 lg:p-5">
+          <app-seletor-cliente
+            [clientes]="clientes"
+            [(selecionado)]="clienteSelecionado"
+            [permiteRemover]="true"
+            [destaque]="clienteSelecionado ? 'Preço personalizado' : 'Preço base do catálogo'" />
+        </section>
 
         <!-- Busca e filtros (desktop) -->
-        <div class="mt-4 hidden flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm lg:flex">
+        <div class="cartao mt-4 hidden flex-wrap items-center gap-3 p-4 lg:flex">
           <label class="relative min-w-[220px] flex-1">
-            <svg aria-hidden="true" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <svg aria-hidden="true" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 dark:text-noite-suave" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
               <circle cx="11" cy="11" r="7" />
               <path stroke-linecap="round" d="m20 20-4-4" />
             </svg>
@@ -166,63 +57,28 @@
               type="search"
               [(ngModel)]="termoBuscaMobile"
               placeholder="Pesquisar produto ou SKU"
-              class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400"
+              class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400 dark:bg-noite-sutil dark:text-slate-200"
             />
           </label>
 
-          <details class="relative">
-            <summary class="flex h-12 min-w-[190px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860] [&::-webkit-details-marker]:hidden">
-              {{ categoriasSelecionadas.length ? 'Categoria (' + categoriasSelecionadas.length + ')' : 'Todas as categorias' }}
-              <span aria-hidden="true">⌄</span>
-            </summary>
-            <div class="absolute left-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
-              @for (categoria of categorias; track categoria) {
-                <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
-                  <input type="checkbox" [checked]="categoriaEstaSelecionada(categoria)" (change)="alternarCategoria(categoria)" class="h-4 w-4 accent-[#153860]" />
-                  {{ categoria }}
-                </label>
-              }
-            </div>
-          </details>
-
-          <details class="relative">
-            <summary class="flex h-12 min-w-[160px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860] [&::-webkit-details-marker]:hidden">
-              {{ statusSelecionados.length ? 'Status (' + statusSelecionados.length + ')' : 'Todos os status' }}
-              <span aria-hidden="true">⌄</span>
-            </summary>
-            <div class="absolute left-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
-              @for (statusItem of statusProdutos; track statusItem) {
-                <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
-                  <input type="checkbox" [checked]="statusSelecionados.includes(statusItem)" (change)="alternarStatus(statusItem)" class="h-4 w-4 accent-[#153860]" />
-                  {{ textoStatus(statusItem) }}
-                </label>
-              }
-            </div>
-          </details>
-
-          <details class="relative">
-            <summary class="flex h-12 min-w-[150px] cursor-pointer list-none items-center justify-between gap-4 rounded-full border border-[#A9B6C5] bg-white px-5 text-xs font-medium text-slate-700 transition hover:border-[#153860] [&::-webkit-details-marker]:hidden">
-              {{ coresSelecionadas.length ? 'Cor (' + coresSelecionadas.length + ')' : 'Todas as cores' }}
-              <span aria-hidden="true">⌄</span>
-            </summary>
-            <div class="absolute right-0 top-full z-30 mt-2 max-h-64 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
-              @for (cor of cores; track cor) {
-                <label class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
-                  <input type="checkbox" [checked]="coresSelecionadas.includes(cor)" (change)="alternarCor(cor)" class="h-4 w-4 accent-[#153860]" />
-                  {{ cor }}
-                </label>
-              }
-            </div>
-          </details>
+          <app-filtro-modal
+            [totalAtivos]="categoriasSelecionadas.length + statusSelecionados.length + coresSelecionadas.length"
+            [totalResultados]="produtosMobile.length"
+            nomeResultados="produtos"
+            (limpar)="limparFiltros()">
+            <app-filtro-chips titulo="Categoria" [opcoes]="categorias" [selecionados]="categoriasSelecionadas" (alternar)="alternarCategoria($event)" />
+            <app-filtro-chips titulo="Status" [opcoes]="statusProdutos" [selecionados]="statusSelecionados" [textoDe]="textoStatus" (alternar)="alternarStatus($event)" />
+            <app-filtro-chips titulo="Cor" [opcoes]="cores" [selecionados]="coresSelecionadas" (alternar)="alternarCor($event)" />
+          </app-filtro-modal>
 
           @if (totalFiltrosAtivos > 0) {
-            <button type="button" (click)="limparFiltros()" class="p-1 text-xs text-slate-400 hover:text-slate-600">Limpar</button>
+            <button type="button" (click)="limparFiltros()" class="p-1 text-xs text-slate-500 dark:text-noite-suave hover:text-slate-600 dark:hover:text-slate-300">Limpar</button>
           }
         </div>
 
         <!-- Busca (mobile) -->
         <div class="mt-4 flex items-center gap-2 lg:hidden">
-          <label class="flex h-[42px] min-w-0 flex-1 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3">
+          <label class="flex h-[42px] min-w-0 flex-1 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3 dark:border-noite-borda dark:bg-noite-card">
             <img
               src="assets/img/searchIcon.svg"
               alt=""
@@ -234,7 +90,7 @@
               type="search"
               [(ngModel)]="termoBuscaMobile"
               placeholder="Buscar produto ou SKU"
-              class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+              class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2] dark:text-noite-suave"
             />
           </label>
 
@@ -244,7 +100,7 @@
             aria-haspopup="dialog"
             [attr.aria-expanded]="filtrosAbertos"
             (click)="filtrosAbertos ? fecharFiltros() : abrirFiltros()"
-            class="relative grid h-[42px] w-[42px] shrink-0 place-items-center rounded-[12px] border border-[#e0e7ed] bg-white text-[#153d65] transition hover:bg-[#f2f6fa] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#153d65]"
+            class="relative grid h-[42px] w-[42px] shrink-0 place-items-center rounded-[12px] border border-[#e0e7ed] bg-white text-[#153d65] transition hover:bg-[#f2f6fa] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#153d65] dark:border-noite-borda dark:bg-noite-card dark:text-noite-marca dark:hover:bg-noite-sutil dark:focus-visible:ring-noite-marca"
           >
             <span aria-hidden="true" class="flex w-4 flex-col gap-1">
               <span class="h-0.5 w-full rounded-full bg-current"></span>
@@ -278,38 +134,38 @@
           aria-label="Filtros"
           [attr.aria-hidden]="!filtrosAbertos"
           [attr.inert]="filtrosAbertos ? null : ''"
-          class="fixed inset-x-0 bottom-0 z-[70] max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-2xl lg:hidden"
+          class="fixed inset-x-0 bottom-0 z-[70] max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-2xl lg:hidden dark:bg-noite-card"
           ngmMotion
           [initial]="false"
           [animate]="{ y: filtrosAbertos ? '0%' : '100%' }"
           [transition]="{ duration: 0.3, ease: 'easeOut' }"
         >
-          <div class="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#e0e7ed]"></div>
+          <div class="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#e0e7ed] dark:bg-noite-sutil-forte"></div>
 
           <div class="flex items-center justify-between">
-            <h2 class="text-[16px] font-bold text-[#101b2b]">Filtros</h2>
+            <h2 class="text-[16px] font-bold text-[#101b2b] dark:text-noite-texto">Filtros</h2>
             <button
               type="button"
               (click)="fecharFiltros()"
               aria-label="Fechar filtros"
-              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]"
+              class="grid h-9 w-9 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa] dark:text-noite-suave dark:hover:bg-noite-sutil"
             >
               ✕
             </button>
           </div>
 
-          <label class="mt-4 flex h-10 items-center gap-2 rounded-[12px] border border-[#e0e7ed] bg-[#f8fafc] px-3 focus-within:border-[#153d65]">
+          <label class="mt-4 flex h-10 items-center gap-2 rounded-[12px] border border-[#e0e7ed] bg-[#f8fafc] px-3 focus-within:border-[#153d65] dark:border-noite-borda dark:bg-noite-sutil dark:focus-within:border-noite-marca">
             <img src="assets/img/searchIcon.svg" alt="" aria-hidden="true" class="h-4 w-4" />
             <input
               type="search"
               [(ngModel)]="buscaFiltro"
               placeholder="Pesquisar filtros"
               aria-label="Pesquisar filtros"
-              class="min-w-0 flex-1 bg-transparent text-[12px] text-[#475569] outline-none placeholder:text-[#98a4b2]"
+              class="min-w-0 flex-1 bg-transparent text-[12px] text-[#475569] outline-none placeholder:text-[#98a4b2] dark:text-noite-suave"
             />
           </label>
 
-          <h3 class="mb-3 mt-5 text-[10px] font-bold uppercase tracking-wide text-[#8997a7]">Categoria</h3>
+          <h3 class="mb-3 mt-5 text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-noite-suave">Categoria</h3>
           <div class="flex flex-wrap gap-2">
             @for (categoria of categoriasFiltradas; track categoria) {
               <button
@@ -323,11 +179,14 @@
                 [class.border-[#e0e7ed]]="!categoriaEstaSelecionada(categoria)"
                 [class.bg-white]="!categoriaEstaSelecionada(categoria)"
                 [class.text-[#68788c]]="!categoriaEstaSelecionada(categoria)"
-              >
+                [class.dark:border-noite-marca]="categoriaEstaSelecionada(categoria)"
+                [class.dark:border-noite-borda]="!categoriaEstaSelecionada(categoria)"
+                [class.dark:bg-noite-card]="!categoriaEstaSelecionada(categoria)"
+                [class.dark:text-noite-suave]="!categoriaEstaSelecionada(categoria)">
                 {{ categoria }}
               </button>
             } @empty {
-              <p class="w-full py-3 text-center text-[11px] text-[#8997a7]">Nenhum filtro encontrado.</p>
+              <p class="w-full py-3 text-center text-[11px] text-slate-500 dark:text-noite-suave">Nenhum filtro encontrado.</p>
             }
           </div>
 
@@ -335,7 +194,7 @@
             <button
               type="button"
               (click)="limparFiltros()"
-              class="flex-1 rounded-full border border-[#e0e7ed] py-3 text-[12px] font-semibold text-[#68788c]"
+              class="flex-1 rounded-full border border-[#e0e7ed] py-3 text-[12px] font-semibold text-[#68788c] dark:border-noite-borda dark:text-noite-suave"
             >
               Limpar
             </button>
@@ -362,7 +221,10 @@
             [class.border-[#e0e7ed]]="categoriasSelecionadas.length > 0"
             [class.bg-white]="categoriasSelecionadas.length > 0"
             [class.text-[#68788c]]="categoriasSelecionadas.length > 0"
-          >
+            [class.dark:border-noite-marca]="categoriasSelecionadas.length === 0"
+            [class.dark:border-noite-borda]="categoriasSelecionadas.length > 0"
+            [class.dark:bg-noite-card]="categoriasSelecionadas.length > 0"
+            [class.dark:text-noite-suave]="categoriasSelecionadas.length > 0">
             Todas
           </button>
           @for (categoria of categorias; track categoria) {
@@ -377,7 +239,10 @@
               [class.border-[#e0e7ed]]="!categoriaEstaSelecionada(categoria)"
               [class.bg-white]="!categoriaEstaSelecionada(categoria)"
               [class.text-[#68788c]]="!categoriaEstaSelecionada(categoria)"
-            >
+              [class.dark:border-noite-marca]="categoriaEstaSelecionada(categoria)"
+              [class.dark:border-noite-borda]="!categoriaEstaSelecionada(categoria)"
+              [class.dark:bg-noite-card]="!categoriaEstaSelecionada(categoria)"
+              [class.dark:text-noite-suave]="!categoriaEstaSelecionada(categoria)">
               {{ categoria }}
             </button>
           }
@@ -386,8 +251,8 @@
         <!-- Título e quantidade -->
         <div class="mt-5 flex items-center justify-between">
           <div>
-            <h2 class="text-[16px] font-bold text-[#101b2b]">Produtos e preços</h2>
-            <p class="text-[9px] text-[#8997a7]">
+            <h2 class="text-[16px] font-bold text-[#101b2b] dark:text-noite-texto">Produtos e preços</h2>
+            <p class="text-[9px] text-slate-500 dark:text-noite-suave">
               {{ produtosMobile.length }} produtos na sua tabela
             </p>
           </div>
@@ -395,7 +260,7 @@
           <button
             type="button"
             (click)="limparFiltros()"
-            class="text-[9px] font-semibold text-[#153d65]"
+            class="text-[9px] font-semibold text-[#153d65] dark:text-noite-marca"
           >
             Limpar filtros
           </button>
@@ -406,13 +271,13 @@
           @for (produto of produtosMobile; track produto.id) {
             <a
               [routerLink]="['/produtos', produto.id]"
-              class="block overflow-hidden rounded-[14px] border border-[#e3e9ee] bg-white text-inherit no-underline transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)]"
+              class="block overflow-hidden rounded-[14px] border border-[#e3e9ee] bg-white text-inherit no-underline transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)] dark:border-noite-borda dark:bg-noite-card"
             >
                 <!-- Ilustração provisória da embalagem -->
-                <div class="relative grid h-[104px] place-items-center bg-[#eff3f6] md:h-36">
+                <div class="relative grid h-[104px] place-items-center bg-[#eff3f6] md:h-36 dark:bg-noite-sutil">
                   <div class="flex h-[54px] w-[58px] flex-col items-center">
-                    <div class="h-[8px] w-full rounded-t-full border border-[#cbd5df] bg-[#e3e8eb]"></div>
-                    <div class="grid h-[46px] w-full place-items-center rounded-b-[5px] bg-[#f5f2e8]">
+                    <div class="h-[8px] w-full rounded-t-full border border-[#cbd5df] bg-[#e3e8eb] dark:border-noite-borda dark:bg-noite-sutil-forte"></div>
+                    <div class="grid h-[46px] w-full place-items-center rounded-b-[5px] bg-[#f5f2e8] dark:bg-[#40381c]">
                       <span class="w-full bg-[#23588a] py-1 text-center text-[10px] font-bold text-white">
                         NC
                       </span>
@@ -420,22 +285,22 @@
                   </div>
 
                   @if (produto.estoque > 0 && produto.estoque < 20) {
-                    <span class="absolute left-2 top-2 rounded-full bg-[#fff1d6] px-2 py-1 text-[7px] font-bold text-[#b7791f]">
+                    <span class="absolute left-2 top-2 rounded-full bg-[#fff1d6] px-2 py-1 text-[7px] font-bold text-[#b7791f] dark:bg-[#453517] dark:text-[#eac185]">
                       Estoque baixo
                     </span>
                   }
                 </div>
 
                 <div class="px-2.5 pt-3 md:px-4">
-                  <p class="truncate text-[7px] font-bold uppercase text-[#8997a7]">
+                  <p class="truncate text-[7px] font-bold uppercase text-slate-500 dark:text-noite-suave">
                     {{ produto.categoria }}
                   </p>
 
-                  <h3 class="mt-1 min-h-8 text-[11px] font-bold leading-4 text-[#101b2b]">
+                  <h3 class="mt-1 min-h-8 text-[11px] font-bold leading-4 text-[#101b2b] dark:text-noite-texto">
                     {{ produto.nome }}
                   </h3>
 
-                  <p class="mt-1 truncate text-[8px] text-[#8997a7]">
+                  <p class="mt-1 truncate text-[8px] text-slate-500 dark:text-noite-suave">
                     {{ produto.cor }} · {{ produto.embalagem }}
                   </p>
                 </div>
@@ -444,23 +309,24 @@
                   class="text-[8px]"
                   [class.text-[#16815f]]="produto.estoque >= 20"
                   [class.text-[#d99019]]="produto.estoque < 20"
-                >
+                  [class.dark:text-[#85eaca]]="produto.estoque >= 20"
+                  [class.dark:text-[#edc482]]="produto.estoque < 20">
                   ● {{ produto.estoque }} un. disponíveis
                 </p>
 
-                <div class="my-2 border-t border-[#edf1f4]"></div>
+                <div class="my-2 border-t border-[#edf1f4] dark:border-noite-borda"></div>
 
-                <p class="text-[14px] font-bold text-[#153d65]">
+                <p class="text-[14px] font-bold text-[#153d65] dark:text-noite-marca">
                   {{ precoDoProduto(produto) | currency:'BRL' }}
                 </p>
 
-                <div class="mt-2 w-full rounded-[8px] bg-[#edf3f8] py-1.5 text-center text-[8px] font-bold text-[#153d65]">
+                <div class="mt-2 w-full rounded-[8px] bg-[#edf3f8] py-1.5 text-center text-[8px] font-bold text-[#153d65] dark:bg-noite-sutil dark:text-noite-marca">
                   Ver produto
                 </div>
               </div>
             </a>
           } @empty {
-            <p class="col-span-2 py-8 text-center text-xs text-[#64748b]">
+            <p class="col-span-2 py-8 text-center text-xs text-[#64748b] dark:text-noite-suave">
               Nenhum produto encontrado.
             </p>
           }
