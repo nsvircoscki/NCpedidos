@@ -1,6 +1,13 @@
 <div class="flex min-w-0 flex-col gap-6 px-4 lg:px-0">
 
-    <section class="mb-0 pt-4">
+    <section class="mb-0 flex items-center gap-3 pt-4">
+      <a
+        routerLink="/clientes/analise"
+        aria-label="Voltar para a análise de clientes"
+        class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#edf3f7] text-lg font-bold text-[#153860] transition-colors hover:bg-[#e2ecf3] dark:bg-noite-sutil dark:text-noite-marca dark:hover:bg-noite-sutil-forte">
+        ‹
+      </a>
+      <div class="min-w-0">
         <p
           class="text-[11px] font-bold uppercase tracking-[0.05em]"
           [class.text-[#153860]]="status === 'waiting'"
@@ -11,13 +18,14 @@
           [class.dark:text-red-300]="status === 'rejected'">
           {{ statusLabel() }}
         </p>
-        <h1 class="titulo-pagina my-1">Nome do cliente</h1>
+        <h1 class="titulo-pagina my-1 max-lg:text-[26px]">{{ cadastro.nome }}</h1>
         <p class="subtitulo-pagina">
-          Pré-cadastro enviado por representante em 03/11/2026, às 15:30
+          Pré-cadastro #{{ cadastro.id }} enviado por {{ cadastro.representante }} · {{ cadastro.enviadoEm }}
         </p>
+      </div>
     </section>
 
-    <div class="mx-auto w-full max-w-6xl">
+    <div class="w-full">
       <div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1.8fr)_minmax(280px,0.8fr)]">
         <article class="cartao px-5 py-6">
           <section>
@@ -55,7 +63,7 @@
             <div class="mt-5 grid gap-3 sm:grid-cols-2">
               <div class="rounded-xl bg-[#f6f9fc] p-4 dark:bg-noite-sutil">
                 <span class="block text-[10px] text-slate-500 dark:text-noite-suave">Representante</span>
-                <strong class="mt-1 block text-sm text-[#20242a] dark:text-noite-texto">Nome</strong>
+                <strong class="mt-1 block text-sm text-[#20242a] dark:text-noite-texto">{{ cadastro.representante }}</strong>
               </div>
               <div class="rounded-xl bg-[#f6f9fc] p-4 dark:bg-noite-sutil">
                 <span class="block text-[10px] text-slate-500 dark:text-noite-suave">Melhor horário para contato</span>
@@ -69,12 +77,15 @@
               }
             </div>
 
-            <textarea
+            <div class="label-input label-input--textarea mt-5 [--label-input-x:0.75rem] [--label-input-size:0.875rem]">
+            <label class="label-input__label" for="observacoes-analise">Observações</label>
+            <textarea autocomplete="off"
+              id="observacoes-analise"
               [(ngModel)]="notes"
               rows="4"
-              placeholder="Observações"
-              aria-label="Observações"
-              class="mt-5 w-full resize-y rounded-xl border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
+              placeholder="Anotações sobre o perfil comercial"
+              class="label-input__field w-full resize-y rounded-xl border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
+            </div>
           </section>
         </article>
 
@@ -83,14 +94,15 @@
             <h2 class="titulo-secao">Concluir análise</h2>
             <p class="mt-1 text-xs text-slate-500 dark:text-noite-suave">Revise os dados antes de concluir</p>
 
-            <label class="mt-6 block text-[10px] font-semibold text-slate-600 dark:text-slate-300" for="internal-note">
-              Observação interna
-            </label>
-            <textarea
+            <div class="label-input label-input--textarea mt-6 [--label-input-x:0.75rem] [--label-input-size:0.875rem]">
+            <label class="label-input__label" for="internal-note">Observação interna</label>
+            <textarea autocomplete="off"
               id="internal-note"
               [(ngModel)]="internalNote"
               rows="5"
-              class="mt-2 w-full resize-y rounded-xl border border-slate-200 p-3 text-xs outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
+              placeholder="Visível só para o time administrativo"
+              class="label-input__field w-full resize-y rounded-xl border border-slate-200 p-3 text-xs outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
+            </div>
 
             <button
               type="button"

@@ -72,9 +72,14 @@ e o motivo de cada alteração. Responda em português.
 
 - **Tipografia das telas** (`@utility` em `src/styles.scss`): `sobretitulo` (texto pequeno acima
   do título), `titulo-pagina` (h1, 32px), `subtitulo-pagina` (texto de apoio do h1),
-  `titulo-secao` (h2, 20px). No celular, ajuste com variante no HTML (`max-lg:text-xl`).
+  `titulo-secao` (h2, 20px), `titulo-cartao` (título de cartão ou modal, 16px). Título de página
+  no celular: `titulo-pagina max-lg:text-[26px]`. No celular, ajuste com variante no HTML (`max-lg:text-xl`).
 - **Cartões** (blocos brancos): `cartao` (rounded-2xl, branco, shadow-sm, escuro incluso).
   Modais e gavetas não usam `cartao` (têm sombra maior).
+- **Vermelho da marca** (`nc-vermelho` #ea1b25): só na tela de login. Não use no resto do
+  sistema (navegação, contadores, botões, status), porque é lido como erro. Decisão de quem desenvolve.
+- **Tamanho mínimo de texto: 11px**, inclusive no celular. Topo das telas no celular igual ao
+  desktop: `sobretitulo` com o nome da área, `titulo-pagina max-lg:text-[26px]` e `subtitulo-pagina`.
 - **Texto de apoio**: `text-slate-500 dark:text-noite-suave`. Não use `text-slate-400` em texto
   sobre branco: fica abaixo do contraste AA.
 - **Botões de ação** (criar, salvar, editar, enviar): `class="botao-acao botao-pop flex"`
@@ -82,7 +87,17 @@ e o motivo de cada alteração. Responda em português.
   `src/styles.scss` como `@utility`; não repita cores e tamanhos no HTML. O display fica no HTML.
 - **Escolher cliente**: `<app-seletor-cliente [clientes] [(selecionado)] [destaque]>`
   (`components/seletor-cliente/`), com a lista em `data/clientes.ts`.
+- **Cartões de número (KPI)**: `<app-amostra-tinta>` (`components/amostra-tinta/`), com as cores `tinta-*`.
+- **Campos de digitar** (formulários e buscas): sempre com label flutuante, ver o comentário
+  `Label input` em `src/styles.scss`. Ícone ou padding diferente: `[--label-input-x:...]` no wrapper.
+  Use `autocomplete="off"` (os dados são de clientes, não de quem usa); só o login fica com sugestão.
 - **Filtros no desktop**: `<app-filtro-modal>` + `<app-filtro-chips>` (`components/filtro-modal/`).
+- **Pedidos**: leia e altere sempre pelo `PedidosStore` (`services/pedidos-store.ts`: `pedidos`,
+  `buscar`, `adicionar`, `aprovar`, `recusar`), não direto de `data/pedidos.ts`. Assim Pedidos,
+  dashboard, Novo pedido e Aprovação mostram a mesma lista.
+- **PDF do pedido** (`services/pedido-pdf.ts`, jsPDF): `PedidoPdfService.enviarAoCliente(pedido)`
+  compartilha no celular (no computador, baixa); `baixar(pedido)` sempre baixa.
+- **Status de pedido**: `<span class="status-pill" [attr.data-status]="pedido.status">` (cores em `src/styles.scss`).
 
 ## Armadilhas conhecidas
 

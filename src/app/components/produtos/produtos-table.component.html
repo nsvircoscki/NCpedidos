@@ -1,7 +1,7 @@
 <div class="w-full">
   <!-- Busca e filtros -->
   <div class="mb-6 flex flex-wrap items-center gap-3 px-4">
-    <div class="relative min-w-[220px] flex-1">
+    <div class="label-input [--label-input-x:2.75rem] [--label-input-size:0.8125rem] [--label-input-bg:#f6f9fc] dark:[--label-input-bg-escuro:var(--color-noite-sutil)] relative min-w-[220px] flex-1">
       <svg
         aria-hidden="true"
         class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 dark:text-noite-suave"
@@ -13,12 +13,13 @@
         <path stroke-linecap="round" d="m20 20-4-4" />
       </svg>
 
-      <input
+      <label class="label-input__label" for="busca-produtos-tabela">Pesquisar produto ou SKU</label>
+      <input autocomplete="off"
         type="search"
         [(ngModel)]="termoBusca"
         (ngModelChange)="paginaAtual = 1"
-        placeholder="Pesquisar produto ou SKU"
-        class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400 dark:bg-noite-sutil dark:text-slate-200"
+        id="busca-produtos-tabela" placeholder="Ex.: Tinta acrílica"
+        class="label-input__field h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400 dark:bg-noite-sutil dark:text-slate-200"
       />
     </div>
 

@@ -16,7 +16,7 @@
       </div>
 
       <div class="text-right">
-        <p class="text-[9px] text-[#64748b] dark:text-noite-suave">Pedido</p>
+        <p class="text-[11px] text-[#64748b] dark:text-noite-suave">Pedido</p>
         <strong class="text-[13px] text-[#153860] dark:text-noite-marca">#1048</strong>
       </div>
     </div>
@@ -57,10 +57,10 @@
                     <span class="absolute left-0 top-2 h-2 w-8 rounded-full border border-slate-300 bg-slate-200 dark:border-noite-borda dark:bg-noite-borda"></span>
                     <span class="absolute left-0.5 top-3 h-7 w-7 rounded-b-md border border-slate-300 bg-white dark:border-noite-borda dark:bg-noite-card">
                       <span class="mt-2 block h-2 w-full" [style.background-color]="product.color"></span>
-                      <span class="block text-center text-[6px] font-extrabold">CORA</span>
+                      <span class="block text-center text-[11px] font-extrabold">CORA</span>
                     </span>
                   </div>
-                  <span class="absolute bottom-1 right-1 rounded bg-white px-1 py-0.5 text-[7px] text-slate-500 shadow-sm dark:bg-noite-card dark:text-slate-400">{{ product.unit }}</span>
+                  <span class="absolute bottom-1 right-1 rounded bg-white px-1 py-0.5 text-[11px] text-slate-500 shadow-sm dark:bg-noite-card dark:text-slate-400">{{ product.unit }}</span>
                 </div>
                 <div class="min-w-0 flex flex-col overflow-hidden">
                   <strong class="truncate text-xs font-bold">{{ product.name }}</strong>
@@ -97,10 +97,10 @@
               <input type="date" name="deliveryDate" [(ngModel)]="deliveryDate" aria-label="Previsão de entrega" class="sr-only">
             </div>
           </label>
-          <label class="mt-5 block">
-            <span class="mb-2 block text-[10px] font-semibold text-slate-600 dark:text-slate-300">Observação para o faturamento</span>
-            <textarea name="notes" [(ngModel)]="notes" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
-          </label>
+          <div class="label-input label-input--textarea mt-5 [--label-input-x:0.75rem] [--label-input-size:0.875rem]">
+            <label class="label-input__label" for="observacao-faturamento">Observação para o faturamento</label>
+            <textarea autocomplete="off" id="observacao-faturamento" name="notes" [(ngModel)]="notes" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="label-input__field w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
+          </div>
         </section>
       </div>
 
@@ -114,15 +114,27 @@
             <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Subtotal</dt><dd class="font-semibold">{{ subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
             <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Desconto comercial</dt><dd class="font-semibold text-emerald-700 dark:text-emerald-200">− {{ discount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
             <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Frete</dt><dd class="font-semibold">Grátis</dd></div>
-            <div class="flex min-h-20 items-center justify-between"><dt class="flex flex-col"><strong class="text-sm">Total</strong><span class="mt-1 text-[9px] text-slate-500 dark:text-noite-suave">Faturado em {{ payment | lowercase }}</span></dt><dd class="text-xl font-extrabold">{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
+            <div class="flex min-h-20 items-center justify-between"><dt class="flex flex-col"><strong class="text-sm">Total</strong><span class="mt-1 text-[11px] text-slate-500 dark:text-noite-suave">Faturado em {{ payment | lowercase }}</span></dt><dd class="text-xl font-extrabold">{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
           </dl>
           <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500 dark:bg-noite-sutil dark:text-slate-400"><input type="checkbox" name="confirmed" [(ngModel)]="confirmed" class="mt-0.5 h-4 w-4 accent-[#153860] dark:accent-noite-marca"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
           <button type="submit" [disabled]="!confirmed" class="botao-acao botao-pop mt-4 flex min-h-12 w-full justify-between! shadow-lg"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
           @if (submitted) {
-            <div role="status" class="mt-4 flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-950"><span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span><strong class="text-xs text-emerald-800 dark:text-emerald-100">Pedido enviado com sucesso</strong></div>
+            <div role="status" class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-950">
+              <div class="flex items-center gap-3">
+                <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span>
+                <div class="min-w-0">
+                  <strong class="block text-xs text-emerald-800 dark:text-emerald-100">Pedido #{{ pedidoEnviado?.id }} enviado para aprovação</strong>
+                  <a [routerLink]="['/pedidos', pedidoEnviado?.id]" class="text-[11px] font-semibold text-emerald-800 underline dark:text-emerald-100">Ver pedido</a>
+                </div>
+              </div>
+              <div class="mt-3 grid grid-cols-2 gap-2">
+                <button type="button" (click)="enviarPdf()" class="botao-acao-secundario flex">Enviar PDF</button>
+                <button type="button" (click)="baixarPdf()" class="botao-acao-secundario flex">Baixar PDF</button>
+              </div>
+            </div>
           }
         </section>
-        <p class="mx-auto mt-4 max-w-sm text-center text-[9px] leading-4 text-slate-500 dark:text-noite-suave">✓&nbsp; Os preços e o estoque serão validados antes do faturamento.</p>
+        <p class="mx-auto mt-4 max-w-sm text-center text-[11px] leading-4 text-slate-500 dark:text-noite-suave">✓&nbsp; Os preços e o estoque serão validados antes do faturamento.</p>
       </aside>
     </form>
   </div>

@@ -27,3 +27,28 @@ export interface PedidoResumo {
     total: number;
     status: string;
 }
+
+export type StatusPedido = 'Em análise' | 'Aprovado' | 'Recusado' | 'Faturado';
+
+export interface ItemPedidoDetalhado {
+    nome: string;
+    descricao: string;
+    unidade: string;
+    quantidade: number;
+    precoUnitario: number;
+}
+
+/** Pedido completo: o que a aprovação mostra e o que vai no PDF para o cliente. */
+export interface PedidoDetalhado extends PedidoResumo {
+    status: StatusPedido;
+    documentoCliente: string;
+    cidade: string;
+    uf: string;
+    representante: string;
+    pagamento: string;
+    previsaoEntrega: string;
+    observacao: string;
+    itens: ItemPedidoDetalhado[];
+    desconto: number;
+    motivoRecusa?: string;
+}

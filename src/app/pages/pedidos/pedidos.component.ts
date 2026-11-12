@@ -1,7 +1,7 @@
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { PedidoResumo } from '../../models/pedido.model';
-import { PEDIDOS_EXEMPLO } from '../../data/pedidos';
+import { PedidosStore } from '../../services/pedidos-store';
 import { Component, inject, signal, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -54,7 +54,7 @@ export class PedidosComponent implements AfterViewInit {
     search = '';
     statusSelecionados: string[] = [];
     filtrosAbertos = false;
-    readonly statusPedido = ['Em análise', 'Aprovado', 'Faturado'];
+    readonly statusPedido = ['Em análise', 'Aprovado', 'Recusado', 'Faturado'];
     readonly statusOptions = ['Todos', ...this.statusPedido];
 
     get totalFiltrosAtivos(): number {
@@ -111,7 +111,7 @@ export class PedidosComponent implements AfterViewInit {
         return nome.split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
     }
 
-    private readonly orders = signal<PedidoResumo[]>(PEDIDOS_EXEMPLO);
+    private readonly orders = inject(PedidosStore).pedidos;
 
     // Método (e não computed) porque search/statusSelecionados não são signals:
     // um computed nunca recalcularia ao digitar ou trocar o status.

@@ -24,6 +24,13 @@ export const funcionalidades: Funcionalidade[] = [
     },
     {
         grupo: 'Pedidos',
+        titulo: 'Aprovação de pedidos',
+        descricao: 'Fila de pedidos em análise para aprovar ou recusar',
+        rota: '/pedidos/aprovacao',
+        palavrasChave: ['aprovar', 'aprovacao', 'recusar', 'analise', 'fila', 'pedidos'],
+    },
+    {
+        grupo: 'Pedidos',
         titulo: 'Detalhes do pedido',
         descricao: 'Visualizar detalhes de um pedido específico, incluindo produtos, cliente e status',
         rota: '/pedidos/:1047',

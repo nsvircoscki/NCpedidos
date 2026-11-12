@@ -43,6 +43,14 @@ export const routes: Routes = [
                         loadComponent: () => import('./pages/cadastro-pedido/cadastro-pedido.component').then(m => m.CadastroPedidoPageComponent),
                     },
                     {
+                        path: 'aprovacao',
+                        loadComponent: () => import('./pages/aprovacao-pedidos/aprovacao-pedidos.component').then(m => m.AprovacaoPedidosComponent),
+                    },
+                    {
+                        path: 'aprovacao/:id',
+                        loadComponent: () => import('./pages/aprovar-pedido/aprovar-pedido.component').then(m => m.AprovarPedidoComponent),
+                    },
+                    {
                         path: ':id',
                         loadComponent: () => import('./pages/pedido-enviado/pedido-enviado.component').then(m => m.PedidoEnviadoComponent),
                     },
@@ -86,6 +94,10 @@ export const routes: Routes = [
                     },
                     {
                         path: 'analise',
+                        loadComponent: () => import('./pages/analise-clientes/analise-clientes.component').then(m => m.AnaliseClientesPageComponent),
+                    },
+                    {
+                        path: 'analise/:id',
                         loadComponent: () => import('./pages/analise-cliente/analise-cliente.component').then(m => m.AnaliseClientePageComponent),
                     },
                     {

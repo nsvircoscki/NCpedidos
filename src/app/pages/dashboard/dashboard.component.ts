@@ -1,13 +1,24 @@
+import { AmostraTintaComponent } from '../../components/amostra-tinta/amostra-tinta.component';
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { PEDIDOS_EXEMPLO } from '../../data/pedidos';
+import { PedidosStore } from '../../services/pedidos-store';
 import { NgmMotionDirective, type Transition } from '@scripttype/ng-motion';
+
+interface Amostra {
+    rotulo: string;
+    icone: string;
+    valor: number;
+    variacao: string;
+    subiu: boolean;
+    cor: string;
+    corTexto: string;
+}
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [CommonModule, RouterModule, NgmMotionDirective],
+    imports: [CommonModule, RouterModule, NgmMotionDirective, AmostraTintaComponent],
     templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
@@ -82,7 +93,7 @@ export class DashboardComponent {
     }
 
     private readonly router = inject(Router);
-    private readonly pedidos = PEDIDOS_EXEMPLO;
+    private readonly pedidos = inject(PedidosStore).pedidos();
 
     readonly pedidosRecentes = this.pedidos.slice(0, 5);
     readonly totalPedidos = this.pedidos.length;
@@ -90,6 +101,14 @@ export class DashboardComponent {
     readonly emProcessamento = this.contarPorStatus('Aprovado');
     readonly completos = this.contarPorStatus('Faturado');
     dataAtual = new Date();
+
+    // Cada cartão é uma amostra de tinta: a cor identifica a situação do pedido.
+    readonly amostras: Record<string, Amostra> = {
+        total: { rotulo: 'Total de pedidos', icone: 'assets/totalPedidosIcon.svg', valor: this.totalPedidos, variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-marinho)', corTexto: '#ffffff' },
+        novos: { rotulo: 'Novos pedidos', icone: 'assets/novosPedidosIcon.svg', valor: this.novosPedidos, variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-ocre)', corTexto: '#2b1d03' },
+        processamento: { rotulo: 'Em processamento', icone: 'assets/loadingIcon.svg', valor: this.emProcessamento, variacao: '-0,00%', subiu: false, cor: 'var(--color-tinta-anil)', corTexto: '#ffffff' },
+        completos: { rotulo: 'Completos', icone: 'assets/completeIcon.svg', valor: this.completos, variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-musgo)', corTexto: '#ffffff' },
+    };
 
     abrirPedido(id: number): void {
         this.router.navigate(['/pedidos', id]);

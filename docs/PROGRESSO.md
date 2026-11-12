@@ -11,13 +11,21 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 - **Layout** (`src/app/layout/`): `LayoutComponent` envolve as telas internas com sidebar,
   headers e navegação mobile. As páginas não importam mais esses componentes.
 - **Pedido enviado**: movido de `components/pedido-enviado` para `pages/pedido-enviado`.
-- **Inputs com label flutuante**: classes `.label-input*` em `src/styles.scss` (só no desktop).
+- **Inputs com label flutuante**: classes `.label-input*` em `src/styles.scss`, em todos os campos de texto
+  (desktop e celular), inclusive buscas. Exceções: busca Ctrl+K e o campo de data escondido do Novo pedido.
 - **Dashboard**: os cards podem ser reordenados arrastando (ng-motion drag + layout).
 - **Produtos**: o seletor de cliente abre como modal com animação pop-in.
 - **Filtros desktop** (`src/app/components/filtro-modal/`): `app-filtro-modal` (botão hambúrguer
   + modal com pop-in e gelatina, conteúdo por `ng-content`) e `app-filtro-chips` (grupo de chips).
   Usados em clientes, produtos, tabela de preços e pedidos. Os filtros mobile continuam com a gaveta própria.
-- **Dashboard**: lista e contadores vêm de `PEDIDOS_EXEMPLO` (`src/app/data/pedidos.ts`).
+- **Pedidos**: a lista fica no `PedidosStore` (`services/pedidos-store.ts`), iniciada com
+  `PEDIDOS_EXEMPLO` (`data/pedidos.ts`, agora com itens, condições e representante). Pedidos,
+  dashboard, detalhe (`/pedidos/:id`), Novo pedido e Aprovação leem dele. Status:
+  Em análise, Aprovado, Recusado, Faturado. Nada é salvo: ao recarregar a página volta ao mock.
+- **Aprovação de pedidos**: `/pedidos/aprovacao` (fila, filtros, resumo) e `/pedidos/aprovacao/:id`
+  (detalhe com Aprovar e Recusar com motivo obrigatório). Acesso pelo botão em Pedidos e pelo Ctrl+K.
+- **PDF do pedido** (`services/pedido-pdf.ts`, jsPDF 4.2.1): botões "Enviar PDF" e "Baixar PDF" no
+  Novo pedido (depois de enviar), no detalhe do pedido e na aprovação.
 - **Clientes** (`src/app/components/clientes/clientes-table.component.*`):
   - ordenação por nome, data de cadastro, última compra e total comprado;
   - botão hambúrguer abre um modal de filtros (tipo, status, cidade) e ordenação;
@@ -34,11 +42,62 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 - Testar no navegador o modal de filtros compartilhado nas 4 telas (pop-in, gelatina, chips, contador).
 - `PedidoAcompanhamentoComponent` não é usado (aviso NG8113 no build).
-- Detalhe do pedido (`pedido-enviado`) mostra sempre os dados mock do 1047; só o número vem da rota.
+- Testar no navegador o PDF (download no computador, compartilhar no celular) e a aprovação.
+- A aba Acompanhamento do detalhe do pedido ainda usa dados fixos.
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
+- Botões Aprovar/Recusar da análise ainda só mudam o status na tela (não atualizam a lista).
+- Conferir no celular se algum card ficou apertado depois do piso de 11px (produtos, tabela de preços, clientes).
 - Login (por último).
 
 ## Histórico
+
+- 2026-11-12: logo da NC Tintas no topo do PDF do pedido (a mesma `assets/logo-nc-tintas.svg` da
+  sidebar, desenhada num canvas e embutida como JPEG). O topo do PDF ficou branco com uma faixa azul,
+  porque a logo é azul e vermelha. Testado no Edge headless: a logo aparece e o PDF tem ~35 KB. (Claude)
+
+- 2026-11-12: botão "Baixar PDF" ao lado de "Enviar PDF" (`PedidoPdfService.baixar`). Se a fila de
+  aprovação aparecer vazia ou "Pedido #aprovacao não encontrado", reinicie o `ng serve` (ele não
+  pegou as rotas novas). (Claude)
+
+- 2026-11-12: PDF do pedido para o cliente (jsPDF, compartilhar no celular ou baixar) e tela de
+  aprovação de pedidos (`pages/aprovacao-pedidos`, `pages/aprovar-pedido`). Criado o
+  `PedidosStore`; detalhe do pedido passou a mostrar os dados reais do pedido; CSS do
+  `status-pill` (antes não existia). Build ok, não verificado no navegador. (Claude)
+
+- 2026-11-12: `autocomplete="off"` em 60 campos (todos menos o login) para o navegador não sugerir endereços e textos já digitados. (Claude)
+
+- 2026-11-12: label flutuante (`label-input`) em todos os campos de digitar, inclusive buscas, e
+  agora também no celular. No celular o texto digitado tem 16px (evita o zoom do iPhone). Label em
+  repouso passou para #64748b (contraste AA). Backup do src em `%TEMP%/bk_labels`. (Claude)
+
+- 2026-11-12: revisão do mobile: 87 textos de 6 a 9px passaram para 11px (piso de leitura);
+  topo das telas no celular padronizado (sobretítulo com a área, data real no dashboard em vez de
+  "TERÇA-FEIRA, 17 DE SETEMBRO" fixo, sem "OLÁ, RAFAEL", subtítulo com `subtitulo-pagina`).
+  Backup do src antes em `%TEMP%/bk_mobile`. Não verificado no navegador. (Claude)
+
+- 2026-11-12: `AmostraTintaComponent` (`components/amostra-tinta/`) com o cartão de amostra de
+  tinta, usado no dashboard e no resumo da Análise de clientes. Página de análise com botão
+  voltar quadrado (padrão do detalhe do pedido) e conteúdo alinhado ao cabeçalho. (Claude)
+
+- 2026-11-12: Produtos (desktop): botão Cadastrar produto na mesma linha do título, como em Pedidos e Clientes, e menos espaço antes do seletor de cliente. (Claude)
+
+- 2026-11-12: seletor de cliente mais compacto no celular (título menor, avatar 40px, sem documento) e, em Produtos, sem a caixa branca em volta no celular (`lg:cartao`). (Claude)
+
+- 2026-11-12: lista de análise de clientes (`pages/analise-clientes/`, rota `/clientes/analise`):
+  resumo da fila, filtro por status, tabela no desktop e lista no celular, exportar CSV. Cada linha
+  abre `/clientes/analise/:id`, que agora mostra os dados do pré-cadastro (mock em
+  `data/pre-cadastros.ts`). Amostras do dashboard voltaram a ter os ícones. (Claude)
+
+- 2026-11-12: vermelho do logo (#ea1b25) virou o token `nc-vermelho`. Foi testado na navegação
+  ativa e nos contadores e removido (não aprovado); fica só no login, num traço sob o "Entrar". (Claude)
+
+- 2026-11-12: cartões do dashboard como amostras de tinta (tokens `tinta-*`). Segoe UI foi
+  testada e descartada; a fonte continua Manrope.
+  Build ok; não verificado no navegador. (Claude)
+
+- 2026-11-12: branch `design/identidade-visual` descartada (fontes novas e cartões-amostra não
+  aprovados; a Manrope fica). Títulos alinhados no main: título de página no celular com 26px e
+  nova `titulo-cartao` (16px negrito) em cartões e modais. (Claude)
 
 - 2026-11-12: cartões padronizados com a utility `cartao` (31 blocos; antes misturavam
   rounded-xl, 2xl, 14px e 20px e sombras próprias). 105 textos em slate-400 e cinzas parecidos

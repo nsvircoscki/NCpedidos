@@ -19,6 +19,15 @@
     --color-noite-texto: #ececee;       /* títulos e texto principal */
     --color-noite-suave: #a6a6ad;       /* texto secundário */
     --color-noite-marca: #8fb8e8;       /* azul da marca para texto e borda no escuro */
+
+    /* Amostras de tinta: uma cor por situação do pedido (cartões do dashboard). */
+    --color-tinta-marinho: #153860;
+    --color-tinta-ocre: #e3b04b;
+    --color-tinta-anil: #2f6db5;
+    --color-tinta-musgo: #2e7d5b;
+
+    /* Vermelho do logo. Só na tela de login: no resto do sistema seria lido como erro. */
+    --color-nc-vermelho: #ea1b25;
 }
 
 /*
@@ -167,7 +176,7 @@
    Label input: label flutuante dos campos de formulário
    Baseado no Label Input do Spell UI (spell.sh/docs/label-input).
 
-   Só no desktop (lg, a partir de 1024px). No mobile o label continua acima do campo.
+   Vale para desktop e celular.
    - Campo vazio e sem foco: o label fica dentro do campo, no lugar do placeholder.
    - Com foco ou com valor: o label sobe, diminui e fica sobre a borda do campo.
    - O placeholder (dica, ex.: "00000-000") só aparece depois que o label sobe.
@@ -185,7 +194,28 @@
      .label-input--textarea  label no alto do campo, para <textarea>
      .label-input--fixo      label sempre em cima: <select> e dropdowns próprios,
                              que sempre mostram algum texto
+   Campo com ícone ou padding diferente: ajuste no wrapper com
+     [--label-input-x:2.75rem] (onde o texto começa) e [--label-input-size:0.8125rem].
+   Campo sobre fundo que não é branco: [--label-input-bg:#f6f9fc] e
+     dark:[--label-input-bg-escuro:var(--color-noite-sutil)].
    ========================================================================== */
+:root {
+    --label-input-x-padrao: 0.75rem;
+}
+
+@media (min-width: 64rem) {
+    :root {
+        --label-input-x-padrao: 1.5rem;
+    }
+}
+
+/* Abaixo de 16px o iPhone dá zoom na tela ao tocar no campo. */
+@media (max-width: 63.99rem) {
+    .label-input .label-input__field {
+        font-size: 1rem;
+    }
+}
+
 .label-input--md {
     --label-input-x: 1rem;
     --label-input-size: 0.875rem;
@@ -196,8 +226,7 @@
     --label-input-size: 0.8125rem;
 }
 
-@media (min-width: 64rem) {
-    /*
+/*
       A caixa precisa ter exatamente a altura do campo, porque o label se
       centraliza por ela. align-self: start impede que um grid/flex a estique
       quando um vizinho da mesma linha é mais alto (ex.: textarea, mensagem de erro),
@@ -215,15 +244,15 @@
     .label-input .label-input__label {
         position: absolute;
         top: 50%;
-        left: calc(var(--label-input-x, 1.5rem) - 0.375rem);
+        left: calc(var(--label-input-x, var(--label-input-x-padrao)) - 0.375rem);
         z-index: 1;
         display: block;
-        max-width: calc(100% - 2 * var(--label-input-x, 1.5rem));
+        max-width: calc(100% - 2 * var(--label-input-x, var(--label-input-x-padrao)));
         margin: 0;
         padding: 0 0.375rem;
         overflow: hidden;
         background: var(--label-input-bg, #fff);
-        color: #94a3b8;
+        color: #64748b;
         font-size: var(--label-input-size, 1rem);
         font-weight: 500;
         line-height: 1.25;
@@ -257,7 +286,6 @@
     .label-input:not(:focus-within) .label-input__field::placeholder {
         color: transparent;
     }
-}
 
 html,
 body {
@@ -308,7 +336,7 @@ select {
 }
 
 /*
-  Tipografia das telas. Escala: página 32 > seção 20 > cartão 16 > corpo 14 > apoio 13 > sobretítulo 11.
+  Tipografia das telas. Escala: página 32 (26 no celular) > seção 20 > cartão 16 > corpo 14 > apoio 13 > sobretítulo 11.
   Para mudar o tamanho no celular, use variante no HTML (max-lg:text-xl), que vence a utility.
 */
 @utility sobretitulo {
@@ -325,6 +353,10 @@ select {
 
 @utility titulo-secao {
     @apply text-xl font-bold leading-tight text-[#0f172a] dark:text-noite-texto;
+}
+
+@utility titulo-cartao {
+    @apply text-base font-bold leading-tight text-[#0f172a] dark:text-noite-texto;
 }
 
 /* Bloco branco das telas (cartões, painéis, tabelas). Modais usam sombra maior e não entram aqui. */
@@ -373,4 +405,29 @@ select {
         scale: 1;
         transition: none;
     }
+}
+
+/*
+  Selo de status dos pedidos: <span class="status-pill" [attr.data-status]="pedido.status">.
+  A cor vem do texto do status, então qualquer tela que mostre status usa a mesma.
+*/
+.status-pill {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 font-bold whitespace-nowrap;
+    @apply bg-slate-100 text-slate-700 dark:bg-noite-sutil dark:text-noite-texto;
+}
+
+.status-pill[data-status='Em análise'] {
+    @apply bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200;
+}
+
+.status-pill[data-status='Aprovado'] {
+    @apply bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200;
+}
+
+.status-pill[data-status='Faturado'] {
+    @apply bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200;
+}
+
+.status-pill[data-status='Recusado'] {
+    @apply bg-rose-100 text-rose-900 dark:bg-rose-950 dark:text-rose-200;
 }

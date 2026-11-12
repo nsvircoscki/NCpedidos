@@ -5,7 +5,9 @@ import { Router, RouterModule } from '@angular/router';
 import { ClienteSelecao } from '../../models/cliente.model';
 import { SeletorClienteComponent } from '../../components/seletor-cliente/seletor-cliente.component';
 import { CLIENTES_SELECAO } from '../../data/clientes';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { PedidoDetalhado } from '../../models/pedido.model';
+import { PedidosStore } from '../../services/pedidos-store';
+import { PedidoPdfService } from '../../services/pedido-pdf';
 
 type PaymentOption = 'À vista' | '28 dias' | '28/56 dias';
 
@@ -21,11 +23,13 @@ interface ProductOption {
 @Component({
   selector: 'app-cadastro-pedido',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NgmMotionDirective, SeletorClienteComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SeletorClienteComponent],
   templateUrl: './cadastro-pedido.component.html'
 })
 export class CadastroPedidoPageComponent {
   private readonly router = inject(Router);
+  private readonly pedidosStore = inject(PedidosStore);
+  private readonly pedidoPdf = inject(PedidoPdfService);
 
   readonly products: ProductOption[] = [
     { id: 1, name: 'Tinta Acrílica Premium', description: 'Branco Neve · Fosco', unit: '18 L', price: 289.9, color: '#e8e7df' },
@@ -39,6 +43,7 @@ export class CadastroPedidoPageComponent {
   notes = '';
   confirmed = false;
   submitted = false;
+  pedidoEnviado: PedidoDetalhado | null = null;
 
   readonly clientes = CLIENTES_SELECAO;
   clienteSelecionado: ClienteSelecao | null = this.clientes[0];
@@ -77,7 +82,49 @@ export class CadastroPedidoPageComponent {
   }
 
   submitOrder(): void {
+    const cliente = this.clienteSelecionado;
+    if (!cliente) return;
+
+    this.pedidoEnviado = this.pedidosStore.adicionar({
+      clienteId: 0,
+      client: cliente.nome,
+      initials: cliente.nome.split(' ').slice(0, 2).map(parte => parte[0]).join('').toUpperCase(),
+      avatar: 'blue',
+      date: new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(new Date()),
+      status: 'Em análise',
+      documentoCliente: cliente.documento,
+      cidade: cliente.cidade,
+      uf: cliente.uf,
+      representante: 'Camila Rocha',
+      pagamento: this.payment,
+      previsaoEntrega: this.deliveryDate || 'Informado pela empresa',
+      observacao: this.notes.trim(),
+      itens: this.products
+        .filter(product => (this.quantities[product.id] ?? 0) > 0)
+        .map(product => ({
+          nome: product.name,
+          descricao: product.description,
+          unidade: product.unit,
+          quantidade: this.quantities[product.id],
+          precoUnitario: product.price,
+        })),
+      volumes: this.itemCount,
+      desconto: this.discount,
+      total: this.total,
+    });
     this.submitted = true;
+  }
+
+  enviarPdf(): void {
+    if (this.pedidoEnviado) {
+      this.pedidoPdf.enviarAoCliente(this.pedidoEnviado);
+    }
+  }
+
+  baixarPdf(): void {
+    if (this.pedidoEnviado) {
+      this.pedidoPdf.baixar(this.pedidoEnviado);
+    }
   }
 
   fechar(): void {

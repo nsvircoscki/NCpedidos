@@ -11,32 +11,36 @@
           <h1 class="titulo-pagina my-1">Pedidos</h1>
           <p class="subtitulo-pagina">Acompanhe os pedidos realizados e seus status.</p>
         </div>
+        <div class="flex gap-3 self-end">
+        <a routerLink="/pedidos/aprovacao" class="botao-acao-secundario flex">Aprovar pedidos</a>
         <button
-          class="botao-acao botao-pop flex self-end"
+          class="botao-acao botao-pop flex"
           type="button"
           routerLink="/pedidos/novo"
         >
           <svg aria-hidden="true" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" /></svg>
           Novo pedido
         </button>
+        </div>
       </div>
     </section>
 
     <section class="hidden bg-white py-4 shadow-sm lg:block dark:bg-noite-card">
       <!-- Filtros desktop -->
       <div class="mb-4 flex flex-wrap items-center gap-3 px-4">
-        <label class="relative min-w-[220px] flex-1">
+        <div class="label-input [--label-input-x:2.75rem] [--label-input-size:0.8125rem] [--label-input-bg:#f6f9fc] dark:[--label-input-bg-escuro:var(--color-noite-sutil)] relative min-w-[220px] flex-1">
           <svg aria-hidden="true" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 dark:text-noite-suave" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
             <circle cx="11" cy="11" r="7" />
             <path stroke-linecap="round" d="m20 20-4-4" />
           </svg>
-          <input
+          <label class="label-input__label" for="busca-pedidos">Buscar cliente ou número do pedido</label>
+          <input autocomplete="off"
             type="search"
             [(ngModel)]="search"
-            placeholder="Buscar cliente ou número do pedido"
-            class="h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400 dark:bg-noite-sutil dark:text-slate-200"
+            id="busca-pedidos" placeholder="Ex.: 1047 ou Casa Almeida"
+            class="label-input__field h-12 w-full rounded-[40px] bg-[#F6F9FC] py-2.5 pl-11 pr-4 text-[13px] text-slate-700 outline-none placeholder:text-slate-400 dark:bg-noite-sutil dark:text-slate-200"
           />
-        </label>
+        </div>
         <app-filtro-modal
           [totalAtivos]="statusSelecionados.length"
           [totalResultados]="filteredOrders().length"
@@ -124,11 +128,10 @@
       <div class="px-4 pt-4">
         <div class="flex items-center justify-between gap-3">
           <div>
-            <span class="block text-[10px] font-semibold tracking-[0.5px] text-[#153860] uppercase dark:text-noite-marca">
-              TERÇA-FEIRA, 17 DE SETEMBRO
-            </span>
-            <h1 class="mt-0.5 text-[26px] font-semibold leading-tight text-[#0f172a] dark:text-noite-texto">Pedidos</h1>
-            <p class="mt-0.5 text-[12px] text-[#64748b] dark:text-noite-suave">Acompanhe os pedidos realizados e seus status.</p>
+            <span class="sobretitulo block">Pedidos</span>
+            <h1 class="titulo-pagina mt-0.5 max-lg:text-[26px]">Pedidos</h1>
+            <p class="subtitulo-pagina mt-0.5">Acompanhe os pedidos realizados e seus status.</p>
+            <a routerLink="/pedidos/aprovacao" class="mt-2 inline-block text-[13px] font-semibold text-[#153860] underline dark:text-noite-marca">Aprovar pedidos</a>
           </div>
           <a
             routerLink="/pedidos/novo"
@@ -142,7 +145,7 @@
 
       <div class="mt-4 px-4">
         <div class="flex items-center gap-2">
-          <label class="flex h-[42px] min-w-0 flex-1 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3 dark:border-noite-borda dark:bg-noite-card">
+          <div class="label-input [--label-input-x:2.5rem] [--label-input-size:0.8125rem] dark:[--label-input-bg-escuro:var(--color-noite-card)] flex h-[42px] min-w-0 flex-1 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3 dark:border-noite-borda dark:bg-noite-card">
             <img
               src="assets/img/searchIcon.svg"
               alt=""
@@ -150,14 +153,14 @@
               class="h-4 w-4"
             />
 
-            <input
+            <label class="label-input__label" for="busca-pedidos-mobile">Buscar pedidos</label>
+            <input autocomplete="off"
               type="search"
               [(ngModel)]="search"
-              placeholder="Buscar cliente ou número do pedido"
-              aria-label="Buscar pedidos"
-              class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2] dark:text-noite-suave"
+              id="busca-pedidos-mobile" placeholder="Ex.: 1047 ou Casa Almeida"
+              class="label-input__field min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2] dark:text-noite-suave"
             />
-          </label>
+          </div>
 
           <button
             type="button"
@@ -172,7 +175,7 @@
               <span class="h-0.5 w-full rounded-full bg-current"></span>
             </span>
             @if (totalFiltrosAtivos > 0) {
-              <span class="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#153d65] px-1 text-[9px] font-bold text-white">
+              <span class="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#153d65] px-1 text-[11px] font-bold text-white">
                 {{ totalFiltrosAtivos }}
               </span>
             }
@@ -207,7 +210,7 @@
           <div class="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#e0e7ed] dark:bg-noite-sutil-forte"></div>
 
           <div class="flex items-center justify-between">
-            <h2 class="text-[16px] font-bold text-[#101b2b] dark:text-noite-texto">Filtros</h2>
+            <h2 class="titulo-cartao">Filtros</h2>
             <button
               type="button"
               (click)="filtrosAbertos = false"
@@ -270,7 +273,7 @@
             >
             @for (filter of statusOptions; track filter) {
                 <button
-                class="shrink-0 whitespace-nowrap rounded-full border px-3 py-2 text-[8px] font-semibold transition-colors"
+                class="shrink-0 whitespace-nowrap rounded-full border px-3 py-2 text-[11px] font-semibold transition-colors"
                 [class.border-[#153d65]]="statusMobileAtivo(filter)"
                 [class.bg-[#153d65]]="statusMobileAtivo(filter)"
                 [class.text-white]="statusMobileAtivo(filter)"
@@ -291,7 +294,7 @@
         </div>
         <div class="mt-5 flex items-end justify-between">
           <div>
-            <h2 class="text-[16px] font-medium text-[#0f172a] dark:text-noite-texto">Pedidos feitos</h2>
+            <h2 class="titulo-cartao">Pedidos feitos</h2>
             <p class="text-[10px] text-slate-500 dark:text-noite-suave">{{ filteredOrders().length }} pedidos encontrados</p>
           </div>
           <button
@@ -326,7 +329,7 @@
               </span>
               <span class="min-w-0 flex-1">
                 <strong class="block truncate text-[12px] font-semibold text-[#0f172a] dark:text-noite-texto">{{ order.client }}</strong>
-                <small class="mt-1 block text-[9px] text-[#64748b] dark:text-noite-suave">
+                <small class="mt-1 block text-[11px] text-[#64748b] dark:text-noite-suave">
                   <strong class="font-semibold text-[#153860] dark:text-noite-marca">#{{ order.id }}</strong> · {{ order.date }} · {{ order.volumes }} volumes
                 </small>
               </span>

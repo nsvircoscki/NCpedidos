@@ -13,7 +13,7 @@
     <div class="grid gap-4 lg:grid-cols-[1fr_2fr_1fr] lg:gap-5">
       <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto">
         <span class="label-input__label">CEP</span>
-        <input
+        <input autocomplete="off"
           name="cep"
           [(ngModel)]="cliente.cep"
           placeholder="00000-000"
@@ -22,7 +22,7 @@
 
       <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto">
         <span class="label-input__label">Logradouro</span>
-        <input
+        <input autocomplete="off"
           name="endereco"
           [(ngModel)]="cliente.endereco"
           placeholder="Rua, avenida e número"
@@ -31,7 +31,7 @@
 
       <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto">
         <span class="label-input__label">Número</span>
-        <input
+        <input autocomplete="off"
           name="numero"
           [(ngModel)]="cliente.numero"
           placeholder="Nº"
@@ -42,7 +42,7 @@
     <div class="grid gap-4 lg:grid-cols-3 lg:gap-5">
       <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto">
         <span class="label-input__label">Bairro</span>
-        <input
+        <input autocomplete="off"
           name="bairro"
           [(ngModel)]="cliente.bairro"
           placeholder="Digite o bairro"
@@ -51,7 +51,7 @@
 
       <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto">
         <span class="label-input__label">Cidade</span>
-        <input
+        <input autocomplete="off"
           name="cidade"
           [(ngModel)]="cliente.cidade"
           placeholder="Cidade"
@@ -60,7 +60,7 @@
 
       <label class="label-input flex flex-col gap-1 text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto">
         <span class="label-input__label">UF</span>
-        <input
+        <input autocomplete="off"
           name="uf"
           maxlength="2"
           [(ngModel)]="cliente.uf"

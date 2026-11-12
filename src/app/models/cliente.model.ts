@@ -35,3 +35,18 @@ export interface ClienteSelecao {
 
 /** Tipo do pré-cadastro: escolhido antes de preencher, define quais campos aparecem. */
 export type TipoCadastro = 'PJ' | 'PF';
+
+export type StatusPreCadastro = 'Aguardando análise' | 'Em revisão' | 'Documentação pendente';
+
+/** Pré-cadastro enviado por um representante, esperando a análise do administrativo. */
+export interface PreCadastro {
+    id: number;
+    nome: string;
+    documento: string;
+    representante: string;
+    cidade: string;
+    uf: string;
+    enviadoEm: string;
+    status: StatusPreCadastro;
+    prioridade: boolean;
+}

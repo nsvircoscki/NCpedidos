@@ -31,12 +31,12 @@
     <section class="lg:hidden">
 
       <div class="px-4 pt-2">
-        <span class="text-[10px] font-semibold tracking-[0.05em] text-[#153860] dark:text-noite-marca">NC TINTAS</span>
+        <span class="sobretitulo">Clientes</span>
 
         <div class="mt-1 flex items-center justify-between gap-3">
             <div>
-            <h1 class="text-[24px] font-semibold leading-none text-[#0f172a] dark:text-noite-texto">Clientes</h1>
-            <p class="mt-1.5 text-[12px] text-[#64748b] dark:text-noite-suave">Consulte os clientes cadastrados.</p>
+            <h1 class="titulo-pagina max-lg:text-[26px]">Clientes</h1>
+            <p class="subtitulo-pagina mt-1">Consulte os clientes cadastrados.</p>
             </div>
 
             <button
@@ -48,7 +48,7 @@
             </button>
         </div>
 
-        <label class="mt-5 flex h-[42px] min-w-0 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3 dark:border-noite-borda dark:bg-noite-card">
+        <div class="label-input [--label-input-x:2.5rem] [--label-input-size:0.8125rem] dark:[--label-input-bg-escuro:var(--color-noite-card)] mt-5 flex h-[42px] min-w-0 items-center gap-3 rounded-[12px] border border-[#e0e7ed] bg-white px-3 dark:border-noite-borda dark:bg-noite-card">
           <img
             src="assets/img/searchIcon.svg"
             alt=""
@@ -56,13 +56,14 @@
             class="h-4 w-4"
           />
 
-          <input
+          <label class="label-input__label" for="busca-clientes-mobile">Buscar nome, CPF ou CNPJ</label>
+          <input autocomplete="off"
             type="search"
             [(ngModel)]="termoBuscaMobile"
-            placeholder="Buscar nome, CPF ou CNPJ"
-            class="min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2] dark:text-noite-suave"
+            id="busca-clientes-mobile" placeholder="Ex.: Casa Almeida"
+            class="label-input__field min-w-0 flex-1 bg-transparent text-[10px] text-[#475569] outline-none placeholder:text-[#98a4b2] dark:text-noite-suave"
           />
-        </label>
+        </div>
         </div>
 
       <div class="mx-4 mt-6 overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-white px-3 dark:border-noite-borda dark:bg-noite-card">
@@ -81,7 +82,7 @@
 
             <span class="min-w-0 flex-1">
               <span class="block truncate text-[12px] font-semibold text-[#0f172a] dark:text-noite-texto">{{ cliente.nome }}</span>
-              <span class="mt-1 block text-[9px] text-[#64748b] dark:text-noite-suave">
+              <span class="mt-1 block text-[11px] text-[#64748b] dark:text-noite-suave">
                 <strong class="font-semibold text-[#153860] dark:text-noite-marca">#{{ cliente.id | number:'4.0-0' }}</strong>
                 · Cliente desde {{ cliente.dataCadastro | date:'dd/MM/yyyy' }}
               </span>
@@ -128,21 +129,21 @@
             <div class="mx-auto h-1 w-10 rounded-full bg-[#cbd5e1] dark:bg-[#404b59]"></div>
 
             <div class="mt-4 px-0.5">
-              <p class="text-[8px] font-medium text-slate-500 dark:text-noite-suave">Cliente selecionado</p>
+              <p class="text-[11px] font-medium text-slate-500 dark:text-noite-suave">Cliente selecionado</p>
               <div class="mt-3 flex items-center gap-3">
-                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#fff0df] text-[9px] font-semibold text-[#a75a15] dark:bg-[#452f17] dark:text-[#edb582]">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#fff0df] text-[11px] font-semibold text-[#a75a15] dark:bg-[#452f17] dark:text-[#edb582]">
                   {{ obterIniciais(cliente.nome) }}
                 </span>
                 <span class="min-w-0">
                   <span class="block truncate text-[10px] font-semibold text-[#0f172a] dark:text-noite-texto">{{ cliente.nome }}</span>
-                  <span class="mt-0.5 block truncate text-[7px] text-slate-500 dark:text-noite-suave">{{ cliente.tipo }} {{ cliente.cpfcnpj }}</span>
+                  <span class="mt-0.5 block truncate text-[11px] text-slate-500 dark:text-noite-suave">{{ cliente.tipo }} {{ cliente.cpfcnpj }}</span>
                 </span>
               </div>
             </div>
 
             <div class="mt-5 px-0.5">
-              <h2 class="text-[15px] font-bold leading-tight text-[#0f172a] dark:text-noite-texto">O que deseja consultar?</h2>
-              <p class="mt-1 text-[8px] text-slate-500 dark:text-noite-suave">Escolha uma opção para continuar.</p>
+              <h2 class="titulo-cartao">O que deseja consultar?</h2>
+              <p class="mt-1 text-[11px] text-slate-500 dark:text-noite-suave">Escolha uma opção para continuar.</p>
             </div>
 
             <div class="mt-4 grid gap-2 px-0.5">
@@ -152,8 +153,8 @@
                 class="flex min-h-[54px] items-center gap-3 rounded-xl border border-[#e2e8f0] px-2.5 text-left transition hover:bg-[#f8fafc] dark:border-noite-borda dark:hover:bg-noite-sutil">
                 <span class="grid h-9 w-9 shrink-0 place-items-center rounded-[9px] bg-[#edf3f8] text-sm font-semibold text-[#153860] dark:bg-noite-sutil dark:text-noite-marca">$</span>
                 <span class="min-w-0 flex-1">
-                  <span class="block text-[9px] font-semibold text-[#0f172a] dark:text-noite-texto">Tabela de preços</span>
-                  <span class="mt-1 block text-[7px] text-slate-500 dark:text-noite-suave">Consulte os valores para este cliente</span>
+                  <span class="block text-[11px] font-semibold text-[#0f172a] dark:text-noite-texto">Tabela de preços</span>
+                  <span class="mt-1 block text-[11px] text-slate-500 dark:text-noite-suave">Consulte os valores para este cliente</span>
                 </span>
                 <span aria-hidden="true" class="text-lg leading-none text-[#153860] dark:text-noite-marca">›</span>
               </button>
@@ -168,8 +169,8 @@
                   </svg>
                 </span>
                 <span class="min-w-0 flex-1">
-                  <span class="block text-[9px] font-semibold text-[#0f172a] dark:text-noite-texto">Pedidos do cliente</span>
-                  <span class="mt-1 block text-[7px] text-slate-500 dark:text-noite-suave">Veja o histórico e acompanhe entregas</span>
+                  <span class="block text-[11px] font-semibold text-[#0f172a] dark:text-noite-texto">Pedidos do cliente</span>
+                  <span class="mt-1 block text-[11px] text-slate-500 dark:text-noite-suave">Veja o histórico e acompanhe entregas</span>
                 </span>
                 <span aria-hidden="true" class="text-lg leading-none text-[#153860] dark:text-noite-marca">›</span>
               </button>
@@ -178,7 +179,7 @@
             <button
               type="button"
               (click)="fecharModalClienteMobile()"
-              class="mt-2.5 h-8 w-full rounded-[9px] bg-[#f6f9fc] text-[8px] font-medium text-[#64748b] transition hover:bg-[#edf3f8] dark:bg-noite-sutil dark:text-noite-suave dark:hover:bg-noite-sutil">
+              class="mt-2.5 h-8 w-full rounded-[9px] bg-[#f6f9fc] text-[11px] font-medium text-[#64748b] transition hover:bg-[#edf3f8] dark:bg-noite-sutil dark:text-noite-suave dark:hover:bg-noite-sutil">
               Cancelar
             </button>
           </section>
