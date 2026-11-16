@@ -2,7 +2,9 @@
 
 
 
-    @if (produto) {
+    @if (carregando()) {
+      <div class="cartao mx-4 mt-5 lg:mx-0 lg:mt-0"><app-esqueleto-lista texto="Carregando produto..." [linhas]="4" /></div>
+    } @else if (produto(); as produto) {
       <section class="px-4 pt-5 lg:px-0 lg:pt-0">
         <a routerLink="/produtos" class="inline-flex items-center gap-2 text-sm font-medium text-[#64748b] hover:text-[#153860] dark:text-noite-suave dark:hover:text-noite-marca">
           <span aria-hidden="true" class="text-lg">←</span>

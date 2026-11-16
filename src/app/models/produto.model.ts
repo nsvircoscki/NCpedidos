@@ -12,7 +12,7 @@ export interface Produto {
     margem: number;
     status: StatusProduto;
     cor: string;
-    precosPorCliente?: Record<string, number>;
+    precosPorCliente?: Record<number, number>;
     rendimento?: string;
     acabamento?: string;
     linha?: string;

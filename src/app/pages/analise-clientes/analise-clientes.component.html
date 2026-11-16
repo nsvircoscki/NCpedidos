@@ -59,6 +59,9 @@
     </div>
 
     <ul>
+      @if (carregando()) {
+        <li><app-esqueleto-lista texto="Carregando pré-cadastros..." /></li>
+      } @else {
       @for (cadastro of listaFiltrada(); track cadastro.id) {
         <li class="border-t border-slate-100 first:border-t-0 lg:first:border-t-0 dark:border-noite-borda">
           <a
@@ -100,6 +103,7 @@
         </li>
       } @empty {
         <li class="px-5 py-10 text-center text-sm text-slate-500 dark:text-noite-suave">Nenhum cadastro com esse status.</li>
+      }
       }
     </ul>
   </section>

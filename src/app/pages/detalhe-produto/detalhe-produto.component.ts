@@ -1,12 +1,13 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Produto } from '../../models/produto.model';
 import { ProdutoService } from '../../services/produto';
 
 @Component({
   standalone: true,
   imports: [
+    EsqueletoListaComponent,
     CommonModule,
     RouterLink,
   ],
@@ -17,17 +18,13 @@ export class DetalheProdutoComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly produtoService = inject(ProdutoService);
 
-  produto?: Produto;
-
-  constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.produto = this.produtoService.buscarPorId(id);
-
-  }
+  private readonly id = Number(this.route.snapshot.paramMap.get('id'));
+  readonly carregando = this.produtoService.carregando;
+  readonly produto = computed(() => this.produtoService.buscarPorId(this.id));
 
   get percentualEstoqueDeposito(): number {
-    const quantidade = this.produto?.estoquePorDeposito?.[0]?.quantidade ?? 0;
-    const estoqueTotal = this.produto?.estoque ?? 0;
+    const quantidade = this.produto()?.estoquePorDeposito?.[0]?.quantidade ?? 0;
+    const estoqueTotal = this.produto()?.estoque ?? 0;
 
     return estoqueTotal ? Math.min(100, Math.round((quantidade / estoqueTotal) * 100)) : 0;
   }

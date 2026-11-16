@@ -1,25 +1,32 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemTabelaPreco } from '../../models/tabela-preco.model';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { ClientesStore } from '../../services/clientes-store';
+import { TabelasPrecoStore } from '../../services/tabelas-preco-store';
+
 
 @Component({
   selector: 'app-tabela-precos-page',
   standalone: true,
-  imports: [FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, NgmMotionDirective],
+  imports: [EsqueletoListaComponent, FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, NgmMotionDirective],
   templateUrl: './tabela-precos.component.html'
 })
 export class TabelaPrecosPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly clientesStore = inject(ClientesStore);
+  private readonly tabelasStore = inject(TabelasPrecoStore);
 
   clienteId = Number(this.route.snapshot.paramMap.get('id'));
-  clienteNome = this.obterNomeCliente(this.clienteId);
-  itens: ItemTabelaPreco[] = [];
+  clienteNome = computed(() => this.clientesStore.buscar(this.clienteId)?.nome ?? 'Cliente');
+  readonly carregando = this.tabelasStore.carregando;
+  readonly itens = linkedSignal(() => this.tabelasStore.doCliente(this.clienteId));
   termoBusca = '';
   categoriasSelecionadas: string[] = [];
   statusSelecionados: string[] = [];
@@ -30,24 +37,20 @@ export class TabelaPrecosPageComponent {
   itensPorPagina = 10;
   itensSelecionados = new Set<number>();
 
-  constructor() {
-    this.itens = this.obterTabelaDoCliente(this.clienteId);
-  }
-
   voltar(): void {
     this.router.navigate(['/clientes']);
   }
 
   get categorias(): string[] {
-    return [...new Set(this.itens.map(item => item.categoria))];
+    return [...new Set(this.itens().map(item => item.categoria))];
   }
 
   get status(): string[] {
-    return [...new Set(this.itens.map(item => item.status))];
+    return [...new Set(this.itens().map(item => item.status))];
   }
 
   get cores(): string[] {
-    return [...new Set(this.itens.map(item => item.cor))];
+    return [...new Set(this.itens().map(item => item.cor))];
   }
 
   get categoriasMobile(): string[] {
@@ -57,7 +60,7 @@ export class TabelaPrecosPageComponent {
   get itensFiltrados(): ItemTabelaPreco[] {
     const termo = this.termoBusca.trim().toLowerCase();
 
-    return this.itens.filter(item =>
+    return this.itens().filter(item =>
       (!termo || item.produto.toLowerCase().includes(termo) || item.codigoSKU.toLowerCase().includes(termo)) &&
       (!this.categoriasSelecionadas.length || this.categoriasSelecionadas.includes(item.categoria)) &&
       (!this.statusSelecionados.length || this.statusSelecionados.includes(item.status)) &&
@@ -148,37 +151,5 @@ export class TabelaPrecosPageComponent {
 
   textoStatus(status: string): string {
     return status === 'ATIVO' ? 'Ativo' : 'Inativo';
-  }
-
-  private obterNomeCliente(id: number): string {
-    const clientes: Record<number, string> = {
-      1: 'Casa Almeida Materiais',
-      2: 'João da Silva',
-      3: 'Constrular Materiais'
-    };
-
-    return clientes[id] ?? 'Cliente';
-  }
-
-  private obterTabelaDoCliente(id: number): ItemTabelaPreco[] {
-    const tabelas: Record<number, ItemTabelaPreco[]> = {
-      1: [
-        { id: 1, produto: 'Tinta Acrílica Premium 18L', codigoSKU: 'TIN-001', categoria: 'Paredes', embalagem: '18 L', estoque: 124, precoBase: 289.90, status: 'ATIVO', cor: 'Branco Neve', preco: 269.90 },
-        { id: 2, produto: 'Esmalte Sintético Brilhante 3,6L', codigoSKU: 'TIN-002', categoria: 'Esmaltes', embalagem: '3,6 L', estoque: 86, precoBase: 119.90, status: 'ATIVO', cor: 'Branco', preco: 109.90 },
-        { id: 3, produto: 'Massa Corrida 25kg', codigoSKU: 'TIN-003', categoria: 'Preparação', embalagem: '25 kg', estoque: 42, precoBase: 89.90, status: 'INATIVO', cor: 'Branco', preco: 69.50 }
-      ],
-      2: [
-        { id: 1, produto: 'Tinta Acrílica Premium 18L', codigoSKU: 'TIN-001', categoria: 'Paredes', embalagem: '18 L', estoque: 124, precoBase: 289.90, status: 'ATIVO', cor: 'Branco Neve', preco: 289.90 },
-        { id: 2, produto: 'Esmalte Sintético Brilhante 3,6L', codigoSKU: 'TIN-002', categoria: 'Esmaltes', embalagem: '3,6 L', estoque: 86, precoBase: 119.90, status: 'ATIVO', cor: 'Branco', preco: 119.90 },
-        { id: 3, produto: 'Massa Corrida 25kg', codigoSKU: 'TIN-003', categoria: 'Preparação', embalagem: '25 kg', estoque: 42, precoBase: 89.90, status: 'INATIVO', cor: 'Branco', preco: 74.50 }
-      ],
-      3: [
-        { id: 1, produto: 'Tinta Acrílica Premium 18L', codigoSKU: 'TIN-001', categoria: 'Paredes', embalagem: '18 L', estoque: 124, precoBase: 289.90, status: 'ATIVO', cor: 'Branco Neve', preco: 254.90 },
-        { id: 2, produto: 'Esmalte Sintético Brilhante 3,6L', codigoSKU: 'TIN-002', categoria: 'Esmaltes', embalagem: '3,6 L', estoque: 86, precoBase: 119.90, status: 'ATIVO', cor: 'Branco', preco: 99.90 },
-        { id: 3, produto: 'Massa Corrida 25kg', codigoSKU: 'TIN-003', categoria: 'Preparação', embalagem: '25 kg', estoque: 42, precoBase: 89.90, status: 'INATIVO', cor: 'Branco', preco: 64.50 }
-      ]
-    };
-
-    return (tabelas[id] ?? []).map((item) => ({ ...item }));
   }
 }

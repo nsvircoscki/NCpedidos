@@ -34,9 +34,9 @@
       <div class="min-w-0 space-y-4">
         <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
           <app-seletor-cliente
-            [clientes]="clientes"
+            [clientes]="clientes()"
             [(selecionado)]="clienteSelecionado"
-            [destaque]="clienteSelecionado ? 'Limite disponível: ' + (clienteSelecionado.limite | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR') : ''" />
+            [destaque]="clienteSelecionado() ? 'Limite disponível: ' + (clienteSelecionado()!.limite | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR') : ''" />
         </section>
 
         <section class="border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">

@@ -1,3 +1,4 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { PedidoResumo } from '../../models/pedido.model';
@@ -8,14 +9,15 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { PedidoAcompanhamentoComponent } from '../pedido-enviado/pedido-acompanhamento.component';
-import { ClienteOption } from '../../models/cliente.model';
+
+
 
 
 
 @Component({
     selector: 'app-pedidos',
     standalone: true,
-    imports: [FiltroModalComponent, FiltroChipsComponent, 
+    imports: [EsqueletoListaComponent, FiltroModalComponent, FiltroChipsComponent, 
         CommonModule,
         FormsModule,
         RouterLink,
@@ -37,17 +39,6 @@ export class PedidosComponent implements AfterViewInit {
         const valor = this.route.snapshot.queryParamMap.get('clienteId');
         return valor ? Number(valor) : null;
     }
-
-    readonly clientes: ClienteOption[] = [
-        { id: 1, nome: 'Casa Almeida Materiais', documento: '12.345.678/0001-90', limite: 10000 },
-        { id: 2, nome: 'Distribuidora Norte', documento: '98.765.432/0001-12', limite: 15000 },
-        { id: 3, nome: 'Materiais Construção RC', documento: '11.222.333/0001-44', limite: 8000 },
-        { id: 4, nome: 'Ferreira & Filhos Ltda', documento: '55.666.777/0001-88', limite: 20000 },
-    ];
-
-    clienteSelecionado: ClienteOption = this.clientes[0];
-    modalClienteAberto = false;
-    buscaCliente = '';
 
     readonly sent = signal(false);
     readonly pedidoSelecionado = signal<PedidoResumo | null>(null);
@@ -83,35 +74,14 @@ export class PedidosComponent implements AfterViewInit {
         this.statusSelecionados = [];
     }
 
-    abrirModalCliente(): void {
-        this.buscaCliente = '';
-        this.modalClienteAberto = true;
-    }
-
-    fecharModalCliente(): void {
-        this.modalClienteAberto = false;
-    }
-
-    selecionarCliente(cliente: ClienteOption): void {
-        this.clienteSelecionado = cliente;
-        this.fecharModalCliente();
-    }
-
-    get clientesFiltrados(): ClienteOption[] {
-        const termo = this.buscaCliente.toLowerCase().trim();
-        return this.clientes.filter(cliente =>
-            !termo ||
-            cliente.nome.toLowerCase().includes(termo) ||
-            cliente.documento.toLowerCase().includes(termo)
-        );
-    }
-
 
     iniciais(nome: string): string {
         return nome.split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
     }
 
-    private readonly orders = inject(PedidosStore).pedidos;
+    private readonly pedidosStore = inject(PedidosStore);
+    private readonly orders = this.pedidosStore.pedidos;
+    readonly carregando = this.pedidosStore.carregando;
 
     // Método (e não computed) porque search/statusSelecionados não são signals:
     // um computed nunca recalcularia ao digitar ou trocar o status.

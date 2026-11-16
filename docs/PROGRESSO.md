@@ -45,11 +45,37 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 - Testar no navegador o PDF (download no computador, compartilhar no celular) e a aprovação.
 - A aba Acompanhamento do detalhe do pedido ainda usa dados fixos.
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
-- Botões Aprovar/Recusar da análise ainda só mudam o status na tela (não atualizam a lista).
+- Celular (420px): Produtos parece cortado na direita (com ou sem skeleton). Conferir no aparelho.
 - Conferir no celular se algum card ficou apertado depois do piso de 11px (produtos, tabela de preços, clientes).
 - Login (por último).
 
 ## Histórico
+
+- 2026-11-16: skeleton em todas as telas com dados. Todos os stores (`Pedidos`, `Produto`,
+  `PreCadastros`, `TabelasPreco`, `Clientes`) carregam com `carregarExemplo()` (800 ms simulados)
+  e expõem `carregando`. Skeleton (`EsqueletoListaComponent`, agora com `formato="grade"`) em:
+  dashboard, pedidos, aprovação (lista e detalhe), detalhe do pedido, produtos, detalhe e edição
+  de produto, análise de clientes (lista e detalhe), tabela de preços e clientes. Telas que liam o
+  store na criação passaram para `computed`/`linkedSignal`/`effect`. Testado no Edge headless:
+  skeleton aparece em 300 ms e os dados chegam em todas as 13 rotas. (Claude)
+
+- 2026-11-16: aulas 6 a 9: `ProdutoService` com signal e mock em `data/produtos.ts`; `docs/API.md`
+  (contrato da API e perguntas para o outro dev); `ClientesStore` com `resource()` simulando 800 ms
+  de rede, tela de Clientes com skeleton (`EsqueletoListaComponent`), erro e "Tentar de novo";
+  Novo pedido (`linkedSignal`) e Tabela de preços (`computed`) acompanham a lista carregada.
+  Removida a cópia duplicada `models/pre-cadastros-store.ts`. Build ok; skeleton não verificado no navegador. (Claude, com quem desenvolve)
+
+- 2026-11-16: aulas 3 a 5: clientes dos pedidos vêm do `CLIENTES_EXEMPLO` (`montarPedido` busca pelo
+  `clienteId`; `ClienteOption` e código morto da tela de Pedidos removidos); `PreCadastrosStore`
+  com aprovar/recusar refletindo na lista; `TabelasPrecoStore` (`data/tabelas-preco.ts`) e nome do
+  cliente da tabela vindo do `ClientesStore`. Pendente para o contrato da API: preço por cliente
+  existe em dois lugares (tabela de preços e `precosPorCliente`) com valores diferentes. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-16: aulas 1 e 2 de preparação para o backend: `ClientesStore` (`services/clientes-store.ts`)
+  com a lista única de clientes (`CLIENTES_EXEMPLO`) e `paraSelecao` (computed) para o seletor.
+  `CLIENTES_SELECAO` removido; Produtos e Novo pedido leem do store; ids de cliente numéricos
+  (inclusive `precosPorCliente`). Próxima aula: clientes da tela de Pedidos e `clienteId` dos
+  pedidos de exemplo, que não batem com os nomes. Build ok. (Claude, com quem desenvolve)
 
 - 2026-11-12: README reescrito (funcionalidades atuais, como rodar, estrutura de pastas). (Claude)
 
