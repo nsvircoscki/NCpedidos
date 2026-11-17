@@ -1,5 +1,6 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, untracked } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Produto } from '../../models/produto.model';
@@ -10,6 +11,7 @@ type AbaCadastroProduto = 'informacoes' | 'variacoes' | 'precos';
 @Component({
   standalone: true,
   imports: [
+    EsqueletoListaComponent,
     CommonModule,
     FormsModule,
     RouterLink,
@@ -19,6 +21,7 @@ type AbaCadastroProduto = 'informacoes' | 'variacoes' | 'precos';
 })
 export class CadastroProdutoComponent {
   private produtoService = inject(ProdutoService);
+  readonly carregando = this.produtoService.carregando;
 
   idProduto: number | null = null;
   modoEdicao = false;
@@ -47,15 +50,24 @@ export class CadastroProdutoComponent {
     const idDaRota = this.route.snapshot.paramMap.get('id');
 
     if (idDaRota !== null) {
-      this.idProduto = Number(idDaRota);
-      const produtoExistente = this.produtoService.buscarPorId(this.idProduto);
+      const id = Number(idDaRota);
+      this.idProduto = id;
+      // Só dá para preencher o formulário depois que a lista de produtos chegar.
+      effect(() => {
+        if (this.carregando()) return;
+        untracked(() => this.preencherFormulario(id));
+      });
+    }
+  }
 
-      if (produtoExistente) {
-        this.produto = { ...produtoExistente };
-        this.modoEdicao = true;
-      } else {
-        this.produtoNaoEncontrado = true;
-      }
+  private preencherFormulario(id: number): void {
+    const produtoExistente = this.produtoService.buscarPorId(id);
+
+    if (produtoExistente) {
+      this.produto = { ...produtoExistente };
+      this.modoEdicao = true;
+    } else {
+      this.produtoNaoEncontrado = true;
     }
   }
 

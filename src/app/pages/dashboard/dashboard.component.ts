@@ -1,5 +1,6 @@
 import { AmostraTintaComponent } from '../../components/amostra-tinta/amostra-tinta.component';
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { PedidosStore } from '../../services/pedidos-store';
@@ -18,7 +19,7 @@ interface Amostra {
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [CommonModule, RouterModule, NgmMotionDirective, AmostraTintaComponent],
+    imports: [CommonModule, RouterModule, NgmMotionDirective, AmostraTintaComponent, EsqueletoListaComponent],
     templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
@@ -93,28 +94,26 @@ export class DashboardComponent {
     }
 
     private readonly router = inject(Router);
-    private readonly pedidos = inject(PedidosStore).pedidos();
+    private readonly pedidosStore = inject(PedidosStore);
+    private readonly pedidos = this.pedidosStore.pedidos;
+    readonly carregando = this.pedidosStore.carregando;
 
-    readonly pedidosRecentes = this.pedidos.slice(0, 5);
-    readonly totalPedidos = this.pedidos.length;
-    readonly novosPedidos = this.contarPorStatus('Em análise');
-    readonly emProcessamento = this.contarPorStatus('Aprovado');
-    readonly completos = this.contarPorStatus('Faturado');
+    readonly pedidosRecentes = computed(() => this.pedidos().slice(0, 5));
     dataAtual = new Date();
 
     // Cada cartão é uma amostra de tinta: a cor identifica a situação do pedido.
-    readonly amostras: Record<string, Amostra> = {
-        total: { rotulo: 'Total de pedidos', icone: 'assets/totalPedidosIcon.svg', valor: this.totalPedidos, variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-marinho)', corTexto: '#ffffff' },
-        novos: { rotulo: 'Novos pedidos', icone: 'assets/novosPedidosIcon.svg', valor: this.novosPedidos, variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-ocre)', corTexto: '#2b1d03' },
-        processamento: { rotulo: 'Em processamento', icone: 'assets/loadingIcon.svg', valor: this.emProcessamento, variacao: '-0,00%', subiu: false, cor: 'var(--color-tinta-anil)', corTexto: '#ffffff' },
-        completos: { rotulo: 'Completos', icone: 'assets/completeIcon.svg', valor: this.completos, variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-musgo)', corTexto: '#ffffff' },
-    };
+    readonly amostras = computed<Record<string, Amostra>>(() => ({
+        total: { rotulo: 'Total de pedidos', icone: 'assets/totalPedidosIcon.svg', valor: this.pedidos().length, variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-marinho)', corTexto: '#ffffff' },
+        novos: { rotulo: 'Novos pedidos', icone: 'assets/novosPedidosIcon.svg', valor: this.contarPorStatus('Em análise'), variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-ocre)', corTexto: '#2b1d03' },
+        processamento: { rotulo: 'Em processamento', icone: 'assets/loadingIcon.svg', valor: this.contarPorStatus('Aprovado'), variacao: '-0,00%', subiu: false, cor: 'var(--color-tinta-anil)', corTexto: '#ffffff' },
+        completos: { rotulo: 'Completos', icone: 'assets/completeIcon.svg', valor: this.contarPorStatus('Faturado'), variacao: '+0,00%', subiu: true, cor: 'var(--color-tinta-musgo)', corTexto: '#ffffff' },
+    }));
 
     abrirPedido(id: number): void {
         this.router.navigate(['/pedidos', id]);
     }
 
     private contarPorStatus(status: string): number {
-        return this.pedidos.filter(pedido => pedido.status === status).length;
+        return this.pedidos().filter(pedido => pedido.status === status).length;
     }
 }

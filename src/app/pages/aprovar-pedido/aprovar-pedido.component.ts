@@ -1,3 +1,4 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CurrencyPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -6,13 +7,14 @@ import { PedidoPdfService } from '../../services/pedido-pdf';
 
 @Component({
   selector: 'app-aprovar-pedido',
-  imports: [RouterLink, CurrencyPipe],
+  imports: [EsqueletoListaComponent, RouterLink, CurrencyPipe],
   templateUrl: './aprovar-pedido.component.html',
 })
 export class AprovarPedidoComponent {
   private readonly store = inject(PedidosStore);
   private readonly pedidoPdf = inject(PedidoPdfService);
   private readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  readonly carregando = this.store.carregando;
 
   // computed lê a lista do store: depois de aprovar ou recusar, a tela já mostra o novo status.
   readonly pedido = computed(() => this.store.pedidos().find(pedido => pedido.id === this.id));

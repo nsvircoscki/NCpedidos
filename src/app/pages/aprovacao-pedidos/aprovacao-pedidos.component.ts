@@ -1,3 +1,4 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CurrencyPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -9,11 +10,13 @@ type FiltroAprovacao = 'Todos' | Exclude<StatusPedido, 'Faturado'>;
 
 @Component({
   selector: 'app-aprovacao-pedidos',
-  imports: [RouterLink, CurrencyPipe, AmostraTintaComponent],
+  imports: [EsqueletoListaComponent, RouterLink, CurrencyPipe, AmostraTintaComponent],
   templateUrl: './aprovacao-pedidos.component.html',
 })
 export class AprovacaoPedidosComponent {
-  private readonly pedidos = inject(PedidosStore).pedidos;
+  private readonly pedidosStore = inject(PedidosStore);
+  private readonly pedidos = this.pedidosStore.pedidos;
+  readonly carregando = this.pedidosStore.carregando;
 
   readonly filtros: FiltroAprovacao[] = ['Todos', 'Em análise', 'Aprovado', 'Recusado'];
   readonly filtro = signal<FiltroAprovacao>('Em análise');

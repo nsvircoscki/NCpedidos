@@ -55,6 +55,9 @@
     </div>
 
     <ul>
+      @if (carregando()) {
+        <li><app-esqueleto-lista texto="Carregando pedidos..." /></li>
+      } @else {
       @for (pedido of listaFiltrada(); track pedido.id) {
         <li class="border-t border-slate-100 first:border-t-0 dark:border-noite-borda">
           <a
@@ -90,6 +93,7 @@
         </li>
       } @empty {
         <li class="px-5 py-10 text-center text-sm text-slate-500 dark:text-noite-suave">Nenhum pedido com esse status.</li>
+      }
       }
     </ul>
   </section>

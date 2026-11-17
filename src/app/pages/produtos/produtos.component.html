@@ -26,7 +26,7 @@
 
         <section class="mt-4 lg:cartao lg:mt-0 lg:p-5">
           <app-seletor-cliente
-            [clientes]="clientes"
+            [clientes]="clientes()"
             [(selecionado)]="clienteSelecionado"
             [permiteRemover]="true"
             [destaque]="clienteSelecionado ? 'Preço personalizado' : 'Preço base do catálogo'" />
@@ -256,6 +256,9 @@
 
         <!-- Grade de produtos -->
         <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          @if (carregando()) {
+            <div class="col-span-full"><app-esqueleto-lista texto="Carregando produtos..." formato="grade" [linhas]="8" /></div>
+          } @else {
           @for (produto of produtosMobile; track produto.id) {
             <a
               [routerLink]="['/produtos', produto.id]"
@@ -317,6 +320,7 @@
             <p class="col-span-2 py-8 text-center text-xs text-[#64748b] dark:text-noite-suave">
               Nenhum produto encontrado.
             </p>
+          }
           }
         </div>
       </div>

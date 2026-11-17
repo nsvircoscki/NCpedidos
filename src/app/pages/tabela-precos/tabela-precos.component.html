@@ -7,7 +7,7 @@
       </button>
       <span class="block sobretitulo">CLIENTES</span>
       <h1 class="titulo-pagina my-1">Produtos e preços</h1>
-      <p class="subtitulo-pagina">Tabela de preços exclusiva de {{ clienteNome }}.</p>
+      <p class="subtitulo-pagina">Tabela de preços exclusiva de {{ clienteNome() }}.</p>
     </section>
 
     <section class="cartao hidden py-4 lg:block">
@@ -48,6 +48,9 @@
       </div>
 
       <div class="grid grid-cols-2 gap-4 px-4 md:grid-cols-3 xl:grid-cols-4">
+        @if (carregando()) {
+          <app-esqueleto-lista texto="Carregando tabela de preços..." />
+        } @else {
         @for (item of itensDaPagina; track item.id) {
           <article class="overflow-hidden rounded-[14px] border bg-white transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)] dark:bg-noite-card"
             [class.border-[#153860]]="itemEstaSelecionado(item)"
@@ -104,6 +107,7 @@
         } @empty {
           <p class="col-span-full py-12 text-center text-sm text-slate-500 dark:text-noite-suave">Nenhum produto encontrado.</p>
         }
+        }
       </div>
 
       <div class="mt-6 flex items-center justify-between border-t border-slate-100 px-4 pt-4 dark:border-noite-borda">
@@ -127,7 +131,7 @@
           <div>
             <span class="sobretitulo block">Clientes</span>
             <h1 class="titulo-pagina mt-0.5 max-lg:text-[26px]">Produtos e preços</h1>
-            <p class="subtitulo-pagina mt-0.5">Valores exclusivos de {{ clienteNome }}.</p>
+            <p class="subtitulo-pagina mt-0.5">Valores exclusivos de {{ clienteNome() }}.</p>
           </div>  
         </div>
       </div>
@@ -331,6 +335,9 @@
         </div>
 
         <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
+          @if (carregando()) {
+            <app-esqueleto-lista texto="Carregando tabela de preços..." />
+          } @else {
           @for (item of itensDaPagina; track item.id) {
             <article class="overflow-hidden rounded-[14px] border border-[#e3e9ee] bg-white transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)] dark:border-noite-borda dark:bg-noite-card">
               <div class="relative grid h-[104px] place-items-center bg-[#eff3f6] dark:bg-noite-sutil">
@@ -356,6 +363,7 @@
             </article>
           } @empty {
             <p class="py-8 text-center text-xs text-[#64748b] dark:text-noite-suave">Nenhum produto encontrado.</p>
+          }
           }
         </div>
       </div>

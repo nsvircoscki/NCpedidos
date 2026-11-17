@@ -2,7 +2,9 @@
 
 
     <div class="mx-auto w-full max-w-[1600px] px-5 py-6 sm:px-6 lg:px-0 lg:py-0">
-      @if (produtoNaoEncontrado) {
+      @if (idProduto !== null && carregando()) {
+        <div class="cartao"><app-esqueleto-lista texto="Carregando produto..." [linhas]="4" /></div>
+      } @else if (produtoNaoEncontrado) {
         <section class="cartao p-8 text-center">
           <h1 class="text-xl font-bold text-[#153860] dark:text-noite-marca">Produto não encontrado</h1>
           <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">

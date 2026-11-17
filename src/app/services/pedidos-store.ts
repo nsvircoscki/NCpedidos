@@ -1,21 +1,23 @@
-import { Service, signal } from '@angular/core';
+import { Service, computed } from '@angular/core';
 import { PEDIDOS_EXEMPLO } from '../data/pedidos';
 import { PedidoDetalhado } from '../models/pedido.model';
+import { carregarExemplo } from './carregar-exemplo';
 
 /** Lista de pedidos compartilhada entre Pedidos, dashboard, Novo pedido e Aprovação. */
 @Service()
 export class PedidosStore {
-  private readonly lista = signal<PedidoDetalhado[]>(PEDIDOS_EXEMPLO);
-  readonly pedidos = this.lista.asReadonly();
+  private readonly recurso = carregarExemplo(PEDIDOS_EXEMPLO);
+  readonly pedidos = computed(() => (this.recurso.hasValue() ? this.recurso.value() : []));
+  readonly carregando = this.recurso.isLoading;
 
   buscar(id: number): PedidoDetalhado | undefined {
-    return this.lista().find(pedido => pedido.id === id);
+    return this.pedidos().find(pedido => pedido.id === id);
   }
 
   adicionar(pedido: Omit<PedidoDetalhado, 'id'>): PedidoDetalhado {
-    const id = Math.max(...this.lista().map(p => p.id)) + 1;
+    const id = Math.max(0, ...this.pedidos().map(p => p.id)) + 1;
     const novo = { ...pedido, id };
-    this.lista.update(lista => [novo, ...lista]);
+    this.recurso.set([novo, ...this.pedidos()]);
     return novo;
   }
 
@@ -28,6 +30,6 @@ export class PedidosStore {
   }
 
   private alterar(id: number, mudancas: Partial<PedidoDetalhado>): void {
-    this.lista.update(lista => lista.map(pedido => (pedido.id === id ? { ...pedido, ...mudancas } : pedido)));
+    this.recurso.set(this.pedidos().map(pedido => (pedido.id === id ? { ...pedido, ...mudancas } : pedido)));
   }
 }

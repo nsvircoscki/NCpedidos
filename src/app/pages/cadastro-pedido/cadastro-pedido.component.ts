@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, linkedSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ClienteSelecao } from '../../models/cliente.model';
 import { SeletorClienteComponent } from '../../components/seletor-cliente/seletor-cliente.component';
-import { CLIENTES_SELECAO } from '../../data/clientes';
+import { ClientesStore } from '../../services/clientes-store';
 import { PedidoDetalhado } from '../../models/pedido.model';
 import { PedidosStore } from '../../services/pedidos-store';
 import { PedidoPdfService } from '../../services/pedido-pdf';
@@ -45,8 +45,8 @@ export class CadastroPedidoPageComponent {
   submitted = false;
   pedidoEnviado: PedidoDetalhado | null = null;
 
-  readonly clientes = CLIENTES_SELECAO;
-  clienteSelecionado: ClienteSelecao | null = this.clientes[0];
+  readonly clientes = inject(ClientesStore).paraSelecao;
+  readonly clienteSelecionado = linkedSignal<ClienteSelecao | null>(() => this.clientes()[0] ?? null);
 
   get itemCount(): number {
     return Object.values(this.quantities).reduce((total, quantity) => total + quantity, 0);
@@ -82,7 +82,7 @@ export class CadastroPedidoPageComponent {
   }
 
   submitOrder(): void {
-    const cliente = this.clienteSelecionado;
+    const cliente = this.clienteSelecionado();
     if (!cliente) return;
 
     this.pedidoEnviado = this.pedidosStore.adicionar({

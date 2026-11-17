@@ -25,7 +25,16 @@
     </section>
 
     <section class="cartao hidden min-w-0 overflow-hidden py-4 lg:block">
-        <app-clientes-table [clientes]="clientes"></app-clientes-table>
+      @if (carregando()) {
+        <app-esqueleto-lista texto="Carregando clientes..." />
+      } @else if (erro()) {
+        <div class="px-5 py-10 text-center" role="alert">
+          <p class="text-sm text-slate-500 dark:text-noite-suave">Não foi possível carregar os clientes.</p>
+          <button type="button" (click)="recarregar()" class="botao-acao-secundario mt-3 inline-flex">Tentar de novo</button>
+        </div>
+      } @else {
+        <app-clientes-table [clientes]="clientes()"></app-clientes-table>
+      }
     </section>
 
     <section class="lg:hidden">
@@ -67,32 +76,41 @@
         </div>
 
       <div class="mx-4 mt-6 overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-white px-3 dark:border-noite-borda dark:bg-noite-card">
-        @for (cliente of clientesMobile; track cliente.id) {
-          <button
-            type="button"
-            class="flex min-h-[76px] w-full items-center gap-3 border-b border-[#dbe4ed] text-left last:border-b-0 dark:border-noite-borda"
-            [class.bg-[#edf3f7]]="clienteMobileEstaSelecionado(cliente)"
-            (click)="selecionarClienteMobile(cliente)"
-            [class.dark:bg-noite-sutil]="clienteMobileEstaSelecionado(cliente)">
-            <span
-              class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[11px] font-medium"
-              [ngClass]="cliente.id === 1 ? 'bg-[#edf3f7] text-[#153860] dark:bg-noite-sutil dark:text-noite-marca' : 'bg-[#fff0df] text-[#a75a15] dark:bg-[#452f17] dark:text-[#edb582]'">
-              {{ obterIniciais(cliente.nome) }}
-            </span>
-
-            <span class="min-w-0 flex-1">
-              <span class="block truncate text-[12px] font-semibold text-[#0f172a] dark:text-noite-texto">{{ cliente.nome }}</span>
-              <span class="mt-1 block text-[11px] text-[#64748b] dark:text-noite-suave">
-                <strong class="font-semibold text-[#153860] dark:text-noite-marca">#{{ cliente.id | number:'4.0-0' }}</strong>
-                · Cliente desde {{ cliente.dataCadastro | date:'dd/MM/yyyy' }}
+        @if (carregando()) {
+          <app-esqueleto-lista texto="Carregando clientes..." [linhas]="4" />
+        } @else if (erro()) {
+          <div class="px-5 py-10 text-center" role="alert">
+            <p class="text-sm text-slate-500 dark:text-noite-suave">Não foi possível carregar os clientes.</p>
+            <button type="button" (click)="recarregar()" class="botao-acao-secundario mt-3 inline-flex">Tentar de novo</button>
+          </div>
+        } @else {
+          @for (cliente of clientesMobile; track cliente.id) {
+            <button
+              type="button"
+              class="flex min-h-[76px] w-full items-center gap-3 border-b border-[#dbe4ed] text-left last:border-b-0 dark:border-noite-borda"
+              [class.bg-[#edf3f7]]="clienteMobileEstaSelecionado(cliente)"
+              (click)="selecionarClienteMobile(cliente)"
+              [class.dark:bg-noite-sutil]="clienteMobileEstaSelecionado(cliente)">
+              <span
+                class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[11px] font-medium"
+                [ngClass]="cliente.id === 1 ? 'bg-[#edf3f7] text-[#153860] dark:bg-noite-sutil dark:text-noite-marca' : 'bg-[#fff0df] text-[#a75a15] dark:bg-[#452f17] dark:text-[#edb582]'">
+                {{ obterIniciais(cliente.nome) }}
               </span>
-            </span>
 
-            <span aria-hidden="true" class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl leading-none text-[#153860] dark:bg-noite-sutil dark:text-noite-marca">›</span>
-          </button>
-        } @empty {
-          <p class="px-3 py-8 text-center text-xs text-[#64748b] dark:text-noite-suave">Nenhum cliente encontrado.</p>
-        }
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-[12px] font-semibold text-[#0f172a] dark:text-noite-texto">{{ cliente.nome }}</span>
+                <span class="mt-1 block text-[11px] text-[#64748b] dark:text-noite-suave">
+                  <strong class="font-semibold text-[#153860] dark:text-noite-marca">#{{ cliente.id | number:'4.0-0' }}</strong>
+                  · Cliente desde {{ cliente.dataCadastro | date:'dd/MM/yyyy' }}
+                </span>
+              </span>
+
+              <span aria-hidden="true" class="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#edf3f7] text-2xl leading-none text-[#153860] dark:bg-noite-sutil dark:text-noite-marca">›</span>
+            </button>
+          } @empty {
+            <p class="px-3 py-8 text-center text-xs text-[#64748b] dark:text-noite-suave">Nenhum cliente encontrado.</p>
+          }
+      }
       </div>
 
       <!-- Modal de opções do cliente (centralizado, com pop-in) -->

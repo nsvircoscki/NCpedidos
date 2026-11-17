@@ -1,6 +1,7 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { SeletorClienteComponent } from '../../components/seletor-cliente/seletor-cliente.component';
-import { CLIENTES_SELECAO } from '../../data/clientes';
 import { ClienteSelecao } from '../../models/cliente.model';
+import { ClientesStore} from '../../services/clientes-store';
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { Component, HostListener, inject } from '@angular/core';
@@ -14,21 +15,16 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 @Component({
     selector: 'app-produtos-page',
     standalone: true,
-    imports: [SeletorClienteComponent, FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, RouterLink, NgmMotionDirective],
+    imports: [EsqueletoListaComponent, SeletorClienteComponent, FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, RouterLink, NgmMotionDirective],
     templateUrl: './produtos.component.html',
 })
 export class ProdutosPageComponent { 
 
     private produtoService = inject(ProdutoService);
 
-    
+    readonly carregando = this.produtoService.carregando;
 
-    constructor() {
-      this.produtos = this.produtoService.listar();
-
-    }
-
-    readonly clientes = CLIENTES_SELECAO;
+    readonly clientes = inject(ClientesStore).paraSelecao;
     clienteSelecionado: ClienteSelecao | null = null;
 
     filtrosAbertos = false;
@@ -160,5 +156,7 @@ export class ProdutosPageComponent {
       });
     }
 
-    produtos: Produto[] = [];
+    get produtos(): Produto[] {
+      return this.produtoService.produtos();
+    }
 }

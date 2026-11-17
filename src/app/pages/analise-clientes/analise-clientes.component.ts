@@ -1,18 +1,21 @@
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { AmostraTintaComponent } from '../../components/amostra-tinta/amostra-tinta.component';
-import { Component, computed, signal } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PRE_CADASTROS } from '../../data/pre-cadastros';
 import { PreCadastro, StatusPreCadastro } from '../../models/cliente.model';
+import { PreCadastrosStore } from '../../services/pre-cadastros-store';
 
 type FiltroStatus = StatusPreCadastro | 'Todos';
 
 @Component({
   selector: 'app-analise-clientes',
-  imports: [RouterLink, AmostraTintaComponent],
+  imports: [EsqueletoListaComponent, RouterLink, AmostraTintaComponent],
   templateUrl: './analise-clientes.component.html',
 })
 export class AnaliseClientesPageComponent {
-  readonly preCadastros = signal<PreCadastro[]>(PRE_CADASTROS);
+  private readonly store = inject(PreCadastrosStore);
+  readonly preCadastros = this.store.preCadastros;
+  readonly carregando = this.store.carregando;
   readonly filtro = signal<FiltroStatus>('Todos');
 
   readonly filtros: FiltroStatus[] = ['Todos', 'Aguardando análise', 'Em revisão', 'Documentação pendente'];
@@ -28,6 +31,8 @@ export class AnaliseClientesPageComponent {
   readonly prioritarios = computed(() => this.preCadastros().filter(cadastro => cadastro.prioridade).length);
 
   private readonly coresStatus: Record<StatusPreCadastro, string> = {
+    'Aprovado': 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300',
+    'Rejeitado': 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
     'Aguardando análise': 'bg-[#fff4dc] text-[#8A5A08] dark:bg-[#40381c] dark:text-[#edc682]',
     'Em revisão': 'bg-[#eaf2fb] text-[#1d4f8a] dark:bg-[#172f45] dark:text-noite-marca',
     'Documentação pendente': 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',

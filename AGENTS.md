@@ -27,7 +27,9 @@ ou explicar como fazer algo:
 3. **Explique por que o código fica naquele arquivo** e não em outro (ex.: componente x
    página, `.ts` x `.html`, model x service, `styles.scss` global x classe Tailwind).
 4. **Explique a lógica**: o que cada parte faz e por que foi escrita assim, não só o código pronto.
-5. Quando o pedido for "me ensine", **não altere os arquivos**: mostre o código para a
+5. **Nas aulas, primeiro liste os conceitos que vão ser usados** (funções da linguagem e do
+   Angular, explicadas), **depois mande o código**. Seja curto: o mínimo de texto possível.
+6. Quando o pedido for "me ensine", **não altere os arquivos**: mostre o código para a
    pessoa escrever, a menos que ela peça para aplicar.
 
 **Código legível para humanos:** nomes claros em português, funções curtas e poucos
@@ -86,7 +88,14 @@ e o motivo de cada alteração. Responda em português.
   (ou `inline-flex`). Secundário (cancelar, ver lista): `botao-acao-secundario`. Ficam em
   `src/styles.scss` como `@utility`; não repita cores e tamanhos no HTML. O display fica no HTML.
 - **Escolher cliente**: `<app-seletor-cliente [clientes] [(selecionado)] [destaque]>`
-  (`components/seletor-cliente/`), com a lista em `data/clientes.ts`.
+  (`components/seletor-cliente/`), com a lista vinda de `ClientesStore.paraSelecao`.
+- **Dados**: cada área tem um store em `services/` (`ClientesStore`, `PreCadastrosStore`,
+  `TabelasPrecoStore`, `ProdutoService`, `PedidosStore`); as telas leem dele, nunca de `data/`.
+  O contrato esperado da API está em `docs/API.md`.
+- **Carregando**: todos os stores carregam com `carregarExemplo()` (`services/carregar-exemplo.ts`,
+  simula 800 ms de rede com `resource()`) e expõem `carregando`. Nas telas:
+  `@if (carregando()) { <app-esqueleto-lista texto="..." [linhas]="n" /> } @else { ... }`
+  (`formato="grade"` para cartões, como em Produtos). Erro e "Tentar de novo": ver tela de Clientes.
 - **Cartões de número (KPI)**: `<app-amostra-tinta>` (`components/amostra-tinta/`), com as cores `tinta-*`.
 - **Campos de digitar** (formulários e buscas): sempre com label flutuante, ver o comentário
   `Label input` em `src/styles.scss`. Ícone ou padding diferente: `[--label-input-x:...]` no wrapper.
@@ -106,6 +115,13 @@ e o motivo de cada alteração. Responda em português.
   `(a: number, b: number) => ...`. Usar `([a, b]) =>` quebra em runtime ("não é iterável")
   e o build não acusa, porque o tipo é `any[]`. O exemplo da skill do ng-motion está errado
   para esta versão.
+- **`npm install` dá ERESOLVE por causa do ng-motion**: o `@scripttype/ng-motion` 0.5.0 declara
+  peer Angular 21, e o projeto é 22 (funciona mesmo assim). Instale pacotes novos com
+  `npm install <pacote> --legacy-peer-deps`. Pacote do Angular sempre com `@` (`@angular/aria`);
+  sem o `@` o npm tenta baixar do GitHub por SSH.
+- **Dados dos stores chegam depois** (simulam a API): não leia o store uma vez só na criação da
+  tela (`campo = store.buscar(id)` fica `undefined` para sempre). Use `computed`/`linkedSignal`,
+  ou `effect` + `untracked` para preencher formulário (ver `cadastro-produto`).
 - **Python com heredoc no Git Bash (Windows)** costuma falhar: escreva o script em um arquivo
   e rode depois.
 

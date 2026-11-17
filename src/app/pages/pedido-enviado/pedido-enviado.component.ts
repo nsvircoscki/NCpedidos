@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
+import { Component, EventEmitter, Output, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PedidosStore } from '../../services/pedidos-store';
@@ -10,7 +11,7 @@ import { NgmMotionDirective, type Transition } from '@scripttype/ng-motion';
 @Component({
   selector: 'app-pedido-enviado',
   standalone: true,
-  imports: [CommonModule, PedidoAcompanhamentoComponent, NgmMotionDirective],
+  imports: [EsqueletoListaComponent, CommonModule, PedidoAcompanhamentoComponent, NgmMotionDirective],
   templateUrl: './pedido-enviado.component.html',
 })
 export class PedidoEnviadoComponent {
@@ -24,17 +25,21 @@ export class PedidoEnviadoComponent {
   readonly indicadorTransition: Transition = { type: 'spring', stiffness: 400, damping: 32 };
 
   private readonly pedidoPdf = inject(PedidoPdfService);
-  readonly pedido = inject(PedidosStore).buscar(Number(this.numeroPedido));
+  private readonly pedidosStore = inject(PedidosStore);
+  readonly carregando = this.pedidosStore.carregando;
+  readonly pedido = computed(() => this.pedidosStore.buscar(Number(this.numeroPedido)));
 
   enviarPdf(): void {
-    if (this.pedido) {
-      this.pedidoPdf.enviarAoCliente(this.pedido);
+    const pedido = this.pedido();
+    if (pedido) {
+      this.pedidoPdf.enviarAoCliente(pedido);
     }
   }
 
   baixarPdf(): void {
-    if (this.pedido) {
-      this.pedidoPdf.baixar(this.pedido);
+    const pedido = this.pedido();
+    if (pedido) {
+      this.pedidoPdf.baixar(pedido);
     }
   }
 

@@ -34,7 +34,7 @@
 
     <div>
       <h2 class="text-sm font-semibold text-[#1e5338] dark:text-[#96d9b7]">Pedido enviado com sucesso</h2>
-      <p class="text-xs text-[#527965] dark:text-noite-suave">Enviado em {{ pedido?.date }} · {{ pedido?.status }}</p>
+      <p class="text-xs text-[#527965] dark:text-noite-suave">Enviado em {{ pedido()?.date }} · {{ pedido()?.status }}</p>
     </div>
   </div>
   } @else {
@@ -91,7 +91,9 @@
 </div>
 
   @if (abaAtiva === 'resumo') {
-  @if (pedido; as pedido) {
+  @if (carregando()) {
+  <div class="cartao mt-6"><app-esqueleto-lista texto="Carregando pedido..." [linhas]="4" /></div>
+  } @else if (pedido(); as pedido) {
   <!-- Seção Cliente -->
   <section class="mt-6 lg:mt-8">
     <h3 class="mb-2 text-base font-bold text-[#0f172a] lg:text-lg dark:text-noite-texto">Cliente</h3>
