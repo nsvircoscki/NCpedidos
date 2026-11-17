@@ -18,7 +18,7 @@
           </a>
         </section>
       } @else {
-        <form (ngSubmit)="salvar()">
+        <form (submit)="salvar($event)">
           <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <a
@@ -106,40 +106,43 @@
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Nome do produto <span class="text-red-500">*</span></span>
                       <input autocomplete="off"
-                        name="nome"
-                        [(ngModel)]="produto.nome"
-                        required
+                        [formField]="formulario.nome"
+                        [attr.aria-invalid]="formulario.nome().touched() && formulario.nome().invalid()"
+                        aria-describedby="erro-nome"
                         placeholder="Digite aqui"
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
+                      <app-erro-campo [campo]="formulario.nome" id="erro-nome" />
                     </label>
 
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">SKU base <span class="text-red-500">*</span></span>
                       <input autocomplete="off"
-                        name="codigoSKU"
-                        [(ngModel)]="produto.codigoSKU"
-                        required
+                        [formField]="formulario.codigoSKU"
+                        [attr.aria-invalid]="formulario.codigoSKU().touched() && formulario.codigoSKU().invalid()"
+                        aria-describedby="erro-sku"
                         placeholder="Digite aqui"
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
+                      <app-erro-campo [campo]="formulario.codigoSKU" id="erro-sku" />
                     </label>
 
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Categoria</span>
                       <input autocomplete="off"
-                        name="categoria"
-                        [(ngModel)]="produto.categoria"
+                        [formField]="formulario.categoria"
+                        [attr.aria-invalid]="formulario.categoria().touched() && formulario.categoria().invalid()"
+                        aria-describedby="erro-categoria"
                         placeholder="Ex.: Paredes"
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
+                      <app-erro-campo [campo]="formulario.categoria" id="erro-categoria" />
                     </label>
 
                     <label class="label-input label-input--md label-input--textarea grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Descrição</span>
                       <textarea autocomplete="off"
-                        name="descricao"
-                        [(ngModel)]="produto.descricao"
+                        [formField]="formulario.descricao"
                         rows="3"
                         placeholder="Descreva características e aplicação do produto"
                         class="label-input__field min-h-28 rounded-lg border border-[#e2e8f0] px-4 py-3 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
@@ -167,8 +170,7 @@
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Cor</span>
                       <input autocomplete="off"
-                        name="cor"
-                        [(ngModel)]="produto.cor"
+                        [formField]="formulario.cor"
                         placeholder="Ex.: Branco Neve"
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
@@ -177,11 +179,13 @@
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Embalagem</span>
                       <input autocomplete="off"
-                        name="embalagem"
-                        [(ngModel)]="produto.embalagem"
+                        [formField]="formulario.embalagem"
+                        [attr.aria-invalid]="formulario.embalagem().touched() && formulario.embalagem().invalid()"
+                        aria-describedby="erro-embalagem"
                         placeholder="Ex.: 18 L"
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
+                      <app-erro-campo [campo]="formulario.embalagem" id="erro-embalagem" />
                     </label>
                   </div>
                 </div>
@@ -198,39 +202,42 @@
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Preço base</span>
                       <input autocomplete="off"
-                        name="preco"
                         type="number"
-                        min="0"
                         step="0.01"
-                        [(ngModel)]="produto.preco"
+                        [formField]="formulario.preco"
+                        [attr.aria-invalid]="formulario.preco().touched() && formulario.preco().invalid()"
+                        aria-describedby="erro-preco"
                         placeholder=" "
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
+                      <app-erro-campo [campo]="formulario.preco" id="erro-preco" />
                     </label>
 
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Estoque disponível</span>
                       <input autocomplete="off"
-                        name="estoque"
                         type="number"
-                        min="0"
-                        [(ngModel)]="produto.estoque"
+                        [formField]="formulario.estoque"
+                        [attr.aria-invalid]="formulario.estoque().touched() && formulario.estoque().invalid()"
+                        aria-describedby="erro-estoque"
                         placeholder=" "
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
+                      <app-erro-campo [campo]="formulario.estoque" id="erro-estoque" />
                     </label>
 
                     <label class="label-input label-input--md grid gap-2 text-xs font-medium text-[#475569] dark:text-noite-suave">
                       <span class="label-input__label">Margem (%)</span>
                       <input autocomplete="off"
-                        name="margem"
                         type="number"
-                        min="0"
                         step="0.1"
-                        [(ngModel)]="produto.margem"
+                        [formField]="formulario.margem"
+                        [attr.aria-invalid]="formulario.margem().touched() && formulario.margem().invalid()"
+                        aria-describedby="erro-margem"
                         placeholder=" "
                         class="label-input__field h-12 rounded-lg border border-[#e2e8f0] px-4 text-sm outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"
                       />
+                      <app-erro-campo [campo]="formulario.margem" id="erro-margem" />
                     </label>
                   </div>
                 </div>
@@ -274,7 +281,7 @@
                   </span>
                   <input
                     type="checkbox"
-                    [checked]="produto.status === 'ATIVO'"
+                    [checked]="produto().status === 'ATIVO'"
                     (change)="alternarStatus($event)"
                     class="h-4 w-4 accent-[#16815f] dark:accent-[#85eaca]"
                   />
@@ -284,15 +291,15 @@
                   <span class="text-[11px] uppercase text-slate-500 dark:text-noite-suave">Status</span>
                   <span
                     class="rounded-full px-3 py-1 text-[11px] font-semibold"
-                    [class.bg-[#e8f6f0]]="produto.status === 'ATIVO'"
-                    [class.text-[#16815f]]="produto.status === 'ATIVO'"
-                    [class.bg-[#fff1f2]]="produto.status === 'INATIVO'"
-                    [class.text-[#be123c]]="produto.status === 'INATIVO'"
-                    [class.dark:bg-[#1a4231]]="produto.status === 'ATIVO'"
-                    [class.dark:text-[#85eaca]]="produto.status === 'ATIVO'"
-                    [class.dark:bg-noite-sutil]="produto.status === 'INATIVO'"
-                    [class.dark:text-[#ed829c]]="produto.status === 'INATIVO'">
-                    {{ produto.status === 'ATIVO' ? 'Ativo' : 'Inativo' }}
+                    [class.bg-[#e8f6f0]]="produto().status === 'ATIVO'"
+                    [class.text-[#16815f]]="produto().status === 'ATIVO'"
+                    [class.bg-[#fff1f2]]="produto().status === 'INATIVO'"
+                    [class.text-[#be123c]]="produto().status === 'INATIVO'"
+                    [class.dark:bg-[#1a4231]]="produto().status === 'ATIVO'"
+                    [class.dark:text-[#85eaca]]="produto().status === 'ATIVO'"
+                    [class.dark:bg-noite-sutil]="produto().status === 'INATIVO'"
+                    [class.dark:text-[#ed829c]]="produto().status === 'INATIVO'">
+                    {{ produto().status === 'ATIVO' ? 'Ativo' : 'Inativo' }}
                   </span>
                 </div>
               </section>

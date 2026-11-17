@@ -38,6 +38,13 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Pendências
 
+- Commit das aulas de Signal Forms de 17/11 (16 arquivos no main sem commit). O merge de
+  `feat/stores-e-skeleton` já foi feito (PR #1).
+- Testar no navegador os 3 formulários com Signal Forms (pré-cadastro, cadastro de produto, Novo pedido).
+- Tabela de preços: preços editados se perdem ao sair da tela (falta salvar no `TabelasPrecoStore`).
+- Pré-cadastro: `PreCadastro` só guarda nome, documento, cidade e UF; telefone, e-mail e perfil se
+  perdem. Perguntar ao outro dev (anotar em `docs/API.md`).
+- Preparar a API: `environment`, interceptor, "Tentar de novo" nas outras telas.
 - Revisar o modo escuro tela por tela no navegador e ajustar cores que ficaram estranhas.
 
 - Testar no navegador o modal de filtros compartilhado nas 4 telas (pop-in, gelatina, chips, contador).
@@ -50,6 +57,29 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 - Login (por último).
 
 ## Histórico
+
+- 2026-11-17: pré-cadastro: campo Número também no desktop; consulta de CNPJ preenche o número no
+  campo próprio (antes ia junto do endereço). Build ok. (Claude)
+- 2026-11-17: skill `reutilizar` (`.claude/skills/reutilizar/SKILL.md`): procurar e reaproveitar
+  antes de criar função, componente ou classe, com a lista do que já existe. (Claude)
+- 2026-11-17: aula 4 de Signal Forms: Novo pedido com `form()` (confirmação obrigatória, observação
+  até 500, entrega não pode ser no passado); cliente e itens conferidos pelo `get pendencia`; botão
+  Enviar não fica mais desabilitado (mostra o que falta). Build ok; não testado no navegador. (Claude, com quem desenvolve)
+- 2026-11-17: aula 3 de Signal Forms: Cadastro de produto com `form()` (nome, SKU, categoria,
+  embalagem obrigatórios; preço > 0; estoque ≥ 0; margem 0–100), erros nos campos e salvar abre a
+  primeira aba com erro. `ErroCampoComponent` aceita número e usa `<span>` (fica dentro de `<label>`).
+  Build ok; não testado no navegador. Próxima: aula 4, Novo pedido. (Claude, com quem desenvolve)
+- 2026-11-17: aula 2 de Signal Forms: CPF/CNPJ conferidos pelos dígitos (`validacoes/documentos.ts`),
+  endereço, CEP, cidade e UF no formulário (desktop e celular), consultas de CEP/CNPJ escrevem direto
+  no `formulario`; removidos `cliente`/`valorAlterado`/`emitirValor` do filho e `atualizarCliente`
+  da página. Build ok; não testado no navegador. (Claude, com quem desenvolve)
+- 2026-11-17: aula 1 de Signal Forms no pré-cadastro: `cliente` e `tipoCadastro` viraram signals,
+  `form()` com regras na página, `ErroCampoComponent` (`components/erro-campo/`), 7 campos com
+  `[formField]` (CPF, nome, CNPJ, razão social, contato, telefone, e-mail) e "Próximo" só avança
+  válido. Novo pedido lê do `ProdutoService` (`computed`) e salva o `clienteId`; pré-cadastro entra
+  no `PreCadastrosStore`. Build ok; não testado no navegador. Aula 2: endereço/CEP/cidade/UF,
+  dígitos de CPF/CNPJ e remover `cliente`/`valorAlterado` do filho. (Claude, com quem desenvolve)
+- 2026-11-17: skill `enxuto` (`.claude/skills/enxuto/SKILL.md`): menos tokens e código limpo em todas as tarefas. (Claude)
 
 - 2026-11-16: skeleton em todas as telas com dados. Todos os stores (`Pedidos`, `Produto`,
   `PreCadastros`, `TabelasPreco`, `Clientes`) carregam com `carregarExemplo()` (800 ms simulados)

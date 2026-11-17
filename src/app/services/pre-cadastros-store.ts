@@ -21,6 +21,22 @@ export class PreCadastrosStore {
         this.alterarStatus(id, 'Rejeitado');
     }
 
+    adicionar(dados: Omit<PreCadastro, 'id' | 'enviadoEm' | 'status'>): PreCadastro {
+        const novoCadastro: PreCadastro = {
+            ...dados,
+            id: this.proximoId(),
+            enviadoEm: `Hoje, ${new Intl.DateTimeFormat('pt-BR', { timeStyle: 'short'}).format(new Date())}`,
+            status: 'Aguardando análise'
+        };
+        this.recurso.set([novoCadastro, ...this.preCadastros()]);
+        return novoCadastro;
+    }
+
+    private proximoId(): number {
+        const ids = this.preCadastros().map(cadastro => cadastro.id);
+        return ids.length > 0 ? Math.max(...ids) + 1 : 1;
+    }
+
     private alterarStatus(id: number, status: StatusPreCadastro): void {
         this.recurso.set(this.preCadastros().map(cadastro => (cadastro.id === id ? { ...cadastro, status } : cadastro)));
     }

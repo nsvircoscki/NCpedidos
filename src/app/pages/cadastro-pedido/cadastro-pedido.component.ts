@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, linkedSignal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
+import { FormField, form, maxLength, required, validate } from '@angular/forms/signals';
+import { ErroCampoComponent } from '../../components/erro-campo/erro-campo.component';
 import { Router, RouterModule } from '@angular/router';
 import { ClienteSelecao } from '../../models/cliente.model';
 import { SeletorClienteComponent } from '../../components/seletor-cliente/seletor-cliente.component';
@@ -8,6 +9,7 @@ import { ClientesStore } from '../../services/clientes-store';
 import { PedidoDetalhado } from '../../models/pedido.model';
 import { PedidosStore } from '../../services/pedidos-store';
 import { PedidoPdfService } from '../../services/pedido-pdf';
+import { ProdutoService } from '../../services/produto';
 
 type PaymentOption = 'À vista' | '28 dias' | '28/56 dias';
 
@@ -23,25 +25,53 @@ interface ProductOption {
 @Component({
   selector: 'app-cadastro-pedido',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SeletorClienteComponent],
+  imports: [CommonModule, ErroCampoComponent, RouterModule, SeletorClienteComponent, FormField],
   templateUrl: './cadastro-pedido.component.html'
 })
 export class CadastroPedidoPageComponent {
   private readonly router = inject(Router);
   private readonly pedidosStore = inject(PedidosStore);
+  private readonly produtoService = inject(ProdutoService);
   private readonly pedidoPdf = inject(PedidoPdfService);
 
-  readonly products: ProductOption[] = [
-    { id: 1, name: 'Tinta Acrílica Premium', description: 'Branco Neve · Fosco', unit: '18 L', price: 289.9, color: '#e8e7df' },
-    { id: 2, name: 'Esmalte Sintético', description: 'Azul Del Rey · Brilhante', unit: '3,6 L', price: 94.5, color: '#3154d8' },
-    { id: 3, name: 'Massa Corrida PVA', description: 'Interior · Fácil aplicação', unit: '25 kg', price: 78.4, color: '#e3c2a2' }
-  ];
+  readonly products = computed<ProductOption[]>(() => {
+  const clienteId = this.clienteSelecionado()?.id;
+  if(!clienteId) {
+    return [];
+  }
+
+  return this.produtoService.produtos().map(produto => ({
+    id: produto.id,
+    name: produto.nome,
+    description: produto.descricao,
+    unit: produto.embalagem,
+    price: produto.precosPorCliente?.[clienteId] ?? produto.preco,
+    color: produto.cor,
+  }));
+});
+
   readonly paymentOptions: PaymentOption[] = ['À vista', '28 dias', '28/56 dias'];
   quantities: Record<number, number> = { 1: 2, 2: 1, 3: 1 };
   payment: PaymentOption = '28 dias';
-  deliveryDate = '';
-  notes = '';
-  confirmed = false;
+  
+  readonly dadosPedido = signal({
+    previsaoEntrega: '', 
+    observacao: '',
+    confirmado: false
+  });
+
+  readonly formulario = form(this.dadosPedido, campo => {
+    required(campo.confirmado, { message: 'Confirme os dados do pedido.' });
+    maxLength(campo.observacao, 500, { message: 'A observação vai até 500 caracteres.' });
+    validate(campo.previsaoEntrega, ({ value }) =>
+      value() && value() < hojeNoFormatoDoInput()
+        ? { kind: 'dataPassada', message: 'A entrega não pode ser no passado.' }
+        : null);
+  });
+
+  tentouEnviar = false;
+
+
   submitted = false;
   pedidoEnviado: PedidoDetalhado | null = null;
 
@@ -53,7 +83,7 @@ export class CadastroPedidoPageComponent {
   }
 
   get subtotal(): number {
-    return this.products.reduce(
+    return this.products().reduce(
       (total, product) => total + product.price * (this.quantities[product.id] ?? 0),
       0
     );
@@ -65,6 +95,12 @@ export class CadastroPedidoPageComponent {
 
   get total(): number {
     return this.subtotal - this.discount;
+  }
+
+  get pendencia(): string {
+    if (!this.clienteSelecionado()) return 'Escolha um cliente.';
+    if (this.itemCount === 0) return 'Adicione pelo menos 1 item.';
+    return '';
   }
 
   changeQuantity(productId: number, change: number): void {
@@ -81,12 +117,18 @@ export class CadastroPedidoPageComponent {
     this.submitted = false;
   }
 
-  submitOrder(): void {
+  submitOrder(evento: Event): void {
+    evento.preventDefault();
+    this.tentouEnviar = true;
+    this.formulario().markAsTouched();
+
     const cliente = this.clienteSelecionado();
-    if (!cliente) return;
+    if (!cliente || this.pendencia || this.formulario().invalid()) return;
+
+    const { previsaoEntrega, observacao } = this.dadosPedido();
 
     this.pedidoEnviado = this.pedidosStore.adicionar({
-      clienteId: 0,
+      clienteId: cliente.id,
       client: cliente.nome,
       initials: cliente.nome.split(' ').slice(0, 2).map(parte => parte[0]).join('').toUpperCase(),
       avatar: 'blue',
@@ -97,9 +139,9 @@ export class CadastroPedidoPageComponent {
       uf: cliente.uf,
       representante: 'Camila Rocha',
       pagamento: this.payment,
-      previsaoEntrega: this.deliveryDate || 'Informado pela empresa',
-      observacao: this.notes.trim(),
-      itens: this.products
+      previsaoEntrega: previsaoEntrega || 'Informado pela empresa',
+      observacao: observacao.trim(),
+      itens: this.products()
         .filter(product => (this.quantities[product.id] ?? 0) > 0)
         .map(product => ({
           nome: product.name,
@@ -130,4 +172,9 @@ export class CadastroPedidoPageComponent {
   fechar(): void {
     this.router.navigate(['/dashboard']);
   }
+}
+
+// en-CA formata como AAAA-MM-DD no fuso de quem usa, igual ao valor do <input type="date">.
+function hojeNoFormatoDoInput(): string {
+  return new Date().toLocaleDateString('en-CA');
 }

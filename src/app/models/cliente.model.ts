@@ -47,3 +47,36 @@ export interface PreCadastro {
     status: StatusPreCadastro;
     prioridade: boolean;
 }
+
+export interface DadosPreCadastro {
+    cpf: string;
+    nomeCompleto: string;
+    atuacao: string;
+    segmento: string;
+    cnpj: string;
+    razaoSocial: string;
+    nomeFantasia: string;
+    responsavel: string;
+    telefone: string;
+    email: string;
+    endereco: string;
+    numero: string;
+    bairro: string;
+    cidade: string;
+    uf: string;
+    cep: string;
+    perfil: {
+        trabalhaComOutrasMarcas: boolean;
+        buscaMelhoresCondicoes: boolean;
+        entregaRecorrente: boolean;
+        interessePreparacao: boolean;
+        novoEmpredimento: boolean;
+        resumoComercial: string;
+        melhorHorario: string;
+    };
+    observacoes: {
+        texto: string;
+        categoria: 'Perfil comercial' | 'Entrega' | 'Pagamento';
+        destacar: boolean;
+    };
+}

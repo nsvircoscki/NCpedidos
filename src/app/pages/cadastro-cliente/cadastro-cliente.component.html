@@ -76,15 +76,14 @@
     </ol>
   </nav>
 
-  @if (etapaAtual === 1 && !tipoCadastro) {
+  @if (etapaAtual === 1 && !tipoCadastro()) {
     <app-escolha-tipo-cliente (escolher)="definirTipo($event)"></app-escolha-tipo-cliente>
   }
 
-  @if (etapaAtual === 1 && tipoCadastro) {
+  @if (etapaAtual === 1 && tipoCadastro(); as tipo) {
     <app-cadastro-cliente
-      [cliente]="cliente"
-      [tipoCadastro]="tipoCadastro"
-      (valorAlterado)="atualizarCliente($event)"
+      [formulario]="formulario"
+      [tipoCadastro]="tipo"
       (proximo)="irParaProximaEtapa()"
       (voltar)="voltarParaEscolha()"
       (cancelar)="cancelar()">
@@ -93,8 +92,8 @@
 
   @if (etapaAtual === 2) {
     <app-observacoes-cliente
-      [observacoes]="cliente.observacoes"
-      [perfil]="cliente.perfil"
+      [observacoes]="cliente().observacoes"
+      [perfil]="cliente().perfil"
       (voltar)="voltarEtapa()"
       (salvar)="salvarCadastro()"
       (cancelar)="cancelar()">

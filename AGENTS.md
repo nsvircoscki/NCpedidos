@@ -35,6 +35,9 @@ ou explicar como fazer algo:
 **Código legível para humanos:** nomes claros em português, funções curtas e poucos
 comentários. Comente só o que não dá para entender lendo o código (o porquê, não o quê).
 
+**Reutilizar antes de criar:** antes de criar função, componente, tipo ou classe CSS, procure se
+já existe algo igual ou parecido e reaproveite (ver skill `reutilizar` em `.claude/skills/`).
+
 Mesmo quando a tarefa for implementar (não ensinar), ao final liste os arquivos alterados
 e o motivo de cada alteração. Responda em português.
 
@@ -100,6 +103,9 @@ e o motivo de cada alteração. Responda em português.
 - **Campos de digitar** (formulários e buscas): sempre com label flutuante, ver o comentário
   `Label input` em `src/styles.scss`. Ícone ou padding diferente: `[--label-input-x:...]` no wrapper.
   Use `autocomplete="off"` (os dados são de clientes, não de quem usa); só o login fica com sugestão.
+- **Formulários**: Signal Forms (`form()` + regras na página). Erro de campo:
+  `<app-erro-campo [campo]="formulario.x" id="erro-x" />` (`components/erro-campo/`), com
+  `aria-describedby="erro-x"` no input. CPF/CNPJ: `validarCPF`/`validarCNPJ` (`validacoes/documentos.ts`).
 - **Filtros no desktop**: `<app-filtro-modal>` + `<app-filtro-chips>` (`components/filtro-modal/`).
 - **Pedidos**: leia e altere sempre pelo `PedidosStore` (`services/pedidos-store.ts`: `pedidos`,
   `buscar`, `adicionar`, `aprovar`, `recusar`), não direto de `data/pedidos.ts`. Assim Pedidos,
@@ -122,6 +128,8 @@ e o motivo de cada alteração. Responda em português.
 - **Dados dos stores chegam depois** (simulam a API): não leia o store uma vez só na criação da
   tela (`campo = store.buscar(id)` fica `undefined` para sempre). Use `computed`/`linkedSignal`,
   ou `effect` + `untracked` para preencher formulário (ver `cadastro-produto`).
+- **Signal Forms, `[formField]`:** não aceita `maxlength`, `required`, `min`... no HTML (erro NG8022).
+  Esses limites viram regras no `form()` (`maxLength(campo.uf, 2)`), que colocam o atributo sozinhas.
 - **Python com heredoc no Git Bash (Windows)** costuma falhar: escreva o script em um arquivo
   e rode depois.
 

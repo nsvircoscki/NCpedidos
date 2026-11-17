@@ -30,7 +30,7 @@
       </section>
     </section>
 
-    <form (ngSubmit)="submitOrder()" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0 lg:max-w-6xl lg:gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
+    <form (submit)="submitOrder($event)" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0 lg:max-w-6xl lg:gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
       <div class="min-w-0 space-y-4">
         <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
           <app-seletor-cliente
@@ -49,7 +49,7 @@
           </div>
 
           <div class="space-y-1">
-            @for (product of products; track product.id) {
+            @for (product of products(); track product.id) {
               <article class="grid min-w-0 grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-2 rounded-[12px] border border-[#e2e8f0] bg-white p-2.5 sm:gap-3 sm:p-3 dark:border-noite-borda dark:bg-noite-card">
                 <div class="relative flex h-14 items-center justify-center rounded-lg bg-slate-50 dark:bg-noite-sutil">
                   <div class="relative h-10 w-8">
@@ -91,15 +91,17 @@
             <span class="mb-2 block text-[10px] font-semibold text-slate-600 dark:text-slate-300">Previsão de entrega</span>
             <div class="relative">
               <button type="button" class="flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 px-3 text-left text-xs text-slate-700 dark:border-noite-borda dark:text-slate-200">
-                <span>{{ deliveryDate || 'Informado pela empresa.' }}</span>
+                <span>{{ dadosPedido().previsaoEntrega || 'Informado pela empresa.' }}</span>
                 <span class="text-xl text-slate-500 dark:text-noite-suave">›</span>
               </button>
-              <input type="date" name="deliveryDate" [(ngModel)]="deliveryDate" aria-label="Previsão de entrega" class="sr-only">
+              <input type="date" [formField]="formulario.previsaoEntrega" aria-label="Previsão de entrega" aria-describedby="erro-entrega" class="sr-only">
             </div>
+            <app-erro-campo [campo]="formulario.previsaoEntrega" id="erro-entrega" />
           </label>
           <div class="label-input label-input--textarea mt-5 [--label-input-x:0.75rem] [--label-input-size:0.875rem]">
             <label class="label-input__label" for="observacao-faturamento">Observação para o faturamento</label>
-            <textarea autocomplete="off" id="observacao-faturamento" name="notes" [(ngModel)]="notes" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="label-input__field w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
+            <textarea autocomplete="off" id="observacao-faturamento" [formField]="formulario.observacao" [attr.aria-invalid]="formulario.observacao().invalid()" aria-describedby="erro-observacao" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="label-input__field w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>
+            <app-erro-campo [campo]="formulario.observacao" id="erro-observacao" />
           </div>
         </section>
       </div>
@@ -116,8 +118,12 @@
             <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Frete</dt><dd class="font-semibold">Grátis</dd></div>
             <div class="flex min-h-20 items-center justify-between"><dt class="flex flex-col"><strong class="text-sm">Total</strong><span class="mt-1 text-[11px] text-slate-500 dark:text-noite-suave">Faturado em {{ payment | lowercase }}</span></dt><dd class="text-xl font-extrabold">{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
           </dl>
-          <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500 dark:bg-noite-sutil dark:text-slate-400"><input type="checkbox" name="confirmed" [(ngModel)]="confirmed" class="mt-0.5 h-4 w-4 accent-[#153860] dark:accent-noite-marca"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
-          <button type="submit" [disabled]="!confirmed" class="botao-acao botao-pop mt-4 flex min-h-12 w-full justify-between! shadow-lg"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
+          <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500 dark:bg-noite-sutil dark:text-slate-400"><input type="checkbox" [formField]="formulario.confirmado" aria-describedby="erro-confirmado" class="mt-0.5 h-4 w-4 accent-[#153860] dark:accent-noite-marca"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
+          <app-erro-campo [campo]="formulario.confirmado" id="erro-confirmado" />
+          <button type="submit" class="botao-acao botao-pop mt-4 flex min-h-12 w-full justify-between! shadow-lg"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
+          @if (tentouEnviar && pendencia) {
+            <p role="alert" class="mt-2 text-xs font-semibold text-red-600 dark:text-red-400">{{ pendencia }}</p>
+          }
           @if (submitted) {
             <div role="status" class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-950">
               <div class="flex items-center gap-3">

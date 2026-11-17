@@ -31,22 +31,25 @@
     @if (tipoCadastro() === 'PF') {
     <div class="label-input mb-[22px]">
       <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="cpf">CPF *</label>
-      <input autocomplete="off" id="cpf" placeholder="000.000.000-00" [value]="cliente['cpf'] || ''" (input)="emitirValor('cpf', $event)"
+      <input autocomplete="off" id="cpf" placeholder="000.000.000-00" [formField]="formulario().cpf" [attr.aria-invalid]="formulario().cpf().touched() && formulario().cpf().invalid()" aria-describedby="erro-cpf"
         class="label-input__field h-12 w-full max-w-[761px] rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().cpf" id="erro-cpf" />
     </div>
 
     <div class="label-input mb-[38px]">
       <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeCompleto">Nome completo</label>
-      <input autocomplete="off" id="nomeCompleto" placeholder="Nome completo do cliente" [value]="cliente['nomeCompleto'] || ''" (input)="emitirValor('nomeCompleto', $event)"
+      <input autocomplete="off" id="nomeCompleto" placeholder="Nome completo do cliente" [formField]="formulario().nomeCompleto" [attr.aria-invalid]="formulario().nomeCompleto().touched() && formulario().nomeCompleto().invalid()" aria-describedby="erro-nome-completo"
         class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-7 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().nomeCompleto" id="erro-nome-completo" />
     </div>
     } @else {
     <div class="mb-[22px]">
       <div class="flex flex-col gap-3 lg:flex-row">
         <div class="label-input w-full">
           <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cnpj">CNPJ</label>
-          <input autocomplete="off" id="cnpj" placeholder="Digite o CNPJ" [value]="cliente['cnpj'] || ''" (input)="emitirValor('cnpj', $event)"
+          <input autocomplete="off" id="cnpj" placeholder="Digite o CNPJ" [formField]="formulario().cnpj" [attr.aria-invalid]="formulario().cnpj().touched() && formulario().cnpj().invalid()" aria-describedby="erro-cnpj"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().cnpj" id="erro-cnpj" />
         </div>
         <button type="button"
           (click)="consultarCNPJ()"
@@ -65,18 +68,19 @@
     </div>
     <div class="label-input mb-[14px]">
       <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="razaoSocial">Razão social</label>
-      <input autocomplete="off" id="razaoSocial" placeholder="Nome empresarial" [value]="cliente['razaoSocial'] || ''" (input)="emitirValor('razaoSocial', $event)"
+      <input autocomplete="off" id="razaoSocial" placeholder="Nome empresarial" [formField]="formulario().razaoSocial" [attr.aria-invalid]="formulario().razaoSocial().touched() && formulario().razaoSocial().invalid()" aria-describedby="erro-razao-social"
         class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().razaoSocial" id="erro-razao-social" />
     </div>
     <div class="mb-[38px] grid gap-5 lg:grid-cols-2">
       <div class="label-input">
         <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="nomeFantasia">Nome fantasia</label>
-        <input autocomplete="off" id="nomeFantasia" placeholder="Como a empresa é conhecida" [value]="cliente['nomeFantasia'] || ''" (input)="emitirValor('nomeFantasia', $event)"
+        <input autocomplete="off" id="nomeFantasia" placeholder="Como a empresa é conhecida" [formField]="formulario().nomeFantasia"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
       </div>
       <div class="label-input label-input--fixo">
         <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="segmento">Segmento</label>
-        <select id="segmento" (change)="emitirValor('segmento', $event)"
+        <select id="segmento" [formField]="formulario().segmento"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca">
           <option value="">Selecione</option>
         </select>
@@ -96,19 +100,22 @@
       <div class="grid grid-cols-2 gap-4 lg:gap-5">
         <div class="label-input">
           <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeResponsavel">Nome do contato *</label>
-          <input autocomplete="off" id="nomeResponsavel" placeholder="Nome completo" [value]="cliente['nomeResponsavel'] || ''" (input)="emitirValor('nomeResponsavel', $event)"
+          <input autocomplete="off" id="nomeResponsavel" placeholder="Nome completo" [formField]="formulario().responsavel" [attr.aria-invalid]="formulario().responsavel().touched() && formulario().responsavel().invalid()" aria-describedby="erro-responsavel"
             class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().responsavel" id="erro-responsavel" />
         </div>
         <div class="label-input">
           <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="telefone">Telefone ou Whatsapp</label>
-          <input autocomplete="off" id="telefone" placeholder="(00) 00000-0000" [value]="cliente['telefone'] || ''" (input)="emitirValor('telefone', $event)"
+          <input autocomplete="off" id="telefone" placeholder="(00) 00000-0000" [formField]="formulario().telefone" [attr.aria-invalid]="formulario().telefone().touched() && formulario().telefone().invalid()" aria-describedby="erro-telefone"
             class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().telefone" id="erro-telefone" />
         </div>
       </div>
       <div class="label-input mt-[18px]">
         <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="email">E-mail</label>
-        <input autocomplete="off" id="email" placeholder="contato@empresa,com.br" [value]="cliente['email'] || ''" (input)="emitirValor('email', $event)"
+        <input autocomplete="off" id="email" placeholder="contato@empresa,com.br" [formField]="formulario().email" [attr.aria-invalid]="formulario().email().touched() && formulario().email().invalid()" aria-describedby="erro-email"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().email" id="erro-email" />
       </div>
     </section>
 
@@ -121,12 +128,13 @@
         </div>
       </header>
 
-      <div class="grid gap-5 lg:grid-cols-[1fr_2fr_1fr]">
+      <div class="grid gap-5 lg:grid-cols-[1fr_2fr_0.7fr_1fr]">
         <div>
           <div class="label-input">
             <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cep">CEP</label>
-            <input autocomplete="off" id="cep" placeholder="00000-000" [value]="cliente['cep'] || ''" (input)="emitirValor('cep', $event)" (blur)="consultarCEP()"
+            <input autocomplete="off" id="cep" placeholder="00000-000" [formField]="formulario().cep" [attr.aria-invalid]="formulario().cep().touched() && formulario().cep().invalid()" aria-describedby="erro-cep" (blur)="consultarCEP()"
             class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().cep" id="erro-cep" />
           </div>
              @if (mensagemErroCEP) {
                 <p class="mt-2 text-xs font-semibold text-red-500">{{ mensagemErroCEP }}</p>
@@ -134,12 +142,18 @@
         </div>
         <div class="label-input">
           <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="endereco">Endereço</label>
-          <input autocomplete="off" id="endereco" placeholder="Rua, avenida e número" [value]="cliente['endereco'] || ''" (input)="emitirValor('endereco', $event)"
+          <input autocomplete="off" id="endereco" placeholder="Rua ou avenida" [formField]="formulario().endereco" [attr.aria-invalid]="formulario().endereco().touched() && formulario().endereco().invalid()" aria-describedby="erro-endereco"
+            class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().endereco" id="erro-endereco" />
+        </div>
+        <div class="label-input">
+          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="numero">Número</label>
+          <input autocomplete="off" id="numero" placeholder="Nº" [formField]="formulario().numero"
             class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
         <div class="label-input">
           <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="bairro">Bairro</label>
-          <input autocomplete="off" id="bairro" placeholder="Digite o bairro" [value]="cliente['bairro'] || ''" (input)="emitirValor('bairro', $event)"
+          <input autocomplete="off" id="bairro" placeholder="Digite o bairro" [formField]="formulario().bairro"
             class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
       </div>
@@ -156,8 +170,8 @@
             type="button"
             (click)="dropdownCidadeAberto = !dropdownCidadeAberto"
             class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca">
-            <span [class.text-[#94a3b8]]="!cliente['cidade']">
-              {{ cliente['cidade'] || 'Buscar e selecionar cidade' }}
+            <span [class.text-[#94a3b8]]="!formulario().cidade().value()">
+              {{ formulario().cidade().value() || 'Buscar e selecionar cidade' }}
             </span>
 
             <svg
@@ -205,12 +219,12 @@
                     type="button"
                     (click)="selecionarCidade(cidade)"
                     class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9] dark:text-noite-texto dark:hover:bg-noite-sutil"
-                    [class.bg-[#f1f5f9]]="cliente['cidade'] === cidade.nome"
-                    [class.font-bold]="cliente['cidade'] === cidade.nome"
-                    [class.dark:bg-noite-sutil]="cliente['cidade'] === cidade.nome">
+                    [class.bg-[#f1f5f9]]="formulario().cidade().value() === cidade.nome"
+                    [class.font-bold]="formulario().cidade().value() === cidade.nome"
+                    [class.dark:bg-noite-sutil]="formulario().cidade().value() === cidade.nome">
                     <span>{{ cidade.nome }} <small class="font-normal text-slate-500 dark:text-noite-suave">- {{ cidade.uf }}</small></span>
                     
-                    @if (cliente['cidade'] === cidade.nome) {
+                    @if (formulario().cidade().value() === cidade.nome) {
                       <span class="text-[#183869] dark:text-noite-marca">✓</span>
                     }
                   </button>
@@ -220,6 +234,7 @@
           </div>
         }
         </div>
+        <app-erro-campo [campo]="formulario().cidade" id="erro-cidade" />
         </div>
 
   <!-- Coluna UF -->
@@ -232,8 +247,8 @@
         type="button"
         (click)="dropdownUfAberto = !dropdownUfAberto"
         class="flex h-[68px] w-full items-center justify-between rounded-[41px] border border-[#e2e8f0] bg-white px-6 text-base text-[#0f172a] outline-none transition-colors focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca">
-        <span [class.text-[#94a3b8]]="!cliente['uf']">
-          {{ cliente['uf'] || 'Selecione a UF' }}
+        <span [class.text-[#94a3b8]]="!formulario().uf().value()">
+          {{ formulario().uf().value() || 'Selecione a UF' }}
         </span>
         
         <svg 
@@ -272,11 +287,11 @@
                   type="button"
                   (click)="selecionarOpcao('uf', uf)"
                   class="flex w-full items-center justify-between rounded-[12px] px-4 py-3 text-left text-sm font-medium text-[#0f172a] transition hover:bg-[#f1f5f9] dark:text-noite-texto dark:hover:bg-noite-sutil"
-                  [class.bg-[#f1f5f9]]="cliente['uf'] === uf"
-                  [class.font-bold]="cliente['uf'] === uf"
-                  [class.dark:bg-noite-sutil]="cliente['uf'] === uf">
+                  [class.bg-[#f1f5f9]]="formulario().uf().value() === uf"
+                  [class.font-bold]="formulario().uf().value() === uf"
+                  [class.dark:bg-noite-sutil]="formulario().uf().value() === uf">
                   {{ uf }}
-                  @if (cliente['uf'] === uf) {
+                  @if (formulario().uf().value() === uf) {
                     <span class="text-[#183869] dark:text-noite-marca">✓</span>
                   }
                 </button>
@@ -286,6 +301,7 @@
         </div>
       }
     </div>
+    <app-erro-campo [campo]="formulario().uf" id="erro-uf" />
   </div>
 
 </div>
@@ -303,25 +319,27 @@
       <div class="grid gap-4">
         <div class="label-input">
           <label class="label-input__label" for="cepMobile">CEP</label>
-          <input autocomplete="off" id="cepMobile" placeholder="00000-000" [value]="cliente['cep'] || ''" (input)="emitirValor('cep', $event)" (blur)="consultarCEP()"
+          <input autocomplete="off" id="cepMobile" placeholder="00000-000" [formField]="formulario().cep" [attr.aria-invalid]="formulario().cep().touched() && formulario().cep().invalid()" aria-describedby="erro-cep-mobile" (blur)="consultarCEP()"
             class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().cep" id="erro-cep-mobile" />
         </div>
 
         <div class="label-input">
           <label class="label-input__label" for="enderecoMobile">Logradouro</label>
-          <input autocomplete="off" id="enderecoMobile" placeholder="Rua, avenida e número" [value]="cliente['endereco'] || ''" (input)="emitirValor('endereco', $event)"
+          <input autocomplete="off" id="enderecoMobile" placeholder="Rua ou avenida" [formField]="formulario().endereco" [attr.aria-invalid]="formulario().endereco().touched() && formulario().endereco().invalid()" aria-describedby="erro-endereco-mobile"
             class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().endereco" id="erro-endereco-mobile" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div class="label-input">
             <label class="label-input__label" for="bairroMobile">Bairro</label>
-            <input autocomplete="off" id="bairroMobile" placeholder="Bairro" [value]="cliente['bairro'] || ''" (input)="emitirValor('bairro', $event)"
+            <input autocomplete="off" id="bairroMobile" placeholder="Bairro" [formField]="formulario().bairro"
               class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
           </div>
           <div class="label-input">
             <label class="label-input__label" for="numeroMobile">Número</label>
-            <input autocomplete="off" id="numeroMobile" placeholder="Nº" [value]="cliente['numero'] || ''" (input)="emitirValor('numero', $event)"
+            <input autocomplete="off" id="numeroMobile" placeholder="Nº" [formField]="formulario().numero"
               class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
           </div>
         </div>
@@ -329,13 +347,15 @@
         <div class="grid grid-cols-[1fr_88px] gap-3">
           <div class="label-input">
             <label class="label-input__label" for="cidadeMobile">Cidade</label>
-            <input autocomplete="off" id="cidadeMobile" placeholder="Cidade" [value]="cliente['cidade'] || ''" (input)="emitirValor('cidade', $event)"
+            <input autocomplete="off" id="cidadeMobile" placeholder="Cidade" [formField]="formulario().cidade" [attr.aria-invalid]="formulario().cidade().touched() && formulario().cidade().invalid()" aria-describedby="erro-cidade-mobile"
               class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().cidade" id="erro-cidade-mobile" />
           </div>
           <div class="label-input">
             <label class="label-input__label" for="ufMobile">UF</label>
-            <input autocomplete="off" id="ufMobile" maxlength="2" placeholder="UF" [value]="cliente['uf'] || ''" (input)="emitirValor('uf', $event)"
+            <input autocomplete="off" id="ufMobile" placeholder="UF" [formField]="formulario().uf" [attr.aria-invalid]="formulario().uf().touched() && formulario().uf().invalid()" aria-describedby="erro-uf-mobile"
               class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3 text-[11px] uppercase text-[#0f172a] outline-none focus:border-[#183869] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
+          <app-erro-campo [campo]="formulario().uf" id="erro-uf-mobile" />
           </div>
         </div>
       </div>

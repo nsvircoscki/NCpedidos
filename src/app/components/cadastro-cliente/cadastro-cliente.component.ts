@@ -1,17 +1,21 @@
-import { Component, EventEmitter, Input, Output, inject, input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, inject, input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TipoCadastro } from '../../models/cliente.model';
+import { FieldTree, FormField } from '@angular/forms/signals';
+import { DadosPreCadastro, TipoCadastro } from '../../models/cliente.model';
+import { ErroCampoComponent } from '../erro-campo/erro-campo.component';
+
+type CampoTexto = Exclude<keyof DadosPreCadastro, 'perfil' | 'observacoes'>;
 
 @Component({
   selector: 'app-cadastro-cliente',
   standalone: true,
+  imports: [FormField, ErroCampoComponent],
   templateUrl: './cadastro-cliente.component.html'
 })
 export class CadastroClienteComponent implements OnInit {
   private http = inject(HttpClient);
 
-  @Input() cliente: Record<string, any> = {};
-  @Output() valorAlterado = new EventEmitter<{ campo: string; valor: string }>();
+  readonly formulario = input.required<FieldTree<DadosPreCadastro>>();
   @Output() proximo = new EventEmitter<void>();
   @Output() voltar = new EventEmitter<void>();
   @Output() cancelar = new EventEmitter<void>();
@@ -21,8 +25,7 @@ export class CadastroClienteComponent implements OnInit {
   mensagemErroCEP = '';
 
   consultarCEP(): void {
-    const cepBruto = (this.cliente?.['cep'] || '') as string;
-    const cep = cepBruto.replace(/\D/g, '');
+    const cep = this.formulario().cep().value().replace(/\D/g, '');
 
     if (cep.length !== 8) {
       this.mensagemErroCEP = 'CEP inválido. Deve conter 8 dígitos.';
@@ -95,8 +98,7 @@ export class CadastroClienteComponent implements OnInit {
   mensagemErroCNPJ = '';
 
   consultarCNPJ(): void {
-    const cnpjBruto = (this.cliente?.['cnpj'] || '') as string;
-    const cnpj = cnpjBruto.replace(/\D/g, '');
+    const cnpj = this.formulario().cnpj().value().replace(/\D/g, '');
 
     if (cnpj.length !== 14) {
       this.mensagemErroCNPJ = 'CNPJ inválido. Digite os 14 dígitos.';
@@ -120,8 +122,10 @@ export class CadastroClienteComponent implements OnInit {
           this.definirValor('cep', dados.cep);
         }
         if (dados.logradouro) {
-          const endereco = dados.numero ? `${dados.logradouro}, ${dados.numero}` : dados.logradouro;
-          this.definirValor('endereco', endereco);
+          this.definirValor('endereco', dados.logradouro);
+        }
+        if (dados.numero) {
+          this.definirValor('numero', dados.numero);
         }
         if (dados.bairro) {
           this.definirValor('bairro', dados.bairro);
@@ -147,26 +151,21 @@ export class CadastroClienteComponent implements OnInit {
     });
   }
 
-  emitirValor(campo: string, event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.definirValor(campo, input.value);
-  }
-
-  private definirValor(campo: string, valor: string): void {
-    if (this.cliente) {
-      this.cliente[campo] = valor; 
-    }
-    this.valorAlterado.emit({ campo, valor });
+  private definirValor(campo: CampoTexto, valor: string): void {
+    this.formulario()[campo]().value.set(valor);
 
     if (campo === 'uf' && valor) {
       this.cidadesFiltradas = this.todasCidades
         .filter(c => c.uf === valor)
         .slice(0, 100);
     }
-    }
+  }
 
     irParaProximaEtapa(): void {
-      this.proximo.emit();
+      this.formulario()().markAsTouched();
+      if (this.formulario()().valid()) {
+        this.proximo.emit();
+      }
     }
 
     cancelarCadastro(): void {
@@ -256,7 +255,7 @@ export class CadastroClienteComponent implements OnInit {
     this.dropdownCidadeAberto = false;
   }
 
-  selecionarOpcao(campo: string, valor: string): void {
+  selecionarOpcao(campo: CampoTexto, valor: string): void {
     this.definirValor(campo, valor);
     this.dropdownUfAberto = false;
 
