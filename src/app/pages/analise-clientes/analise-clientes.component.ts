@@ -1,4 +1,5 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
+import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 import { AmostraTintaComponent } from '../../components/amostra-tinta/amostra-tinta.component';
 import { Component, inject, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -9,13 +10,18 @@ type FiltroStatus = StatusPreCadastro | 'Todos';
 
 @Component({
   selector: 'app-analise-clientes',
-  imports: [EsqueletoListaComponent, RouterLink, AmostraTintaComponent],
+  imports: [EsqueletoListaComponent, ErroCarregamentoComponent, RouterLink, AmostraTintaComponent],
   templateUrl: './analise-clientes.component.html',
 })
 export class AnaliseClientesPageComponent {
   private readonly store = inject(PreCadastrosStore);
   readonly preCadastros = this.store.preCadastros;
   readonly carregando = this.store.carregando;
+  readonly erro = this.store.erro;
+
+  recarregar(): void {
+    this.store.recarregar();
+  }
   readonly filtro = signal<FiltroStatus>('Todos');
 
   readonly filtros: FiltroStatus[] = ['Todos', 'Aguardando análise', 'Em revisão', 'Documentação pendente'];

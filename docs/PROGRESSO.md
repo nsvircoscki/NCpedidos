@@ -44,7 +44,8 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 - Tabela de preços: preços editados se perdem ao sair da tela (falta salvar no `TabelasPrecoStore`).
 - Pré-cadastro: `PreCadastro` só guarda nome, documento, cidade e UF; telefone, e-mail e perfil se
   perdem. Perguntar ao outro dev (anotar em `docs/API.md`).
-- Preparar a API: `environment`, interceptor, "Tentar de novo" nas outras telas.
+- API: só o pré-cadastro grava com POST; pedidos, aprovação e tabela de preços ainda gravam só em
+  memória. (Chave testada em 18/11: com `usarDadosExemplo: false` as telas mostram "Tentar novamente".)
 - Revisar o modo escuro tela por tela no navegador e ajustar cores que ficaram estranhas.
 
 - Testar no navegador o modal de filtros compartilhado nas 4 telas (pop-in, gelatina, chips, contador).
@@ -58,6 +59,16 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Histórico
 
+- 2026-11-18: aula 8: `carregarExemplo` virou `carregarDados(caminho, dadosExemplo)`
+  (`services/carregar-dados.ts`): com `usarDadosExemplo` simula, senão `httpResource`. Os 5 stores
+  usam os caminhos do `docs/API.md` (`/tabelas-preco` provisório, pergunta 7). `PreCadastrosStore.adicionar`
+  é `async` e faz `POST /pre-cadastros`; o pré-cadastro mostra erro se o envio falhar. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-17: aulas 5 a 7 da ligação com a API: `src/environments/` (`apiUrl`, `usarDadosExemplo`),
+  interceptors `urlApiInterceptor` e `errosApiInterceptor` (`src/app/interceptors/`, 401 → login) e
+  `ErroCarregamentoComponent` com "Tentar novamente" em clientes, pedidos, dashboard, aprovação,
+  produtos, tabela de preços e análise de clientes; todos os stores expõem `erro` e `recarregar()`.
+  Build ok. Próxima: aula 8, `httpResource` e a chave dados de exemplo ↔ API. (Claude, com quem desenvolve)
 - 2026-11-17: pré-cadastro: campo Número também no desktop; consulta de CNPJ preenche o número no
   campo próprio (antes ia junto do endereço). Build ok. (Claude)
 - 2026-11-17: skill `reutilizar` (`.claude/skills/reutilizar/SKILL.md`): procurar e reaproveitar

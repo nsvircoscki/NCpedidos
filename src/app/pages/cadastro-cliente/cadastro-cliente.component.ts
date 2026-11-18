@@ -22,6 +22,7 @@ export class CadastroClientePageComponent {
     private router = inject(Router);
     private preCadastrosStore = inject(PreCadastrosStore);
     etapaAtual = 1;
+    erroAoSalvar = '';
 
     readonly tipoCadastro = signal<TipoCadastro | null>(null);
 
@@ -124,21 +125,25 @@ export class CadastroClientePageComponent {
         this.router.navigate(['/clientes']);
     }
 
-    salvarCadastro(): void {
+    async salvarCadastro(): Promise<void> {
         const tipo = this.tipoCadastro();
         if (!tipo) return;
 
         const { cpf, cnpj, nomeCompleto, razaoSocial, cidade, uf, observacoes } = this.cliente();
         const PJ = tipo === 'PJ';
 
-        this.preCadastrosStore.adicionar({
-            nome: PJ ? razaoSocial : nomeCompleto,
-            documento: PJ ? `CNPJ ${cnpj}` : `CPF ${cpf}`,
-            representante: 'Camila Moreira',
-            cidade,
-            uf,
-            prioridade: observacoes.destacar,
-        });
-        this.router.navigate(['/clientes/analise']);
+        try {
+            await this.preCadastrosStore.adicionar({
+                nome: PJ ? razaoSocial : nomeCompleto,
+                documento: PJ ? `CNPJ ${cnpj}` : `CPF ${cpf}`,
+                representante: 'Camila Moreira',
+                cidade,
+                uf,
+                prioridade: observacoes.destacar,
+            });
+            this.router.navigate(['/clientes/analise']);
+        } catch {
+            this.erroAoSalvar = 'Não foi possível enviar o cadastro. Tente novamente.';
+        }
     }
 }

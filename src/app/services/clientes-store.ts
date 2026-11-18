@@ -1,11 +1,11 @@
 import { Service, computed } from '@angular/core';
 import { CLIENTES_EXEMPLO } from '../data/clientes';
 import { Cliente, ClienteSelecao } from '../models/cliente.model';
-import { carregarExemplo } from './carregar-exemplo';
+import { carregarDados } from './carregar-dados';
 
 @Service()
 export class ClientesStore {
-    private readonly recurso = carregarExemplo(CLIENTES_EXEMPLO);
+    private readonly recurso = carregarDados('/clientes', CLIENTES_EXEMPLO);
 
     readonly clientes = computed(() => (this.recurso.hasValue() ? this.recurso.value() : []));
     readonly carregando = this.recurso.isLoading;

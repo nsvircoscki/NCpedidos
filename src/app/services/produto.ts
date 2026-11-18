@@ -1,13 +1,18 @@
 import { Service, computed } from '@angular/core';
 import { PRODUTOS_EXEMPLO } from '../data/produtos';
 import { Produto } from '../models/produto.model';
-import { carregarExemplo } from './carregar-exemplo';
+import { carregarDados } from './carregar-dados';
 
 @Service()
 export class ProdutoService {
-  private readonly recurso = carregarExemplo(PRODUTOS_EXEMPLO);
+  private readonly recurso = carregarDados('/produtos', PRODUTOS_EXEMPLO);
   readonly produtos = computed(() => (this.recurso.hasValue() ? this.recurso.value() : []));
   readonly carregando = this.recurso.isLoading;
+  readonly erro = this.recurso.error;
+
+  recarregar(): void {
+    this.recurso.reload();
+  }
 
   listar(): Produto[] {
     return this.produtos();

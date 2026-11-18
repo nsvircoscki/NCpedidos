@@ -1,6 +1,7 @@
 import { AmostraTintaComponent } from '../../components/amostra-tinta/amostra-tinta.component';
 import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
+import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { PedidosStore } from '../../services/pedidos-store';
@@ -19,7 +20,7 @@ interface Amostra {
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [CommonModule, RouterModule, NgmMotionDirective, AmostraTintaComponent, EsqueletoListaComponent],
+    imports: [CommonModule, RouterModule, NgmMotionDirective, AmostraTintaComponent, EsqueletoListaComponent, ErroCarregamentoComponent],
     templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
@@ -97,6 +98,11 @@ export class DashboardComponent {
     private readonly pedidosStore = inject(PedidosStore);
     private readonly pedidos = this.pedidosStore.pedidos;
     readonly carregando = this.pedidosStore.carregando;
+    readonly erro = this.pedidosStore.erro;
+
+    recarregar(): void {
+        this.pedidosStore.recarregar();
+    }
 
     readonly pedidosRecentes = computed(() => this.pedidos().slice(0, 5));
     dataAtual = new Date();

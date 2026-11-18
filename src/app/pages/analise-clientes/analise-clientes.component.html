@@ -61,6 +61,8 @@
     <ul>
       @if (carregando()) {
         <li><app-esqueleto-lista texto="Carregando pré-cadastros..." /></li>
+      } @else if (erro()) {
+        <li><app-erro-carregamento texto="Não foi possível carregar os pré-cadastros." (tentarDeNovo)="recarregar()" /></li>
       } @else {
       @for (cadastro of listaFiltrada(); track cadastro.id) {
         <li class="border-t border-slate-100 first:border-t-0 lg:first:border-t-0 dark:border-noite-borda">

@@ -95,10 +95,12 @@ e o motivo de cada alteração. Responda em português.
 - **Dados**: cada área tem um store em `services/` (`ClientesStore`, `PreCadastrosStore`,
   `TabelasPrecoStore`, `ProdutoService`, `PedidosStore`); as telas leem dele, nunca de `data/`.
   O contrato esperado da API está em `docs/API.md`.
-- **Carregando**: todos os stores carregam com `carregarExemplo()` (`services/carregar-exemplo.ts`,
-  simula 800 ms de rede com `resource()`) e expõem `carregando`. Nas telas:
+- **Carregando**: todos os stores carregam com `carregarDados('/caminho', DADOS_EXEMPLO)`
+  (`services/carregar-dados.ts`): com `environment.usarDadosExemplo` simula 800 ms com `resource()`,
+  senão busca na API com `httpResource`. Expõem `carregando`, `erro` e `recarregar()`. Nas telas:
   `@if (carregando()) { <app-esqueleto-lista texto="..." [linhas]="n" /> } @else { ... }`
-  (`formato="grade"` para cartões, como em Produtos). Erro e "Tentar de novo": ver tela de Clientes.
+  (`formato="grade"` para cartões, como em Produtos). Erro: `} @else if (erro()) {
+  <app-erro-carregamento texto="..." (tentarDeNovo)="recarregar()" />` (`components/erro-carregamento/`).
 - **Cartões de número (KPI)**: `<app-amostra-tinta>` (`components/amostra-tinta/`), com as cores `tinta-*`.
 - **Campos de digitar** (formulários e buscas): sempre com label flutuante, ver o comentário
   `Label input` em `src/styles.scss`. Ícone ou padding diferente: `[--label-input-x:...]` no wrapper.

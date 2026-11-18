@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ClientesStore } from '../../services/clientes-store';
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
+import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 
 @Component({
   selector: 'app-clientes-page',
@@ -18,7 +19,8 @@ import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esquel
     ClientesTableComponent,
     RouterModule,
     NgmMotionDirective,
-    EsqueletoListaComponent
+    EsqueletoListaComponent,
+    ErroCarregamentoComponent
   ],
   templateUrl: './clientes.component.html'
 })

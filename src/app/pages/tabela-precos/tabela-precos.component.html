@@ -50,6 +50,8 @@
       <div class="grid grid-cols-2 gap-4 px-4 md:grid-cols-3 xl:grid-cols-4">
         @if (carregando()) {
           <app-esqueleto-lista texto="Carregando tabela de preços..." />
+        } @else if (erro()) {
+          <app-erro-carregamento texto="Não foi possível carregar a tabela de preços." (tentarDeNovo)="recarregar()" />
         } @else {
         @for (item of itensDaPagina; track item.id) {
           <article class="overflow-hidden rounded-[14px] border bg-white transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)] dark:bg-noite-card"
@@ -337,6 +339,8 @@
         <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
           @if (carregando()) {
             <app-esqueleto-lista texto="Carregando tabela de preços..." />
+          } @else if (erro()) {
+            <app-erro-carregamento texto="Não foi possível carregar a tabela de preços." (tentarDeNovo)="recarregar()" />
           } @else {
           @for (item of itensDaPagina; track item.id) {
             <article class="overflow-hidden rounded-[14px] border border-[#e3e9ee] bg-white transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(21,61,101,0.18)] dark:border-noite-borda dark:bg-noite-card">

@@ -50,3 +50,5 @@ Os tipos citados estão em `src/app/models/`.
    Recusado, Faturado / Aguardando análise, Em revisão, Documentação pendente, Aprovado, Recusado)
 5. Quem calcula total, desconto e volumes do pedido: front ou backend?
 6. Login (fica por último): como vai ser a autenticação (token, sessão)?
+7. Tabela de preços: o front carrega todas de uma vez (`GET /tabelas-preco`, provisório).
+   A API vai ter essa rota ou só `/clientes/:id/tabela-precos`?

@@ -27,7 +27,7 @@ Código novo só quando nada do projeto resolve. Repetir lógica é o que mais s
   `filtro-modal` + `filtro-chips`, `erro-campo` (erro de Signal Forms).
 - **Stores:** `ClientesStore` (`paraSelecao`), `PreCadastrosStore`, `TabelasPrecoStore`,
   `ProdutoService`, `PedidosStore`. Ler e alterar dados sempre por eles.
-- **Funções:** `carregarExemplo()` (`services/carregar-exemplo.ts`), `validarCPF`/`validarCNPJ`
+- **Funções:** `carregarDados(caminho, dadosExemplo)` (`services/carregar-dados.ts`), `validarCPF`/`validarCNPJ`
   (`validacoes/documentos.ts`), `PedidoPdfService` (`enviarAoCliente`, `baixar`).
 - **Classes CSS:** `cartao`, `botao-acao`, `botao-acao-secundario`, `botao-pop`, `label-input`,
   `status-pill`, `sobretitulo`, `titulo-pagina`, `subtitulo-pagina`, `titulo-secao`, `titulo-cartao`.

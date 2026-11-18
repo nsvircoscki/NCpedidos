@@ -1,4 +1,5 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
+import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { CommonModule } from '@angular/common';
@@ -14,7 +15,7 @@ import { TabelasPrecoStore } from '../../services/tabelas-preco-store';
 @Component({
   selector: 'app-tabela-precos-page',
   standalone: true,
-  imports: [EsqueletoListaComponent, FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, NgmMotionDirective],
+  imports: [EsqueletoListaComponent, ErroCarregamentoComponent, FiltroModalComponent, FiltroChipsComponent, CommonModule, FormsModule, NgmMotionDirective],
   templateUrl: './tabela-precos.component.html'
 })
 export class TabelaPrecosPageComponent {
@@ -26,6 +27,11 @@ export class TabelaPrecosPageComponent {
   clienteId = Number(this.route.snapshot.paramMap.get('id'));
   clienteNome = computed(() => this.clientesStore.buscar(this.clienteId)?.nome ?? 'Cliente');
   readonly carregando = this.tabelasStore.carregando;
+  readonly erro = this.tabelasStore.erro;
+
+  recarregar(): void {
+    this.tabelasStore.recarregar();
+  }
   readonly itens = linkedSignal(() => this.tabelasStore.doCliente(this.clienteId));
   termoBusca = '';
   categoriasSelecionadas: string[] = [];

@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { PedidoAcompanhamentoComponent } from '../pedido-enviado/pedido-acompanhamento.component';
-
+import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 
 
 
@@ -23,6 +23,7 @@ import { PedidoAcompanhamentoComponent } from '../pedido-enviado/pedido-acompanh
         RouterLink,
         NgmMotionDirective,
         PedidoAcompanhamentoComponent,
+        ErroCarregamentoComponent,
     ],
     templateUrl: './pedidos.component.html',
 })
@@ -82,6 +83,11 @@ export class PedidosComponent implements AfterViewInit {
     private readonly pedidosStore = inject(PedidosStore);
     private readonly orders = this.pedidosStore.pedidos;
     readonly carregando = this.pedidosStore.carregando;
+    readonly erro = this.pedidosStore.erro;
+
+    recarregar(): void {
+        this.pedidosStore.recarregar();
+    }
 
     // Método (e não computed) porque search/statusSelecionados não são signals:
     // um computed nunca recalcularia ao digitar ou trocar o status.

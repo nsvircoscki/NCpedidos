@@ -69,11 +69,13 @@
         </div>
         @if (carregando()) {
           <app-esqueleto-lista texto="Carregando pedidos..." [linhas]="6" />
+        } @else if (erro()) {
+          <app-erro-carregamento texto="Não foi possível carregar os pedidos." (tentarDeNovo)="recarregar()" />
         } @else {
         @for (order of filteredOrders(); track order.id; let last = $last) {
           <button
             type="button"
-            [routerLink]="['/pedidos', order.id]"
+            [routerLink]="['/ pedidos', order.id]"
             class="grid min-h-[72px] w-full min-w-[950px] grid-cols-[auto_minmax(220px,1.4fr)_minmax(110px,.7fr)_minmax(100px,.6fr)_minmax(130px,.8fr)_minmax(120px,.7fr)] items-center border-b border-slate-100 text-left transition-colors hover:bg-slate-50 dark:hover:bg-noite-sutil"
             [class.border-b]="!last"
             [class.border-[#dbe4ed]]="!last"
@@ -313,6 +315,8 @@
         <section class="cartao mt-3 overflow-hidden border border-[#e2e8f0] dark:border-noite-borda">
           @if (carregando()) {
             <app-esqueleto-lista texto="Carregando pedidos..." [linhas]="4" />
+          } @else if (erro()) {
+            <app-erro-carregamento texto="Não foi possível carregar os pedidos." (tentarDeNovo)="recarregar()" />
           } @else {
           @for (order of filteredOrders(); track order.id; let last = $last) {
             <button

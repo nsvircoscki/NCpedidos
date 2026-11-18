@@ -28,10 +28,8 @@
       @if (carregando()) {
         <app-esqueleto-lista texto="Carregando clientes..." />
       } @else if (erro()) {
-        <div class="px-5 py-10 text-center" role="alert">
-          <p class="text-sm text-slate-500 dark:text-noite-suave">Não foi possível carregar os clientes.</p>
-          <button type="button" (click)="recarregar()" class="botao-acao-secundario mt-3 inline-flex">Tentar de novo</button>
-        </div>
+        <app-erro-carregamento texto="Não foi possível carregar os clientes."
+        (tentarDeNovo)="recarregar()" />
       } @else {
         <app-clientes-table [clientes]="clientes()"></app-clientes-table>
       }
@@ -79,10 +77,7 @@
         @if (carregando()) {
           <app-esqueleto-lista texto="Carregando clientes..." [linhas]="4" />
         } @else if (erro()) {
-          <div class="px-5 py-10 text-center" role="alert">
-            <p class="text-sm text-slate-500 dark:text-noite-suave">Não foi possível carregar os clientes.</p>
-            <button type="button" (click)="recarregar()" class="botao-acao-secundario mt-3 inline-flex">Tentar de novo</button>
-          </div>
+          <app-erro-carregamento texto="Não foi possível carregar os clientes." (tentarDeNovo)="recarregar()" />
         } @else {
           @for (cliente of clientesMobile; track cliente.id) {
             <button

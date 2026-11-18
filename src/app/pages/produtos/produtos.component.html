@@ -258,6 +258,8 @@
         <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           @if (carregando()) {
             <div class="col-span-full"><app-esqueleto-lista texto="Carregando produtos..." formato="grade" [linhas]="8" /></div>
+          } @else if (erro()) {
+            <div class="col-span-full"><app-erro-carregamento texto="Não foi possível carregar os produtos." (tentarDeNovo)="recarregar()" /></div>
           } @else {
           @for (produto of produtosMobile; track produto.id) {
             <a
