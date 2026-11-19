@@ -45,3 +45,6 @@ Thumbs.db
 
 # Configuração local do Claude Code (pessoal)
 .claude/settings.local.json
+
+# Regras dos agentes (local, com o modo de ensino)
+AGENTS.md

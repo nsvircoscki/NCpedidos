@@ -41,11 +41,11 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Pendências
 
-- Commit das aulas 9 e 10 (as aulas 5 a 8 já foram commitadas).
+- Commit das etapas 9 e 10 (as etapas 5 a 8 já foram commitadas).
 - Testar no navegador os 3 formulários com Signal Forms (pré-cadastro, cadastro de produto, Novo pedido).
 - Pré-cadastro: `PreCadastro` só guarda nome, documento, cidade e UF; telefone, e-mail e perfil se
   perdem. Perguntar ao outro dev (anotar em `docs/API.md`).
-- Testar no navegador a aula 9: enviar pedido, aprovar/recusar pedido e pré-cadastro, salvar preço
+- Testar no navegador a etapa 9: enviar pedido, aprovar/recusar pedido e pré-cadastro, salvar preço
   (sair e voltar da tela). Na tabela de preços, salvar um item desfaz edições não salvas de outros
   (o `itens` é `linkedSignal` do store).
 - Quando a API existir: testar as gravações de verdade (com `usarDadosExemplo: false` as listas
@@ -61,7 +61,7 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Histórico
 
-- 2026-11-19: aulas 11 e 12, login: `SessaoService` (signal + localStorage), tela de login com Signal
+- 2026-11-19: etapas 11 e 12, login: `SessaoService` (signal + localStorage), tela de login com Signal
   Forms, guards nas rotas, `tokenInterceptor`, 401 encerra a sessão, iniciais e "Sair" na sidebar,
   iniciais no header do celular e representante do pedido/pré-cadastro vindo da sessão. Testado no
   navegador. (Claude, com quem desenvolve)
@@ -71,46 +71,46 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
   cartões com `dark:border-noite-fundo` (antes aparecia uma faixa cinza) e lata com "NC" (o "CORA" não
   cabia). Menu de baixo do celular: item ativo com cor no escuro e texto de 11px. (Claude, com quem desenvolve)
 
-- 2026-11-18: aula 10: `ProdutoService.adicionar` (POST) e `atualizar` (PUT) são `async`; o
+- 2026-11-18: etapa 10: `ProdutoService.adicionar` (POST) e `atualizar` (PUT) são `async`; o
   cadastro de produto espera o envio e mostra erro se falhar. Todas as telas leem e gravam pelos
   stores. Build ok. (Claude, com quem desenvolve)
 
-- 2026-11-18: aula 9: gravação com a API ligada (`async` + `firstValueFrom`): `PedidosStore`
+- 2026-11-18: etapa 9: gravação com a API ligada (`async` + `firstValueFrom`): `PedidosStore`
   (POST pedido, aprovar, recusar com motivo), `PreCadastrosStore` (aprovar, recusar) e
   `TabelasPrecoStore.salvarPreco` (PUT; o botão "Salvar preço" agora funciona). Novo pedido,
   aprovação de pedido, análise de cliente e tabela de preços mostram erro se o envio falhar. Build ok.
   (Claude, com quem desenvolve)
 
-- 2026-11-18: aula 8: `carregarExemplo` virou `carregarDados(caminho, dadosExemplo)`
+- 2026-11-18: etapa 8: `carregarExemplo` virou `carregarDados(caminho, dadosExemplo)`
   (`services/carregar-dados.ts`): com `usarDadosExemplo` simula, senão `httpResource`. Os 5 stores
   usam os caminhos do `docs/API.md` (`/tabelas-preco` provisório, pergunta 7). `PreCadastrosStore.adicionar`
   é `async` e faz `POST /pre-cadastros`; o pré-cadastro mostra erro se o envio falhar. Build ok. (Claude, com quem desenvolve)
 
-- 2026-11-17: aulas 5 a 7 da ligação com a API: `src/environments/` (`apiUrl`, `usarDadosExemplo`),
+- 2026-11-17: etapas 5 a 7 da ligação com a API: `src/environments/` (`apiUrl`, `usarDadosExemplo`),
   interceptors `urlApiInterceptor` e `errosApiInterceptor` (`src/app/interceptors/`, 401 → login) e
   `ErroCarregamentoComponent` com "Tentar novamente" em clientes, pedidos, dashboard, aprovação,
   produtos, tabela de preços e análise de clientes; todos os stores expõem `erro` e `recarregar()`.
-  Build ok. Próxima: aula 8, `httpResource` e a chave dados de exemplo ↔ API. (Claude, com quem desenvolve)
+  Build ok. Próxima: etapa 8, `httpResource` e a chave dados de exemplo ↔ API. (Claude, com quem desenvolve)
 - 2026-11-17: pré-cadastro: campo Número também no desktop; consulta de CNPJ preenche o número no
   campo próprio (antes ia junto do endereço). Build ok. (Claude)
 - 2026-11-17: skill `reutilizar` (`.claude/skills/reutilizar/SKILL.md`): procurar e reaproveitar
   antes de criar função, componente ou classe, com a lista do que já existe. (Claude)
-- 2026-11-17: aula 4 de Signal Forms: Novo pedido com `form()` (confirmação obrigatória, observação
+- 2026-11-17: etapa 4 de Signal Forms: Novo pedido com `form()` (confirmação obrigatória, observação
   até 500, entrega não pode ser no passado); cliente e itens conferidos pelo `get pendencia`; botão
   Enviar não fica mais desabilitado (mostra o que falta). Build ok; não testado no navegador. (Claude, com quem desenvolve)
-- 2026-11-17: aula 3 de Signal Forms: Cadastro de produto com `form()` (nome, SKU, categoria,
+- 2026-11-17: etapa 3 de Signal Forms: Cadastro de produto com `form()` (nome, SKU, categoria,
   embalagem obrigatórios; preço > 0; estoque ≥ 0; margem 0–100), erros nos campos e salvar abre a
   primeira aba com erro. `ErroCampoComponent` aceita número e usa `<span>` (fica dentro de `<label>`).
-  Build ok; não testado no navegador. Próxima: aula 4, Novo pedido. (Claude, com quem desenvolve)
-- 2026-11-17: aula 2 de Signal Forms: CPF/CNPJ conferidos pelos dígitos (`validacoes/documentos.ts`),
+  Build ok; não testado no navegador. Próxima: etapa 4, Novo pedido. (Claude, com quem desenvolve)
+- 2026-11-17: etapa 2 de Signal Forms: CPF/CNPJ conferidos pelos dígitos (`validacoes/documentos.ts`),
   endereço, CEP, cidade e UF no formulário (desktop e celular), consultas de CEP/CNPJ escrevem direto
   no `formulario`; removidos `cliente`/`valorAlterado`/`emitirValor` do filho e `atualizarCliente`
   da página. Build ok; não testado no navegador. (Claude, com quem desenvolve)
-- 2026-11-17: aula 1 de Signal Forms no pré-cadastro: `cliente` e `tipoCadastro` viraram signals,
+- 2026-11-17: etapa 1 de Signal Forms no pré-cadastro: `cliente` e `tipoCadastro` viraram signals,
   `form()` com regras na página, `ErroCampoComponent` (`components/erro-campo/`), 7 campos com
   `[formField]` (CPF, nome, CNPJ, razão social, contato, telefone, e-mail) e "Próximo" só avança
   válido. Novo pedido lê do `ProdutoService` (`computed`) e salva o `clienteId`; pré-cadastro entra
-  no `PreCadastrosStore`. Build ok; não testado no navegador. Aula 2: endereço/CEP/cidade/UF,
+  no `PreCadastrosStore`. Build ok; não testado no navegador. Etapa 2: endereço/CEP/cidade/UF,
   dígitos de CPF/CNPJ e remover `cliente`/`valorAlterado` do filho. (Claude, com quem desenvolve)
 - 2026-11-17: skill `enxuto` (`.claude/skills/enxuto/SKILL.md`): menos tokens e código limpo em todas as tarefas. (Claude)
 
@@ -122,22 +122,22 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
   store na criação passaram para `computed`/`linkedSignal`/`effect`. Testado no Edge headless:
   skeleton aparece em 300 ms e os dados chegam em todas as 13 rotas. (Claude)
 
-- 2026-11-16: aulas 6 a 9: `ProdutoService` com signal e mock em `data/produtos.ts`; `docs/API.md`
+- 2026-11-16: etapas 6 a 9: `ProdutoService` com signal e mock em `data/produtos.ts`; `docs/API.md`
   (contrato da API e perguntas para o outro dev); `ClientesStore` com `resource()` simulando 800 ms
   de rede, tela de Clientes com skeleton (`EsqueletoListaComponent`), erro e "Tentar de novo";
   Novo pedido (`linkedSignal`) e Tabela de preços (`computed`) acompanham a lista carregada.
   Removida a cópia duplicada `models/pre-cadastros-store.ts`. Build ok; skeleton não verificado no navegador. (Claude, com quem desenvolve)
 
-- 2026-11-16: aulas 3 a 5: clientes dos pedidos vêm do `CLIENTES_EXEMPLO` (`montarPedido` busca pelo
+- 2026-11-16: etapas 3 a 5: clientes dos pedidos vêm do `CLIENTES_EXEMPLO` (`montarPedido` busca pelo
   `clienteId`; `ClienteOption` e código morto da tela de Pedidos removidos); `PreCadastrosStore`
   com aprovar/recusar refletindo na lista; `TabelasPrecoStore` (`data/tabelas-preco.ts`) e nome do
   cliente da tabela vindo do `ClientesStore`. Pendente para o contrato da API: preço por cliente
   existe em dois lugares (tabela de preços e `precosPorCliente`) com valores diferentes. Build ok. (Claude, com quem desenvolve)
 
-- 2026-11-16: aulas 1 e 2 de preparação para o backend: `ClientesStore` (`services/clientes-store.ts`)
+- 2026-11-16: etapas 1 e 2 de preparação para o backend: `ClientesStore` (`services/clientes-store.ts`)
   com a lista única de clientes (`CLIENTES_EXEMPLO`) e `paraSelecao` (computed) para o seletor.
   `CLIENTES_SELECAO` removido; Produtos e Novo pedido leem do store; ids de cliente numéricos
-  (inclusive `precosPorCliente`). Próxima aula: clientes da tela de Pedidos e `clienteId` dos
+  (inclusive `precosPorCliente`). Próxima etapa: clientes da tela de Pedidos e `clienteId` dos
   pedidos de exemplo, que não batem com os nomes. Build ok. (Claude, com quem desenvolve)
 
 - 2026-11-12: README reescrito (funcionalidades atuais, como rodar, estrutura de pastas). (Claude)
