@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { sessaoGuard, visitanteGuard } from './guards/sessao.guard';
 
 /**
  * Padrão das rotas de cada recurso:
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     {
         path: 'login',
+        canActivate: [visitanteGuard],
         loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent),
     },
     {
@@ -26,6 +28,7 @@ export const routes: Routes = [
         // Cada página abaixo é desenhada dentro do <router-outlet> dele.
         path: '',
         loadComponent: () => import('./layout/layout.component').then(m => m.LayoutComponent),
+        canActivate: [sessaoGuard],
         children: [
             {
                 path: 'dashboard',

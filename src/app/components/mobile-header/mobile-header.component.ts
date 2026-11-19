@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { TemaService } from '../../services/tema';
+import { SessaoService } from '../../services/sessao';
 
 @Component({
     selector: 'app-mobile-header',
@@ -7,4 +8,5 @@ import { TemaService } from '../../services/tema';
 })
 export class MobileHeaderComponent {
     readonly tema = inject(TemaService);
+    readonly iniciais = inject(SessaoService).iniciais;
 }

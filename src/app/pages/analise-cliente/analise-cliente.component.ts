@@ -1,6 +1,6 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PreCadastrosStore } from '../../services/pre-cadastros-store';
@@ -50,6 +50,8 @@ export class AnaliseClientePageComponent {
     ];
   });
 
+  readonly erroAoSalvar = signal('');
+
   statusLabel(): string {
     switch (this.status()) {
       case 'approved':
@@ -61,11 +63,20 @@ export class AnaliseClientePageComponent {
     }
   }
 
-  aprovar(): void {
-    this.store.aprovar(this.id);
+  async aprovar(): Promise<void> {
+    await this.tentar(() => this.store.aprovar(this.id));
   }
 
-  recusar(): void {
-    this.store.recusar(this.id);
+  async recusar(): Promise<void> {
+    await this.tentar(() => this.store.recusar(this.id));
+  }
+
+  private async tentar(acao: () => Promise<void>): Promise<void> {
+    try {
+      await acao();
+      this.erroAoSalvar.set('');
+    } catch {
+      this.erroAoSalvar.set('Ocorreu um erro ao salvar. Tente novamente.');
+    }
   }
 }

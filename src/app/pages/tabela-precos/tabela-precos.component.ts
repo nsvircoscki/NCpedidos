@@ -3,7 +3,7 @@ import { ErroCarregamentoComponent } from '../../components/erro-carregamento/er
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, linkedSignal } from '@angular/core';
+import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemTabelaPreco } from '../../models/tabela-preco.model';
@@ -23,6 +23,7 @@ export class TabelaPrecosPageComponent {
   private readonly router = inject(Router);
   private readonly clientesStore = inject(ClientesStore);
   private readonly tabelasStore = inject(TabelasPrecoStore);
+  readonly mensagemPreco = signal('');
 
   clienteId = Number(this.route.snapshot.paramMap.get('id'));
   clienteNome = computed(() => this.clientesStore.buscar(this.clienteId)?.nome ?? 'Cliente');
@@ -45,6 +46,15 @@ export class TabelaPrecosPageComponent {
 
   voltar(): void {
     this.router.navigate(['/clientes']);
+  }
+
+  async salvarPreco(item: ItemTabelaPreco): Promise<void> {
+    try {
+      await this.tabelasStore.salvarPreco(this.clienteId, item.id, item.preco);
+      this.mensagemPreco.set(`Preço de ${item.produto} salvo.`);
+    } catch {
+      this.mensagemPreco.set('Não foi possível salvar o preço. Tente novamente.');
+    }
   }
 
   get categorias(): string[] {

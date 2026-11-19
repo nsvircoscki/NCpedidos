@@ -80,8 +80,15 @@
         </div>
 
         <div class="flex items-center gap-2.5 text-sm font-extrabold text-slate-600 dark:text-slate-300" [class.justify-center]="minimizada">
-            <div class="grid h-9 w-9 place-items-center rounded-full bg-blue-600 font-bold text-white">U</div>
-            <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.opacity-100]="!minimizada">Usuário Teste</span>
+            <div class="grid h-9 w-9 place-items-center rounded-full bg-blue-600 font-bold text-white">{{ iniciais()}}</div>
+            <span class="overflow-hidden whitespace-nowrap transition-all duration-300" [class.w-0]="minimizada" [class.opacity-0]="minimizada" [class.opacity-100]="!minimizada">{{ usuario()?.nome ?? 'Usuário' }}</span>
         </div>
+        <button type ="button" (click)="sair()"
+            class="mt-3 flex h-9 items-center gap-2.5 rounded-full text-sm font-extrabold text-slate-500 transition hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+            [class.justify-center]="minimizada">
+            <svg aria-hidden="true" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M!%17l5-5-5-5M20 12H9M12 19H5a1 1 0 01-1-1V6a1 1 0 011-1h7" /></svg>
+            <span [class.sr-only]="minimizada">Sair</span>
+        </button>
     </div>
 </aside>

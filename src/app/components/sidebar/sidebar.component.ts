@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
+import { SessaoService } from '../../services/sessao'
 import { NgmMotionDirective, Transition } from '@scripttype/ng-motion';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { SidebarService } from '../../services/sidebar';
 
 @Component({
@@ -10,6 +11,10 @@ import { SidebarService } from '../../services/sidebar';
     templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
+    private readonly sessao = inject(SessaoService);
+    private readonly router = inject(Router);
+    readonly usuario = this.sessao.usuario;
+    readonly iniciais = this.sessao.iniciais;
     private readonly sidebarService = inject(SidebarService);
     
     minimizada = this.sidebarService.estadoAtual;
@@ -24,6 +29,11 @@ export class SidebarComponent {
         this.sidebarService.minimizada$.subscribe((estado) => {
             this.minimizada = estado;
         });
+    }
+
+    sair(): void {
+        this.sessao.sair();
+        this.router.navigateByUrl('/login');
     }
 
     alternarSidebar(): void {

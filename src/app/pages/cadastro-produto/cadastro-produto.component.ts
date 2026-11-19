@@ -30,6 +30,7 @@ export class CadastroProdutoComponent {
   produtoNaoEncontrado = false;
   abaAtual: AbaCadastroProduto = 'informacoes';
   nomeImagemSelecionada = '';
+  erroAoSalvar = '';
 
   readonly produto = signal<Omit<Produto, 'id'>>({
     nome: '',
@@ -106,7 +107,7 @@ export class CadastroProdutoComponent {
     return null;
   }
 
-  salvar(evento: Event): void {
+  async salvar(evento: Event): Promise<void> {
     evento.preventDefault();
     if (this.produtoNaoEncontrado) return;
 
@@ -117,20 +118,13 @@ export class CadastroProdutoComponent {
       return;
     }
 
-    if (this.modoEdicao && this.idProduto !== null) {
-      const produtoAtualizado = this.produtoService.atualizar(
-        this.idProduto,
-        this.produto()
-      );
-
-      if (produtoAtualizado) {
-        this.router.navigate(['/produtos', produtoAtualizado.id]);
-      }
-
-      return;
+    try {
+      const produtoSalvo = this.modoEdicao && this.idProduto !== null
+        ? await this.produtoService.atualizar(this.idProduto, this.produto())
+        : await this.produtoService.adicionar(this.produto());
+      this.router.navigate(['/produtos', produtoSalvo.id]);
+    } catch {
+      this.erroAoSalvar = 'Não foi possível salvar o produto. Por favor, tente novamente.';
     }
-
-    const novoProduto = this.produtoService.adicionar(this.produto());
-    this.router.navigate(['/produtos', novoProduto.id]);
   }
 }

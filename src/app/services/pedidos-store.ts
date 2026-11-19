@@ -1,11 +1,15 @@
-import { Service, computed } from '@angular/core';
+import { Service, computed, inject } from '@angular/core';
 import { PEDIDOS_EXEMPLO } from '../data/pedidos';
 import { PedidoDetalhado } from '../models/pedido.model';
 import { carregarDados } from './carregar-dados';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 /** Lista de pedidos compartilhada entre Pedidos, dashboard, Novo pedido e Aprovação. */
 @Service()
 export class PedidosStore {
+  private readonly http = inject(HttpClient);
   private readonly recurso = carregarDados('/pedidos', PEDIDOS_EXEMPLO);
   readonly pedidos = computed(() => (this.recurso.hasValue() ? this.recurso.value() : []));
   readonly carregando = this.recurso.isLoading;
@@ -19,18 +23,26 @@ export class PedidosStore {
     return this.pedidos().find(pedido => pedido.id === id);
   }
 
-  adicionar(pedido: Omit<PedidoDetalhado, 'id'>): PedidoDetalhado {
-    const id = Math.max(0, ...this.pedidos().map(p => p.id)) + 1;
-    const novo = { ...pedido, id };
+  async adicionar(pedido: Omit<PedidoDetalhado, 'id'>): Promise<PedidoDetalhado> {
+    const novo = environment.usarDadosExemplo
+      ? { ...pedido, id: Math.max(0, ...this.pedidos().map(p => p.id)) + 1 }
+      : await firstValueFrom(this.http.post<PedidoDetalhado>('/pedidos', pedido));
+
     this.recurso.set([novo, ...this.pedidos()]);
     return novo;
   }
 
-  aprovar(id: number): void {
-    this.alterar(id, { status: 'Aprovado', motivoRecusa: undefined });
+  async aprovar(id: number): Promise<void> {
+    if (!environment.usarDadosExemplo) {
+      await firstValueFrom(this.http.post(`/pedidos/${id}/aprovar`, {}));
+    }
+    this.alterar(id, { status: 'Aprovado', motivoRecusa: undefined});
   }
 
-  recusar(id: number, motivo: string): void {
+  async recusar(id: number, motivo: string): Promise<void> {
+    if (!environment.usarDadosExemplo) {
+      await firstValueFrom(this.http.post(`/pedidos/${id}/recusar`, { motivo }));
+    }
     this.alterar(id, { status: 'Recusado', motivoRecusa: motivo });
   }
 

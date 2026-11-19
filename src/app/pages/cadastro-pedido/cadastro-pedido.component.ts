@@ -10,6 +10,7 @@ import { PedidoDetalhado } from '../../models/pedido.model';
 import { PedidosStore } from '../../services/pedidos-store';
 import { PedidoPdfService } from '../../services/pedido-pdf';
 import { ProdutoService } from '../../services/produto';
+import { SessaoService } from '../../services/sessao';
 
 type PaymentOption = 'À vista' | '28 dias' | '28/56 dias';
 
@@ -33,6 +34,7 @@ export class CadastroPedidoPageComponent {
   private readonly pedidosStore = inject(PedidosStore);
   private readonly produtoService = inject(ProdutoService);
   private readonly pedidoPdf = inject(PedidoPdfService);
+  private readonly sessao = inject(SessaoService);
 
   readonly products = computed<ProductOption[]>(() => {
   const clienteId = this.clienteSelecionado()?.id;
@@ -70,6 +72,7 @@ export class CadastroPedidoPageComponent {
   });
 
   tentouEnviar = false;
+  erroAoEnviar = '';
 
 
   submitted = false;
@@ -103,6 +106,11 @@ export class CadastroPedidoPageComponent {
     return '';
   }
 
+  get avisoEnvio(): string {
+    if (this.tentouEnviar && this.pendencia) return this.pendencia;
+    return this.erroAoEnviar;
+  }
+
   changeQuantity(productId: number, change: number): void {
     const currentQuantity = this.quantities[productId] ?? 0;
     this.quantities = {
@@ -117,7 +125,7 @@ export class CadastroPedidoPageComponent {
     this.submitted = false;
   }
 
-  submitOrder(evento: Event): void {
+  async submitOrder(evento: Event): Promise<void> {
     evento.preventDefault();
     this.tentouEnviar = true;
     this.formulario().markAsTouched();
@@ -126,36 +134,41 @@ export class CadastroPedidoPageComponent {
     if (!cliente || this.pendencia || this.formulario().invalid()) return;
 
     const { previsaoEntrega, observacao } = this.dadosPedido();
-
-    this.pedidoEnviado = this.pedidosStore.adicionar({
-      clienteId: cliente.id,
-      client: cliente.nome,
-      initials: cliente.nome.split(' ').slice(0, 2).map(parte => parte[0]).join('').toUpperCase(),
-      avatar: 'blue',
-      date: new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(new Date()),
-      status: 'Em análise',
-      documentoCliente: cliente.documento,
-      cidade: cliente.cidade,
-      uf: cliente.uf,
-      representante: 'Camila Rocha',
-      pagamento: this.payment,
-      previsaoEntrega: previsaoEntrega || 'Informado pela empresa',
-      observacao: observacao.trim(),
-      itens: this.products()
-        .filter(product => (this.quantities[product.id] ?? 0) > 0)
-        .map(product => ({
-          nome: product.name,
-          descricao: product.description,
-          unidade: product.unit,
-          quantidade: this.quantities[product.id],
-          precoUnitario: product.price,
-        })),
-      volumes: this.itemCount,
-      desconto: this.discount,
-      total: this.total,
-    });
-    this.submitted = true;
+    try {
+      this.pedidoEnviado = await this.pedidosStore.adicionar({
+        clienteId: cliente.id,
+        client: cliente.nome,
+        initials: cliente.nome.split(' ').slice(0, 2).map(parte => parte[0]).join('').toUpperCase(),
+        avatar: 'blue',
+        date: new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(new Date()),
+        status: 'Em análise',
+        documentoCliente: cliente.documento,
+        cidade: cliente.cidade, 
+        uf: cliente.uf,
+        representante: this.sessao.usuario()?.nome ?? '',
+        pagamento: this.payment,
+        previsaoEntrega: previsaoEntrega || 'Informado pela empresa',
+        observacao: observacao.trim(),
+        itens: this.products()
+          .filter(product => (this.quantities[product.id] ?? 0) > 0)
+          .map(product => ({
+            nome: product.name,
+            descricao: product.description,
+            unidade: product.unit,
+            quantidade: this.quantities[product.id],
+            precoUnitario: product.price,
+          })),
+        volumes: this.itemCount,
+        desconto: this.discount,
+        total: this.total,
+      });
+      this.erroAoEnviar = '';
+      this.submitted = true;
+    } catch {
+      this.erroAoEnviar = 'Ocorreu um erro ao enviar o pedido. Tente novamente.';
+    }
   }
+  
 
   enviarPdf(): void {
     if (this.pedidoEnviado) {

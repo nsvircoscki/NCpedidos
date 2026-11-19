@@ -7,6 +7,7 @@ import { CadastroClienteComponent } from '../../components/cadastro-cliente/cada
 import { ObservacoesClienteComponent } from '../../components/cadastro-cliente/observacoes-cliente/observacoes-cliente.component';
 import { EscolhaTipoClienteComponent } from '../../components/cadastro-cliente/escolha-tipo-cliente/escolha-tipo-cliente.component';
 import { PreCadastrosStore } from '../../services/pre-cadastros-store';
+import { SessaoService } from '../../services/sessao';
 
 @Component({
     selector: 'app-cadastro-cliente-page',
@@ -23,6 +24,7 @@ export class CadastroClientePageComponent {
     private preCadastrosStore = inject(PreCadastrosStore);
     etapaAtual = 1;
     erroAoSalvar = '';
+    private readonly sessao = inject(SessaoService);
 
     readonly tipoCadastro = signal<TipoCadastro | null>(null);
 
@@ -136,7 +138,7 @@ export class CadastroClientePageComponent {
             await this.preCadastrosStore.adicionar({
                 nome: PJ ? razaoSocial : nomeCompleto,
                 documento: PJ ? `CNPJ ${cnpj}` : `CPF ${cpf}`,
-                representante: 'Camila Moreira',
+                representante: this.sessao.usuario()?.nome ??'',
                 cidade,
                 uf,
                 prioridade: observacoes.destacar,

@@ -33,31 +33,53 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
     (giro, inclinação e esticar guiados pela velocidade do arrasto) e volta ao centro ao soltar
     (`dragSnapToOrigin`). Os limites (`limitesArrasto`) impedem que ele saia da tela;
   - no mobile, o modal de opções também abre com pop-in.
-- **Login**: ainda não funciona. Fica por último, por decisão de quem desenvolve.
+- **Login** (`services/sessao.ts`, `guards/sessao.guard.ts`): `SessaoService` guarda a sessão no `localStorage`;
+  `sessaoGuard` protege as telas internas e `visitanteGuard` tira quem já entrou do login;
+  `tokenInterceptor` manda `Authorization: Bearer` só para a nossa API. Com dados de exemplo, qualquer
+  e-mail válido entra como "Camila Moreira". Rota da API suposta: `POST /auth/login` (pergunta 6).
 - Todos os dados são mock (sem backend).
 
 ## Pendências
 
-- Commit das aulas de Signal Forms de 17/11 (16 arquivos no main sem commit). O merge de
-  `feat/stores-e-skeleton` já foi feito (PR #1).
+- Commit das aulas 9 e 10 (as aulas 5 a 8 já foram commitadas).
 - Testar no navegador os 3 formulários com Signal Forms (pré-cadastro, cadastro de produto, Novo pedido).
-- Tabela de preços: preços editados se perdem ao sair da tela (falta salvar no `TabelasPrecoStore`).
 - Pré-cadastro: `PreCadastro` só guarda nome, documento, cidade e UF; telefone, e-mail e perfil se
   perdem. Perguntar ao outro dev (anotar em `docs/API.md`).
-- API: só o pré-cadastro grava com POST; pedidos, aprovação e tabela de preços ainda gravam só em
-  memória. (Chave testada em 18/11: com `usarDadosExemplo: false` as telas mostram "Tentar novamente".)
-- Revisar o modo escuro tela por tela no navegador e ajustar cores que ficaram estranhas.
+- Testar no navegador a aula 9: enviar pedido, aprovar/recusar pedido e pré-cadastro, salvar preço
+  (sair e voltar da tela). Na tabela de preços, salvar um item desfaz edições não salvas de outros
+  (o `itens` é `linkedSignal` do store).
+- Quando a API existir: testar as gravações de verdade (com `usarDadosExemplo: false` as listas
+  falham antes, então hoje não dá para testar).
 
 - Testar no navegador o modal de filtros compartilhado nas 4 telas (pop-in, gelatina, chips, contador).
 - `PedidoAcompanhamentoComponent` não é usado (aviso NG8113 no build).
 - Testar no navegador o PDF (download no computador, compartilhar no celular) e a aprovação.
 - A aba Acompanhamento do detalhe do pedido ainda usa dados fixos.
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
-- Celular (420px): Produtos parece cortado na direita (com ou sem skeleton). Conferir no aparelho.
 - Conferir no celular se algum card ficou apertado depois do piso de 11px (produtos, tabela de preços, clientes).
-- Login (por último).
+- Botão "Sair" no celular (hoje só na sidebar do desktop). Sugestão: tela de Configurações.
 
 ## Histórico
+
+- 2026-11-19: aulas 11 e 12, login: `SessaoService` (signal + localStorage), tela de login com Signal
+  Forms, guards nas rotas, `tokenInterceptor`, 401 encerra a sessão, iniciais e "Sair" na sidebar,
+  iniciais no header do celular e representante do pedido/pré-cadastro vindo da sessão. Testado no
+  navegador. (Claude, com quem desenvolve)
+
+- 2026-11-18: revisão do modo escuro e do celular (420px) no navegador, em 15 telas. Nenhuma tela
+  passa da largura (a pendência de Produtos cortado não acontece mais). Novo pedido: separador dos
+  cartões com `dark:border-noite-fundo` (antes aparecia uma faixa cinza) e lata com "NC" (o "CORA" não
+  cabia). Menu de baixo do celular: item ativo com cor no escuro e texto de 11px. (Claude, com quem desenvolve)
+
+- 2026-11-18: aula 10: `ProdutoService.adicionar` (POST) e `atualizar` (PUT) são `async`; o
+  cadastro de produto espera o envio e mostra erro se falhar. Todas as telas leem e gravam pelos
+  stores. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-18: aula 9: gravação com a API ligada (`async` + `firstValueFrom`): `PedidosStore`
+  (POST pedido, aprovar, recusar com motivo), `PreCadastrosStore` (aprovar, recusar) e
+  `TabelasPrecoStore.salvarPreco` (PUT; o botão "Salvar preço" agora funciona). Novo pedido,
+  aprovação de pedido, análise de cliente e tabela de preços mostram erro se o envio falhar. Build ok.
+  (Claude, com quem desenvolve)
 
 - 2026-11-18: aula 8: `carregarExemplo` virou `carregarDados(caminho, dadosExemplo)`
   (`services/carregar-dados.ts`): com `usarDadosExemplo` simula, senão `httpResource`. Os 5 stores

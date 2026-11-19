@@ -32,14 +32,14 @@
 
     <form (submit)="submitOrder($event)" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0 lg:max-w-6xl lg:gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
       <div class="min-w-0 space-y-4">
-        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
+        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-fundo dark:bg-noite-card">
           <app-seletor-cliente
             [clientes]="clientes()"
             [(selecionado)]="clienteSelecionado"
             [destaque]="clienteSelecionado() ? 'Limite disponível: ' + (clienteSelecionado()!.limite | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR') : ''" />
         </section>
 
-        <section class="border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
+        <section class="border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-fundo dark:bg-noite-card">
           <div class="mb-3 flex items-start justify-between gap-4">
             <div>
               <h2 class="titulo-secao">Itens do pedido</h2>
@@ -57,7 +57,7 @@
                     <span class="absolute left-0 top-2 h-2 w-8 rounded-full border border-slate-300 bg-slate-200 dark:border-noite-borda dark:bg-noite-borda"></span>
                     <span class="absolute left-0.5 top-3 h-7 w-7 rounded-b-md border border-slate-300 bg-white dark:border-noite-borda dark:bg-noite-card">
                       <span class="mt-2 block h-2 w-full" [style.background-color]="product.color"></span>
-                      <span class="block text-center text-[11px] font-extrabold">CORA</span>
+                      <span class="block text-center text-[11px] font-extrabold">NC</span>
                     </span>
                   </div>
                   <span class="absolute bottom-1 right-1 rounded bg-white px-1 py-0.5 text-[11px] text-slate-500 shadow-sm dark:bg-noite-card dark:text-slate-400">{{ product.unit }}</span>
@@ -77,7 +77,7 @@
           </div>
         </section>
 
-        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-5 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-borda dark:bg-noite-card">
+        <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-5 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-fundo dark:bg-noite-card">
           <h2 class="titulo-secao">Condições comerciais</h2>
           <fieldset class="mt-4">
             <legend class="mb-2 text-[10px] font-semibold text-slate-600 dark:text-slate-300">Condição de pagamento</legend>
@@ -106,7 +106,7 @@
         </section>
       </div>
 
-      <aside class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0 dark:border-noite-borda dark:bg-noite-card">
+      <aside class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0 dark:border-noite-fundo dark:bg-noite-card">
         <section class="bg-transparent lg:rounded-2xl lg:bg-white lg:px-5 lg:py-5 lg:shadow-sm dark:lg:bg-noite-card">
           <div class="flex items-center justify-between">
             <h2 class="titulo-secao">Resumo do pedido</h2>
@@ -121,8 +121,8 @@
           <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500 dark:bg-noite-sutil dark:text-slate-400"><input type="checkbox" [formField]="formulario.confirmado" aria-describedby="erro-confirmado" class="mt-0.5 h-4 w-4 accent-[#153860] dark:accent-noite-marca"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
           <app-erro-campo [campo]="formulario.confirmado" id="erro-confirmado" />
           <button type="submit" class="botao-acao botao-pop mt-4 flex min-h-12 w-full justify-between! shadow-lg"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
-          @if (tentouEnviar && pendencia) {
-            <p role="alert" class="mt-2 text-xs font-semibold text-red-600 dark:text-red-400">{{ pendencia }}</p>
+          @if (avisoEnvio) {
+            <p role="alert" class="mt-2 text-xs font-semibold text-red-600 dark:text-red-400">{{ avisoEnvio }}</p>
           }
           @if (submitted) {
             <div role="status" class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-950">

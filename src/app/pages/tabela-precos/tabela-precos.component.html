@@ -47,6 +47,10 @@
         </button>
       </div>
 
+      @if (mensagemPreco()) {
+        <p role="status" class="mb-3 px-4 text-sm font-semibold text-slate-600 dark:text-noite-suave">{{ mensagemPreco() }}</p>
+      }
+
       <div class="grid grid-cols-2 gap-4 px-4 md:grid-cols-3 xl:grid-cols-4">
         @if (carregando()) {
           <app-esqueleto-lista texto="Carregando tabela de preços..." />
@@ -101,7 +105,7 @@
                 <input autocomplete="off" type="number" min="0" step="0.01" [(ngModel)]="item.preco" [name]="'preco-' + item.id" [id]="'preco-' + item.id" placeholder="0,00"
                   class="label-input__field h-9 w-full rounded-lg border border-[#dbe3eb] px-2 text-sm font-bold text-[#153860] outline-none focus:border-[#153860] dark:border-noite-borda dark:text-noite-marca dark:focus:border-noite-marca" />
               </div>
-              <button type="button" class="mt-2 w-full rounded-lg bg-[#edf3f8] py-2 text-[11px] font-bold text-[#153860] transition hover:bg-[#e1ebf4] dark:bg-noite-sutil dark:text-noite-marca dark:hover:bg-[#192f43]">
+              <button type="button" (click)="salvarPreco(item)" class="mt-2 w-full rounded-lg bg-[#edf3f8] py-2 text-[11px] font-bold text-[#153860] transition hover:bg-[#e1ebf4] dark:bg-noite-sutil dark:text-noite-marca dark:hover:bg-[#192f43]">
                 Salvar preço
               </button>
             </div>

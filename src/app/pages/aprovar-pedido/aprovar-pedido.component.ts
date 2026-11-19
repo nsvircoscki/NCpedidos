@@ -25,20 +25,27 @@ export class AprovarPedidoComponent {
 
   readonly motivo = signal('');
   readonly faltaMotivo = signal(false);
+  readonly erroAoSalvar = signal('');
 
-  aprovar(): void {
-    this.store.aprovar(this.id);
+  async aprovar(): Promise<void> {
     this.faltaMotivo.set(false);
+    await this.tentar(() => this.store.aprovar(this.id));
   }
 
-  recusar(): void {
+  async recusar(): Promise<void> {
     const motivo = this.motivo().trim();
-    if (!motivo) {
-      this.faltaMotivo.set(true);
-      return;
+    this.faltaMotivo.set(!motivo);
+    if (!motivo) return;
+    await this.tentar(() => this.store.recusar(this.id, motivo));
+  }
+
+  private async tentar(acao: () => Promise<void>): Promise<void> {
+    try {
+      await acao();
+      this.erroAoSalvar.set('');
+    } catch {
+      this.erroAoSalvar.set('Ocorreu um erro ao salvar. Tente novamente.');
     }
-    this.store.recusar(this.id, motivo);
-    this.faltaMotivo.set(false);
   }
 
   enviarPdf(): void {

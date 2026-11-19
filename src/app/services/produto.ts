@@ -1,10 +1,14 @@
-import { Service, computed } from '@angular/core';
+import { Service, computed, inject } from '@angular/core';
 import { PRODUTOS_EXEMPLO } from '../data/produtos';
 import { Produto } from '../models/produto.model';
 import { carregarDados } from './carregar-dados';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Service()
 export class ProdutoService {
+  private readonly http = inject(HttpClient);
   private readonly recurso = carregarDados('/produtos', PRODUTOS_EXEMPLO);
   readonly produtos = computed(() => (this.recurso.hasValue() ? this.recurso.value() : []));
   readonly carregando = this.recurso.isLoading;
@@ -22,17 +26,21 @@ export class ProdutoService {
     return this.produtos().find(produto => produto.id === id);
   }
 
-  adicionar(dados: Omit<Produto, 'id'>): Produto {
-    const novoProduto: Produto = { ...dados, id: Date.now() };
-    this.recurso.set([novoProduto, ...this.produtos()]);
+  async adicionar(dados: Omit<Produto, 'id'>): Promise<Produto> {
+    const novoProduto = environment.usarDadosExemplo
+      ? { ...dados, id: Date.now() }
+      : await firstValueFrom(this.http.post<Produto>('/produtos', dados));
+
+    this.recurso.set([ ...this.produtos(), novoProduto]);
     return novoProduto;
   }
 
-  atualizar(id: number, dados: Omit<Produto, 'id'>): Produto | undefined {
-    if (!this.buscarPorId(id)) return undefined;
+  async atualizar(id: number, dados: Omit<Produto, 'id'>): Promise<Produto> {
+    const produtoAtualizado = environment.usarDadosExemplo
+      ? { ...dados, id }
+      : await firstValueFrom(this.http.put<Produto>(`/produtos/${id}`, dados));
 
-    const produtoAtualizado: Produto = { ...dados, id };
-    this.recurso.set(this.produtos().map(produto => (produto.id === id ? produtoAtualizado : produto)));
+    this.recurso.set(this.produtos().map(produto => produto.id === id ? produtoAtualizado : produto));
     return produtoAtualizado;
   }
 }

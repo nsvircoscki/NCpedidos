@@ -22,11 +22,17 @@ export class PreCadastrosStore {
         return this.preCadastros().find(cadastro => cadastro.id === id);
     }
 
-    aprovar(id: number): void {
+    async aprovar(id: number): Promise<void> {
+        if (!environment.usarDadosExemplo) {
+            await firstValueFrom(this.http.post(`/pre-cadastros/${id}/aprovar`, {}));
+        }
         this.alterarStatus(id, 'Aprovado');
     }
 
-    recusar(id: number): void {
+    async recusar(id: number): Promise<void> {
+        if (!environment.usarDadosExemplo) {
+            await firstValueFrom(this.http.post(`/pre-cadastros/${id}/recusar`, {}));
+        }
         this.alterarStatus(id, 'Rejeitado');
     }
 
