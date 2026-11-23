@@ -18,7 +18,7 @@
           </a>
         </section>
       } @else {
-        <form (submit)="salvar($event)">
+        <form novalidate (submit)="salvar($event)">
           <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <a
@@ -251,7 +251,7 @@
             <aside class="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
               <section class="cartao p-6">
                 <h2 class="titulo-cartao">Imagem do produto</h2>
-                <p class="mt-1 text-[10px] text-slate-500 dark:text-noite-suave">JPG ou PNG, até 5 MB</p>
+                <p class="mt-1 text-[11px] text-slate-500 dark:text-noite-suave">JPG ou PNG, até 5 MB</p>
 
                 <label class="mt-4 grid min-h-[170px] cursor-pointer place-items-center rounded-lg border border-dashed border-[#cbd5e1] bg-[#fbfcfe] p-5 text-center hover:bg-[#f6f9fc] dark:border-noite-borda dark:bg-noite-sutil dark:hover:bg-noite-sutil">
                   <span>
@@ -274,7 +274,7 @@
 
               <section class="cartao p-6">
                 <h2 class="titulo-cartao">Publicação</h2>
-                <p class="mt-1 text-[10px] text-slate-500 dark:text-noite-suave">
+                <p class="mt-1 text-[11px] text-slate-500 dark:text-noite-suave">
                   Controle a disponibilidade no catálogo.
                 </p>
 

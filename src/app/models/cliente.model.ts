@@ -46,6 +46,7 @@ export interface PreCadastro {
     enviadoEm: string;
     status: StatusPreCadastro;
     prioridade: boolean;
+    motivoRecusa?: string;
 }
 
 export interface DadosPreCadastro {

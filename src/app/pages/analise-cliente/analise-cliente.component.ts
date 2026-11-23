@@ -33,7 +33,9 @@ export class AnaliseClientePageComponent {
   });
 
   notes = '';
-  internalNote = '';
+  readonly motivo = signal('');
+  readonly faltaMotivo = signal(false);
+
 
   readonly clientFields = computed<ClientField[]>(() => {
     const cadastro = this.cadastro();
@@ -68,7 +70,10 @@ export class AnaliseClientePageComponent {
   }
 
   async recusar(): Promise<void> {
-    await this.tentar(() => this.store.recusar(this.id));
+    const motivo = this.motivo().trim();
+    this.faltaMotivo.set(!motivo);
+    if (!motivo) return;
+    await this.tentar(() => this.store.recusar(this.id, motivo));
   }
 
   private async tentar(acao: () => Promise<void>): Promise<void> {

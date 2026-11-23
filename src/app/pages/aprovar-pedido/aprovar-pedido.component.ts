@@ -13,7 +13,7 @@ import { PedidoPdfService } from '../../services/pedido-pdf';
 export class AprovarPedidoComponent {
   private readonly store = inject(PedidosStore);
   private readonly pedidoPdf = inject(PedidoPdfService);
-  private readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
   readonly carregando = this.store.carregando;
 
   // computed lê a lista do store: depois de aprovar ou recusar, a tela já mostra o novo status.

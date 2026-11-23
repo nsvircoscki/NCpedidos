@@ -4,7 +4,7 @@
       <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
       <div>
         <h2 class="titulo-secao max-lg:text-[16px]">Dados do cliente</h2>
-        <p class="mt-1 text-[10px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0] dark:text-noite-suave">
+        <p class="mt-1 text-[11px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0] dark:text-noite-suave">
           Preencha os dados para análise do time administrativo.
         </p>
       </div>
@@ -22,7 +22,7 @@
         <strong class="block text-[12px] font-semibold text-[#153860] lg:text-base dark:text-noite-marca">
           {{ tipoCadastro() === 'PJ' ? 'Pessoa jurídica' : 'Pessoa física' }}
         </strong>
-        <small class="block text-[10px] text-[#64748b] lg:text-sm dark:text-noite-suave">
+        <small class="block text-[11px] text-[#64748b] lg:text-sm dark:text-noite-suave">
           {{ tipoCadastro() === 'PJ' ? 'Empresa com CNPJ' : 'Profissional com CPF' }}
         </small>
       </span>
@@ -30,14 +30,14 @@
 
     @if (tipoCadastro() === 'PF') {
     <div class="label-input mb-[22px]">
-      <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="cpf">CPF *</label>
+      <label class="label-input__label mb-1 block text-[11px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="cpf">CPF *</label>
       <input autocomplete="off" id="cpf" placeholder="000.000.000-00" [formField]="formulario().cpf" [attr.aria-invalid]="formulario().cpf().touched() && formulario().cpf().invalid()" aria-describedby="erro-cpf"
         class="label-input__field h-12 w-full max-w-[761px] rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().cpf" id="erro-cpf" />
     </div>
 
     <div class="label-input mb-[38px]">
-      <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeCompleto">Nome completo</label>
+      <label class="label-input__label mb-1 block text-[11px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeCompleto">Nome completo</label>
       <input autocomplete="off" id="nomeCompleto" placeholder="Nome completo do cliente" [formField]="formulario().nomeCompleto" [attr.aria-invalid]="formulario().nomeCompleto().touched() && formulario().nomeCompleto().invalid()" aria-describedby="erro-nome-completo"
         class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-7 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().nomeCompleto" id="erro-nome-completo" />
@@ -46,7 +46,7 @@
     <div class="mb-[22px]">
       <div class="flex flex-col gap-3 lg:flex-row">
         <div class="label-input w-full">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cnpj">CNPJ</label>
+          <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cnpj">CNPJ</label>
           <input autocomplete="off" id="cnpj" placeholder="Digite o CNPJ" [formField]="formulario().cnpj" [attr.aria-invalid]="formulario().cnpj().touched() && formulario().cnpj().invalid()" aria-describedby="erro-cnpj"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().cnpj" id="erro-cnpj" />
@@ -67,19 +67,19 @@
       }
     </div>
     <div class="label-input mb-[14px]">
-      <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="razaoSocial">Razão social</label>
+      <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="razaoSocial">Razão social</label>
       <input autocomplete="off" id="razaoSocial" placeholder="Nome empresarial" [formField]="formulario().razaoSocial" [attr.aria-invalid]="formulario().razaoSocial().touched() && formulario().razaoSocial().invalid()" aria-describedby="erro-razao-social"
         class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().razaoSocial" id="erro-razao-social" />
     </div>
     <div class="mb-[38px] grid gap-5 lg:grid-cols-2">
       <div class="label-input">
-        <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="nomeFantasia">Nome fantasia</label>
+        <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="nomeFantasia">Nome fantasia</label>
         <input autocomplete="off" id="nomeFantasia" placeholder="Como a empresa é conhecida" [formField]="formulario().nomeFantasia"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
       </div>
       <div class="label-input label-input--fixo">
-        <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="segmento">Segmento</label>
+        <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="segmento">Segmento</label>
         <select id="segmento" [formField]="formulario().segmento"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca">
           <option value="">Selecione</option>
@@ -93,27 +93,27 @@
         <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
         <div>
           <h2 class="titulo-secao max-lg:text-[14px] max-lg:font-semibold">Contato Principal</h2>
-          <p class="mt-1 text-[10px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0] dark:text-noite-suave">Pessoa responsável pelas compras e aprovações.</p>
+          <p class="mt-1 text-[11px] text-[#64748b] lg:text-sm lg:font-semibold lg:text-[#a0adc0] dark:text-noite-suave">Pessoa responsável pelas compras e aprovações.</p>
         </div>
       </header>
 
       <div class="grid grid-cols-2 gap-4 lg:gap-5">
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeResponsavel">Nome do contato *</label>
+          <label class="label-input__label mb-1 block text-[11px] font-semibold text-[#414750] lg:text-base dark:text-noite-texto" for="nomeResponsavel">Nome do contato *</label>
           <input autocomplete="off" id="nomeResponsavel" placeholder="Nome completo" [formField]="formulario().responsavel" [attr.aria-invalid]="formulario().responsavel().touched() && formulario().responsavel().invalid()" aria-describedby="erro-responsavel"
             class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().responsavel" id="erro-responsavel" />
         </div>
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="telefone">Telefone ou Whatsapp</label>
+          <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="telefone">Telefone ou Whatsapp</label>
           <input autocomplete="off" id="telefone" placeholder="(00) 00000-0000" [formField]="formulario().telefone" [attr.aria-invalid]="formulario().telefone().touched() && formulario().telefone().invalid()" aria-describedby="erro-telefone"
             class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().telefone" id="erro-telefone" />
         </div>
       </div>
       <div class="label-input mt-[18px]">
-        <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="email">E-mail</label>
-        <input autocomplete="off" id="email" placeholder="contato@empresa,com.br" [formField]="formulario().email" [attr.aria-invalid]="formulario().email().touched() && formulario().email().invalid()" aria-describedby="erro-email"
+        <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="email">E-mail</label>
+        <input autocomplete="off" id="email" placeholder="contato@empresa.com.br" [formField]="formulario().email" [attr.aria-invalid]="formulario().email().touched() && formulario().email().invalid()" aria-describedby="erro-email"
           class="label-input__field h-12 w-full rounded-[10px] border border-[#e2e8f0] bg-white dark:bg-noite-card px-3 text-[11px] text-[#0f172a] outline-none focus:border-[#183869] lg:h-[68px] lg:rounded-[41px] lg:px-6 lg:text-base dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().email" id="erro-email" />
       </div>
@@ -131,7 +131,7 @@
       <div class="grid gap-5 lg:grid-cols-[1fr_2fr_0.7fr_1fr]">
         <div>
           <div class="label-input">
-            <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cep">CEP</label>
+            <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="cep">CEP</label>
             <input autocomplete="off" id="cep" placeholder="00000-000" [formField]="formulario().cep" [attr.aria-invalid]="formulario().cep().touched() && formulario().cep().invalid()" aria-describedby="erro-cep" (blur)="consultarCEP()"
             class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().cep" id="erro-cep" />
@@ -141,18 +141,18 @@
               }
         </div>
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="endereco">Endereço</label>
+          <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="endereco">Endereço</label>
           <input autocomplete="off" id="endereco" placeholder="Rua ou avenida" [formField]="formulario().endereco" [attr.aria-invalid]="formulario().endereco().touched() && formulario().endereco().invalid()" aria-describedby="erro-endereco"
             class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
           <app-erro-campo [campo]="formulario().endereco" id="erro-endereco" />
         </div>
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="numero">Número</label>
+          <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="numero">Número</label>
           <input autocomplete="off" id="numero" placeholder="Nº" [formField]="formulario().numero"
             class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
         <div class="label-input">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="bairro">Bairro</label>
+          <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto" for="bairro">Bairro</label>
           <input autocomplete="off" id="bairro" placeholder="Digite o bairro" [formField]="formulario().bairro"
             class="label-input__field h-[68px] w-full rounded-[41px] border border-[#e2e8f0] px-6 text-base text-[#0f172a] placeholder:text-[#94a3b8] outline-none focus:border-[#183869] dark:border-noite-borda dark:text-noite-texto dark:focus:border-noite-marca" />
         </div>
@@ -162,7 +162,7 @@
   
   <!-- Coluna Cidade -->
         <div class="label-input label-input--fixo">
-          <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto">Cidade</label>
+          <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto">Cidade</label>
           <div class="relative">
       
           <!-- Botão Gatilho - Cidade -->
@@ -239,7 +239,7 @@
 
   <!-- Coluna UF -->
   <div class="label-input label-input--fixo">
-    <label class="label-input__label mb-1 block text-[10px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto">UF</label>
+    <label class="label-input__label mb-1 block text-[11px] font-semibold lg:text-base text-[#414750] dark:text-noite-texto">UF</label>
     <div class="relative">
       
       <!-- Botão Gatilho - UF -->
@@ -312,7 +312,7 @@
         <span class="hidden h-[27px] w-[29px] rounded-full bg-[#183869] lg:block"></span>
         <div>
           <h2 class="titulo-cartao">Endereço</h2>
-          <p class="mt-1 text-[10px] text-[#64748b] dark:text-noite-suave">Informe o endereço principal do cliente.</p>
+          <p class="mt-1 text-[11px] text-[#64748b] dark:text-noite-suave">Informe o endereço principal do cliente.</p>
         </div>
       </header>
 

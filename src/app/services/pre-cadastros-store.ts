@@ -1,6 +1,6 @@
 import { Service, computed, inject } from '@angular/core';
 import { PRE_CADASTROS } from '../data/pre-cadastros';
-import { PreCadastro, StatusPreCadastro } from '../models/cliente.model';
+import { PreCadastro } from '../models/cliente.model';
 import { carregarDados } from './carregar-dados';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -26,14 +26,14 @@ export class PreCadastrosStore {
         if (!environment.usarDadosExemplo) {
             await firstValueFrom(this.http.post(`/pre-cadastros/${id}/aprovar`, {}));
         }
-        this.alterarStatus(id, 'Aprovado');
+        this.alterarStatus(id, { status: 'Aprovado', motivoRecusa: undefined });
     }
 
-    async recusar(id: number): Promise<void> {
+    async recusar(id: number, motivo: string): Promise<void> {
         if (!environment.usarDadosExemplo) {
-            await firstValueFrom(this.http.post(`/pre-cadastros/${id}/recusar`, {}));
+            await firstValueFrom(this.http.post(`/pre-cadastros/${id}/recusar`, { motivo }));
         }
-        this.alterarStatus(id, 'Rejeitado');
+        this.alterarStatus(id, { status: 'Rejeitado', motivoRecusa: motivo });
     }
 
     async adicionar(dados: Omit<PreCadastro, 'id' | 'status' | 'enviadoEm'>): Promise<PreCadastro> {
@@ -59,7 +59,7 @@ export class PreCadastrosStore {
         return ids.length > 0 ? Math.max(...ids) + 1 : 1;
     }
 
-    private alterarStatus(id: number, status: StatusPreCadastro): void {
-        this.recurso.set(this.preCadastros().map(cadastro => (cadastro.id === id ? { ...cadastro, status } : cadastro)));
+    private alterarStatus(id: number, mudancas: Partial<PreCadastro>): void {
+        this.recurso.set(this.preCadastros().map(cadastro => (cadastro.id === id ? { ...cadastro, ...mudancas } : cadastro)));
     }
 }

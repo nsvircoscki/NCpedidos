@@ -111,6 +111,11 @@ export class CadastroPedidoPageComponent {
     return this.erroAoEnviar;
   }
 
+  get previsaoFormatada(): string {
+    const data = this.dadosPedido().previsaoEntrega;
+    return data ? formatarData(data) : 'Informado pela empresa';
+  }
+
   changeQuantity(productId: number, change: number): void {
     const currentQuantity = this.quantities[productId] ?? 0;
     this.quantities = {
@@ -147,7 +152,7 @@ export class CadastroPedidoPageComponent {
         uf: cliente.uf,
         representante: this.sessao.usuario()?.nome ?? '',
         pagamento: this.payment,
-        previsaoEntrega: previsaoEntrega || 'Informado pela empresa',
+        previsaoEntrega: previsaoEntrega ? formatarData(previsaoEntrega): 'Informado pela empresa',
         observacao: observacao.trim(),
         itens: this.products()
           .filter(product => (this.quantities[product.id] ?? 0) > 0)
@@ -190,4 +195,9 @@ export class CadastroPedidoPageComponent {
 // en-CA formata como AAAA-MM-DD no fuso de quem usa, igual ao valor do <input type="date">.
 function hojeNoFormatoDoInput(): string {
   return new Date().toLocaleDateString('en-CA');
+}
+
+function formatarData(dataDoInput: string): string {
+  return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(new
+Date(`${dataDoInput}T00:00`));
 }

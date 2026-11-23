@@ -28,7 +28,7 @@
       [totalResultados]="clientesFiltrados.length"
       nomeResultados="clientes"
       (limpar)="limparFiltrosDoPainel()">
-      <h3 class="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-noite-suave">Ordenar por</h3>
+      <h3 class="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-500 dark:text-noite-suave">Ordenar por</h3>
       <div class="grid gap-1">
         @for (opcao of opcoesOrdenacao; track opcao.valor) {
           <button
@@ -71,12 +71,12 @@
 
   <!-- Resumo da lista -->
   <div class="mb-3 flex items-center justify-between px-4">
-    <span class="text-[10px] text-slate-500 dark:text-slate-400">
+    <span class="text-[11px] text-slate-500 dark:text-slate-400">
       {{ clientesFiltrados.length }} cliente(s) encontrado(s)
     </span>
 
     @if (clientesSelecionados.size > 0) {
-      <span class="text-[10px] font-bold text-[#153860] dark:text-noite-marca">
+      <span class="text-[11px] font-bold text-[#153860] dark:text-noite-marca">
         {{ clientesSelecionados.size }} selecionado(s)
       </span>
     }
@@ -86,7 +86,7 @@
   <div class="w-full overflow-x-auto">
     <table class="w-full min-w-[1050px] border-collapse text-left">
       <thead>
-        <tr class="bg-slate-50 text-[10px] font-bold leading-none text-slate-500 dark:text-noite-suave dark:bg-noite-sutil">
+        <tr class="bg-slate-50 text-[11px] font-bold leading-none text-slate-500 dark:text-noite-suave dark:bg-noite-sutil">
           <th class="w-12 px-4 py-4 uppercase">
             <span class="sr-only">Selecionar</span>
           </th>
@@ -132,7 +132,7 @@
                   <div class="text-[13px] font-bold text-slate-800 dark:text-slate-100">
                     {{ cliente.nome }}
                   </div>
-                  <div class="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">
+                  <div class="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">
                     {{ cliente.cpfcnpj }} <!-- CPF ou CNPJ -->
                   </div>
                 </div>
@@ -142,7 +142,7 @@
             <!-- Contato -->
             <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               <div class="text-xs font-medium text-slate-700 dark:text-slate-200">{{ cliente.telefone }}</div>
-              <div class="text-[10px] text-slate-500 dark:text-noite-suave">{{ cliente.email }}</div>
+              <div class="text-[11px] text-slate-500 dark:text-noite-suave">{{ cliente.email }}</div>
             </td>
 
             <!-- Cidade / UF -->
@@ -152,7 +152,7 @@
 
             <!-- Tipo de Cliente -->
             <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
-              <span class="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-600 dark:bg-noite-sutil-forte dark:text-slate-300">
+              <span class="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-600 dark:bg-noite-sutil-forte dark:text-slate-300">
                 {{ cliente.tipo }}
               </span>
             </td>
@@ -170,11 +170,11 @@
             <!-- Status -->
             <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-700 dark:text-slate-200">
               @if (cliente.status === 'ATIVO') {
-                <span class="rounded-xl bg-[#ECF8F2] px-3 py-1.5 text-[10px] font-bold text-[#267253] dark:bg-noite-sutil dark:text-[#94dbbe]">
+                <span class="rounded-xl bg-[#ECF8F2] px-3 py-1.5 text-[11px] font-bold text-[#267253] dark:bg-noite-sutil dark:text-[#94dbbe]">
                   Ativo
                 </span>
               } @else {
-                <span class="rounded-xl bg-red-50 px-3 py-1.5 text-[10px] font-bold text-red-600 dark:bg-red-950 dark:text-red-300">
+                <span class="rounded-xl bg-red-50 px-3 py-1.5 text-[11px] font-bold text-red-600 dark:bg-red-950 dark:text-red-300">
                   Inativo
                 </span>
               }

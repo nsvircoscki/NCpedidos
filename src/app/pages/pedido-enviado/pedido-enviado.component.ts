@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PedidosStore } from '../../services/pedidos-store';
 import { PedidoPdfService } from '../../services/pedido-pdf';
 import { PedidoAcompanhamentoComponent } from './pedido-acompanhamento.component';
+import { RESUMO_STATUS } from './etapas-pedido';
 import { NgmMotionDirective, type Transition } from '@scripttype/ng-motion';
 
 
@@ -28,6 +29,10 @@ export class PedidoEnviadoComponent {
   private readonly pedidosStore = inject(PedidosStore);
   readonly carregando = this.pedidosStore.carregando;
   readonly pedido = computed(() => this.pedidosStore.buscar(Number(this.numeroPedido)));
+  readonly resumo = computed(() => {
+    const pedido = this.pedido();
+    return pedido ? RESUMO_STATUS[pedido.status] : null;
+  });
 
   enviarPdf(): void {
     const pedido = this.pedido();

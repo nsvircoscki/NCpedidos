@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { PedidoAcompanhamentoComponent } from '../pedido-enviado/pedido-acompanhamento.component';
 import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 
 
@@ -22,7 +21,6 @@ import { ErroCarregamentoComponent } from '../../components/erro-carregamento/er
         FormsModule,
         RouterLink,
         NgmMotionDirective,
-        PedidoAcompanhamentoComponent,
         ErroCarregamentoComponent,
     ],
     templateUrl: './pedidos.component.html',
@@ -42,7 +40,6 @@ export class PedidosComponent implements AfterViewInit {
     }
 
     readonly sent = signal(false);
-    readonly pedidoSelecionado = signal<PedidoResumo | null>(null);
     search = '';
     statusSelecionados: string[] = [];
     filtrosAbertos = false;
@@ -134,14 +131,6 @@ export class PedidosComponent implements AfterViewInit {
 
         // left negativo indica o limite máximo que a barra pode ser arrastada para a esquerda
         this.dragConstraints.set({ top: 0, bottom: 0, left: -maxScroll, right: 0 });
-    }
-
-    abrirAcompanhamento(order: PedidoResumo): void {
-        this.pedidoSelecionado.set(order);
-    }
-
-    fecharAcompanhamento(): void {
-        this.pedidoSelecionado.set(null);
     }
 
     currency(value: number): string {

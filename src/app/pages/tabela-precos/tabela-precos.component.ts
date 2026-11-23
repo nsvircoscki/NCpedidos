@@ -33,7 +33,13 @@ export class TabelaPrecosPageComponent {
   recarregar(): void {
     this.tabelasStore.recarregar();
   }
-  readonly itens = linkedSignal(() => this.tabelasStore.doCliente(this.clienteId));
+  readonly itens = linkedSignal<ItemTabelaPreco[], ItemTabelaPreco[]>({
+    source: () => this.tabelasStore.doCliente(this.clienteId),
+    computation: (novos, anterior) => novos.map(novo => {
+      const editado = anterior?.value.find(item => item.id === novo.id);
+      return editado ? { ...novo, preco: editado.preco } : novo;
+    }),
+  });
   termoBusca = '';
   categoriasSelecionadas: string[] = [];
   statusSelecionados: string[] = [];

@@ -20,7 +20,7 @@
     </div>
 
     <div class="text-right">
-      <span class="block text-[10px] text-[#64748b] dark:text-noite-suave">Pedido</span>
+      <span class="block text-[11px] text-[#64748b] dark:text-noite-suave">Pedido</span>
       <strong class="text-base font-bold text-[#153860] dark:text-noite-marca">#{{ numeroPedido }}</strong>
     </div>
   </header>
@@ -37,17 +37,13 @@
       <p class="text-xs text-[#527965] dark:text-noite-suave">Enviado em {{ pedido()?.date }} · {{ pedido()?.status }}</p>
     </div>
   </div>
-  } @else {
-  <!-- Card de Status (Acompanhamento) -->
-  <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#FFF9EA] p-4 lg:mt-0 lg:p-5 dark:bg-[#3f3418]">
-    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F3A928] text-base font-medium text-white">
-      ◷
-    </div>
-
+  } @else if (resumo(); as resumo) {
+  <div class="cartao mt-4 flex items-center justify-between gap-3 p-4 lg:mt-0 lg:p-5">
     <div>
-      <h2 class="text-sm font-semibold text-[#8A5A08] dark:text-[#edc682]">Em análise comercial</h2>
-      <p class="text-xs text-[#765F32] dark:text-[#d4c19b]">Seu pedido foi recebido e está sendo validado · Atualizado há 3 minutos</p>
+      <h2 class="text-sm font-semibold text-[#0f172a] dark:text-noite-texto">{{ resumo.titulo }}</h2>
+      <p class="text-xs text-slate-500 dark:text-noite-suave">{{ resumo.descricao }}</p>
     </div>
+    <span class="status-pill text-[11px]" [attr.data-status]="pedido()?.status">{{ pedido()?.status }}</span>
   </div>
   }
 

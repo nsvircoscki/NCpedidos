@@ -16,7 +16,7 @@ Os tipos citados estão em `src/app/models/`.
 | GET | /pre-cadastros/:id | — | `PreCadastro` |
 | POST | /pre-cadastros | dados do formulário PJ/PF | `PreCadastro` (201) |
 | POST | /pre-cadastros/:id/aprovar | — | `PreCadastro` |
-| POST | /pre-cadastros/:id/recusar | — | `PreCadastro` |
+| POST | /pre-cadastros/:id/recusar | `{ motivo }` | `PreCadastro` |
 
 ## Produtos (`ProdutoService`)
 | Verbo | Rota | Envia | Recebe |

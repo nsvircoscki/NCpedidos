@@ -7,7 +7,8 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 - **Rotas** (`src/app/app.routes.ts`): todas com `loadComponent` (lazy), agrupadas em
   `pedidos/`, `produtos/` e `clientes/`. Qualquer rota desconhecida (`**`) vai para o dashboard.
-  "Pedido enviado" e "Acompanhamento" usam o pedido de exemplo 1047.
+  "Pedido enviado" e "Acompanhamento" leem o pedido da URL no `PedidosStore`; as etapas do
+  acompanhamento vêm do status (`pages/pedido-enviado/etapas-pedido.ts`).
 - **Layout** (`src/app/layout/`): `LayoutComponent` envolve as telas internas com sidebar,
   headers e navegação mobile. As páginas não importam mais esses componentes.
 - **Pedido enviado**: movido de `components/pedido-enviado` para `pages/pedido-enviado`.
@@ -41,25 +42,51 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Pendências
 
-- Commit das etapas 9 e 10 (as etapas 5 a 8 já foram commitadas).
-- Testar no navegador os 3 formulários com Signal Forms (pré-cadastro, cadastro de produto, Novo pedido).
+- Commit das etapas 13 e 14.
+- Pedido enviado/Acompanhamento leem o id da rota com `snapshot`: indo de um pedido para outro sem
+  sair da tela (ex.: busca ou notificação), continua mostrando o anterior. Trocar por `paramMap`/
+  `input()` com `withComponentInputBinding` quando houver link entre pedidos.
+- Testar o PDF (download no computador, compartilhar no celular): precisa ser feito por quem
+  desenvolve, porque baixa arquivo.
 - Pré-cadastro: `PreCadastro` só guarda nome, documento, cidade e UF; telefone, e-mail e perfil se
   perdem. Perguntar ao outro dev (anotar em `docs/API.md`).
-- Testar no navegador a etapa 9: enviar pedido, aprovar/recusar pedido e pré-cadastro, salvar preço
-  (sair e voltar da tela). Na tabela de preços, salvar um item desfaz edições não salvas de outros
-  (o `itens` é `linkedSignal` do store).
 - Quando a API existir: testar as gravações de verdade (com `usarDadosExemplo: false` as listas
   falham antes, então hoje não dá para testar).
-
-- Testar no navegador o modal de filtros compartilhado nas 4 telas (pop-in, gelatina, chips, contador).
-- `PedidoAcompanhamentoComponent` não é usado (aviso NG8113 no build).
-- Testar no navegador o PDF (download no computador, compartilhar no celular) e a aprovação.
-- A aba Acompanhamento do detalhe do pedido ainda usa dados fixos.
+- "Editar cliente" (`/clientes/:id`) abre o pré-cadastro vazio: a página não lê o id. Falta uma
+  tela de detalhe/edição de cliente.
+- Botões sem ação: "+ Adicionar" e "Previsão de entrega" (Novo pedido), "Adicionar produto"
+  (Tabela de preços), "Precisa de ajuda com este pedido?" (Acompanhamento), "Notificações"
+  (header do celular), "Esqueceu sua senha?" (login), paginação fixa "Página 1 de 1" (Pedidos).
+- Configurações: tudo fixo no componente e "Salvar" não grava (sem store nem rota na API).
+- `npx ng test` não compila: specs antigos (`app.spec.ts`, `services/produto.spec.ts`,
+  `services/sidebar.spec.ts`...) importam nomes que não existem mais. Corrigir ou apagar.
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
-- Conferir no celular se algum card ficou apertado depois do piso de 11px (produtos, tabela de preços, clientes).
 - Botão "Sair" no celular (hoje só na sidebar do desktop). Sugestão: tela de Configurações.
 
 ## Histórico
+
+- 2026-11-23: varredura do workspace: build ok (só o aviso de CommonJS do jsPDF); testes não
+  compilam; botões sem ação, "Editar cliente" sem tela e Configurações sem gravar foram para as
+  pendências. (Claude)
+
+- 2026-11-23: etapa 14, correções dos testes: `novalidate` nos 3 formulários; análise de cliente com
+  motivo obrigatório para recusar (`PreCadastrosStore.recusar(id, motivo)`, `motivoRecusa`) e botões
+  só enquanto aguarda; tabela de preços mantém edições não salvas (`linkedSignal` com `computation`);
+  previsão de entrega formatada (`formatarData`); "Pedido #id" na aprovação; frase da previsão só
+  antes do faturamento; placeholder do e-mail; nenhum texto abaixo de 11px (`text-[10px]` e
+  `.settings-label`, `<small>` do dashboard). Testado no navegador: tudo certo. (Claude, com quem desenvolve)
+
+- 2026-11-23: testes no navegador. Funcionando: Novo pedido (envio, data no passado, confirmação),
+  aprovar e recusar pedido com motivo, acompanhamento de pedido recusado, filtro de status em
+  Pedidos, aprovar e recusar pré-cadastro, salvar preço (continua salvo ao sair e voltar), erros
+  do cadastro de produto e do pré-cadastro (CNPJ inválido), celular a 420px sem cards apertados.
+  Problemas encontrados foram para as pendências. (Claude)
+
+- 2026-11-19: etapa 13, acompanhamento com dados reais: `etapas-pedido.ts` monta as etapas pelo
+  status (recusado para na análise e mostra o motivo), cartão de status com `status-pill` no
+  Acompanhamento e no Pedido enviado, previsão de entrega do pedido, `input()` no
+  `PedidoAcompanhamentoComponent` e import sem uso removido de Pedidos (fim do aviso NG8113).
+  Testado no navegador (1046 e 1047). (Claude, com quem desenvolve)
 
 - 2026-11-19: etapas 11 e 12, login: `SessaoService` (signal + localStorage), tela de login com Signal
   Forms, guards nas rotas, `tokenInterceptor`, 401 encerra a sessão, iniciais e "Sair" na sidebar,

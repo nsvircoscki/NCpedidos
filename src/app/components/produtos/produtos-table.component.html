@@ -193,12 +193,12 @@
 
   <!-- Resumo da lista -->
   <div class="mb-3 flex items-center justify-between px-4">
-    <span class="text-[10px] text-slate-500 dark:text-slate-400">
+    <span class="text-[11px] text-slate-500 dark:text-slate-400">
       {{ produtosFiltrados.length }} produto(s) encontrado(s)
     </span>
 
     @if (produtosSelecionados.size > 0) {
-      <span class="text-[10px] font-bold text-[#153860] dark:text-noite-marca">
+      <span class="text-[11px] font-bold text-[#153860] dark:text-noite-marca">
         {{ produtosSelecionados.size }} selecionado(s)
       </span>
     }
@@ -208,7 +208,7 @@
   <div class="overflow-x-auto">
     <table class="w-full min-w-[1050px] border-collapse text-left">
       <thead>
-        <tr class="bg-slate-50 text-[10px] font-bold leading-none text-slate-500 dark:text-noite-suave dark:bg-noite-sutil">
+        <tr class="bg-slate-50 text-[11px] font-bold leading-none text-slate-500 dark:text-noite-suave dark:bg-noite-sutil">
           <th class="w-12 px-4 py-4 uppercase">
             <span class="sr-only">Selecionar</span>
           </th>
@@ -252,7 +252,7 @@
                     {{ produto.nome }}
                   </div>
 
-                  <div class="mt-1 text-[10px] text-slate-500 dark:text-slate-400">
+                  <div class="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                     {{ produto.codigoSKU }} · {{ produto.cor }}
                   </div>
                 </div>
@@ -293,11 +293,11 @@
             <!-- Status -->
             <td class="px-4 py-4">
               @if (produto.status === 'ATIVO') {
-                <span class="rounded-xl bg-[#ECF8F2] px-3 py-1.5 text-[10px] font-bold text-[#267253] dark:bg-noite-sutil dark:text-[#94dbbe]">
+                <span class="rounded-xl bg-[#ECF8F2] px-3 py-1.5 text-[11px] font-bold text-[#267253] dark:bg-noite-sutil dark:text-[#94dbbe]">
                   Ativo
                 </span>
               } @else {
-                <span class="rounded-xl bg-red-50 px-3 py-1.5 text-[10px] font-bold text-red-600 dark:bg-red-950 dark:text-red-300">
+                <span class="rounded-xl bg-red-50 px-3 py-1.5 text-[11px] font-bold text-red-600 dark:bg-red-950 dark:text-red-300">
                   Inativo
                 </span>
               }

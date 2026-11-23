@@ -24,7 +24,7 @@
                 <div class="flex items-start justify-between">
                     <div>
                         <h2 class="titulo-secao">Pedidos recentes</h2>
-                        <p class="mt-1 text-[10px] text-[#64748b] dark:text-noite-suave">Últimas movimentações da sua carteira</p>
+                        <p class="mt-1 text-[11px] text-[#64748b] dark:text-noite-suave">Últimas movimentações da sua carteira</p>
                     </div>
                     <button type="button" routerLink="/pedidos" class="mt-1 text-[11px] font-semibold text-[#153860] dark:text-noite-marca">Ver todos</button>
                 </div>
@@ -43,7 +43,7 @@
                                 <p class="mt-1 text-[11px] text-[#64748b] dark:text-noite-suave">#{{ pedido.id }} · {{ pedido.date }}</p>
                             </div>
                             <div class="min-w-0 shrink-0 text-right">
-                                <p class="text-[10px] font-semibold text-[#0f172a] dark:text-noite-texto">{{ pedido.total | currency:'BRL' }}</p>
+                                <p class="text-[11px] font-semibold text-[#0f172a] dark:text-noite-texto">{{ pedido.total | currency:'BRL' }}</p>
                                 <span class="mt-1 inline-block rounded-xl bg-[#edf3f8] px-2.5 py-1 text-[11px] font-semibold text-[#153860] dark:bg-noite-sutil dark:text-noite-marca">{{ pedido.status }}</span>
                             </div>
                         </a>
@@ -127,7 +127,7 @@
                             [class.text-[#c0392b]]="!amostra.subiu"
                             [class.dark:text-[#ff9b9b]]="!amostra.subiu">
                             {{ amostra.subiu ? '↗' : '↘' }} {{ amostra.variacao }}
-                            <small class="font-normal text-slate-500 dark:text-noite-suave">em comparação ao último mês</small>
+                            <small class="text-[11px] font-normal text-slate-500 dark:text-noite-suave">em comparação ao último mês</small>
                         </span>
                     </app-amostra-tinta>
                 </article>

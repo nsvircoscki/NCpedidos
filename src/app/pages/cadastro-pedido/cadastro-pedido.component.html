@@ -12,7 +12,7 @@
 
       <div class="mr-auto ml-3 min-w-0 sm:ml-4">
         <h1 class="truncate text-[16px] font-bold leading-tight text-[#0f172a] dark:text-noite-texto">Novo pedido</h1>
-        <p class="text-[10px] text-[#64748b] dark:text-noite-suave">Rascunho salvo</p>
+        <p class="text-[11px] text-[#64748b] dark:text-noite-suave">Rascunho salvo</p>
       </div>
 
       <div class="text-right">
@@ -30,7 +30,7 @@
       </section>
     </section>
 
-    <form (submit)="submitOrder($event)" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0 lg:max-w-6xl lg:gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
+    <form novalidate (submit)="submitOrder($event)" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0 lg:max-w-6xl lg:gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
       <div class="min-w-0 space-y-4">
         <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-fundo dark:bg-noite-card">
           <app-seletor-cliente
@@ -43,7 +43,7 @@
           <div class="mb-3 flex items-start justify-between gap-4">
             <div>
               <h2 class="titulo-secao">Itens do pedido</h2>
-              <p class="mt-1 text-[10px] text-slate-500 dark:text-noite-suave">{{ itemCount }} unidades selecionadas</p>
+              <p class="mt-1 text-[11px] text-slate-500 dark:text-noite-suave">{{ itemCount }} unidades selecionadas</p>
             </div>
             <button type="button" class="botao-pop text-xs font-bold text-[#153860] dark:text-noite-marca">+ Adicionar</button>
           </div>
@@ -64,12 +64,12 @@
                 </div>
                 <div class="min-w-0 flex flex-col overflow-hidden">
                   <strong class="truncate text-xs font-bold">{{ product.name }}</strong>
-                  <small class="mt-1 truncate text-[10px] text-slate-500 dark:text-slate-400">{{ product.description }}</small>
+                  <small class="mt-1 truncate text-[11px] text-slate-500 dark:text-slate-400">{{ product.description }}</small>
                   <strong class="mt-2 text-xs text-[#153860] dark:text-noite-marca">{{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong>
                 </div>
                 <div class="grid h-8 w-[6.25rem] shrink-0 grid-cols-[1.75rem_2rem_1.75rem] overflow-hidden rounded-lg border border-slate-200 dark:border-noite-borda">
                   <button type="button" class="grid place-items-center text-sm text-slate-500 transition hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-noite-sutil" (click)="changeQuantity(product.id, -1)">−</button>
-                  <output class="grid place-items-center border-x border-slate-200 text-[10px] font-bold dark:border-noite-borda">{{ quantities[product.id] }}</output>
+                  <output class="grid place-items-center border-x border-slate-200 text-[11px] font-bold dark:border-noite-borda">{{ quantities[product.id] }}</output>
                   <button type="button" class="grid place-items-center bg-[#153860] text-sm text-white transition hover:bg-[#0e2947]" (click)="changeQuantity(product.id, 1)">+</button>
                 </div>
               </article>
@@ -80,18 +80,18 @@
         <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-5 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm dark:border-noite-fundo dark:bg-noite-card">
           <h2 class="titulo-secao">Condições comerciais</h2>
           <fieldset class="mt-4">
-            <legend class="mb-2 text-[10px] font-semibold text-slate-600 dark:text-slate-300">Condição de pagamento</legend>
+            <legend class="mb-2 text-[11px] font-semibold text-slate-600 dark:text-slate-300">Condição de pagamento</legend>
             <div class="grid min-w-0 grid-cols-3 gap-2">
               @for (option of paymentOptions; track option) {
-                <button type="button" class="min-h-10 rounded border px-2 text-[10px] font-bold transition" [class.border-[#153860]]="payment === option" [class.bg-[#153860]]="payment === option" [class.text-white]="payment === option" [class.border-slate-200]="payment !== option" [class.bg-white]="payment !== option" [class.text-slate-600]="payment !== option" (click)="selectPayment(option)" [class.dark:border-noite-marca]="payment === option" [class.dark:border-noite-borda]="payment !== option" [class.dark:bg-noite-card]="payment !== option" [class.dark:text-slate-300]="payment !== option">{{ option }}</button>
+                <button type="button" class="min-h-10 rounded border px-2 text-[11px] font-bold transition" [class.border-[#153860]]="payment === option" [class.bg-[#153860]]="payment === option" [class.text-white]="payment === option" [class.border-slate-200]="payment !== option" [class.bg-white]="payment !== option" [class.text-slate-600]="payment !== option" (click)="selectPayment(option)" [class.dark:border-noite-marca]="payment === option" [class.dark:border-noite-borda]="payment !== option" [class.dark:bg-noite-card]="payment !== option" [class.dark:text-slate-300]="payment !== option">{{ option }}</button>
               }
             </div>
           </fieldset>
           <label class="mt-5 block">
-            <span class="mb-2 block text-[10px] font-semibold text-slate-600 dark:text-slate-300">Previsão de entrega</span>
+            <span class="mb-2 block text-[11px] font-semibold text-slate-600 dark:text-slate-300">Previsão de entrega</span>
             <div class="relative">
               <button type="button" class="flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 px-3 text-left text-xs text-slate-700 dark:border-noite-borda dark:text-slate-200">
-                <span>{{ dadosPedido().previsaoEntrega || 'Informado pela empresa.' }}</span>
+                <span>{{ previsaoFormatada }}</span>
                 <span class="text-xl text-slate-500 dark:text-noite-suave">›</span>
               </button>
               <input type="date" [formField]="formulario.previsaoEntrega" aria-label="Previsão de entrega" aria-describedby="erro-entrega" class="sr-only">
@@ -110,7 +110,7 @@
         <section class="bg-transparent lg:rounded-2xl lg:bg-white lg:px-5 lg:py-5 lg:shadow-sm dark:lg:bg-noite-card">
           <div class="flex items-center justify-between">
             <h2 class="titulo-secao">Resumo do pedido</h2>
-            <span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-[#153860] dark:bg-blue-950 dark:text-noite-marca">{{ itemCount }} un.</span>
+            <span class="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold text-[#153860] dark:bg-blue-950 dark:text-noite-marca">{{ itemCount }} un.</span>
           </div>
           <dl class="mt-4">
             <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Subtotal</dt><dd class="font-semibold">{{ subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
@@ -118,7 +118,7 @@
             <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs dark:border-noite-borda"><dt class="text-slate-500 dark:text-slate-400">Frete</dt><dd class="font-semibold">Grátis</dd></div>
             <div class="flex min-h-20 items-center justify-between"><dt class="flex flex-col"><strong class="text-sm">Total</strong><span class="mt-1 text-[11px] text-slate-500 dark:text-noite-suave">Faturado em {{ payment | lowercase }}</span></dt><dd class="text-xl font-extrabold">{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd></div>
           </dl>
-          <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[10px] leading-4 text-slate-500 dark:bg-noite-sutil dark:text-slate-400"><input type="checkbox" [formField]="formulario.confirmado" aria-describedby="erro-confirmado" class="mt-0.5 h-4 w-4 accent-[#153860] dark:accent-noite-marca"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
+          <label class="flex min-h-12 items-start gap-3 rounded-lg bg-slate-50 p-3 text-[11px] leading-4 text-slate-500 dark:bg-noite-sutil dark:text-slate-400"><input type="checkbox" [formField]="formulario.confirmado" aria-describedby="erro-confirmado" class="mt-0.5 h-4 w-4 accent-[#153860] dark:accent-noite-marca"><span>Confirmo que os dados do cliente e as condições estão corretos.</span></label>
           <app-erro-campo [campo]="formulario.confirmado" id="erro-confirmado" />
           <button type="submit" class="botao-acao botao-pop mt-4 flex min-h-12 w-full justify-between! shadow-lg"><span>Enviar pedido</span><strong>{{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></button>
           @if (avisoEnvio) {

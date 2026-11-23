@@ -49,11 +49,11 @@
     </div>
 
     <fieldset class="mt-8">
-      <legend class="text-[10px] font-semibold text-[#334155] lg:text-sm dark:text-noite-texto">Categoria da observação</legend>
+      <legend class="text-[11px] font-semibold text-[#334155] lg:text-sm dark:text-noite-texto">Categoria da observação</legend>
       <div class="mt-3 flex gap-2 overflow-x-auto">
         @for (categoria of ['Perfil comercial', 'Entrega', 'Pagamento']; track categoria) {
           <label
-            class="shrink-0 cursor-pointer rounded-full px-4 py-2 text-[10px] font-semibold transition-colors"
+            class="shrink-0 cursor-pointer rounded-full px-4 py-2 text-[11px] font-semibold transition-colors"
             [class.bg-[#edf3f7]]="observacoes.categoria === categoria"
             [class.text-[#153860]]="observacoes.categoria === categoria"
             [class.bg-white]="observacoes.categoria !== categoria"
@@ -81,7 +81,7 @@
         [(ngModel)]="observacoes.destacar"
         class="h-[18px] w-[18px] shrink-0 rounded accent-[#153860] dark:accent-noite-marca">
       <span>
-        <strong class="block text-[10px] font-semibold text-[#0f172a] dark:text-noite-texto">Destacar no perfil do cliente</strong>
+        <strong class="block text-[11px] font-semibold text-[#0f172a] dark:text-noite-texto">Destacar no perfil do cliente</strong>
         <small class="mt-1 block text-[11px] text-[#64748b] dark:text-noite-suave">Exibir esta observação no topo do cadastro.</small>
       </span>
     </label>
@@ -89,7 +89,7 @@
     <aside class="mt-8 flex min-h-[84px] gap-3 rounded-[12px] bg-[#fffbeb] px-4 py-4 dark:bg-[#3f3718]">
       <span class="grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full bg-[#fef3c7] text-sm font-bold text-[#d97706] dark:bg-[#453c17] dark:text-[#edbb82]">!</span>
       <div>
-        <strong class="text-[10px] font-semibold text-[#92400e] dark:text-[#edab82]">Evite dados sensíveis</strong>
+        <strong class="text-[11px] font-semibold text-[#92400e] dark:text-[#edab82]">Evite dados sensíveis</strong>
         <p class="mt-1 text-[11px] leading-[14px] text-[#a16207] dark:text-[#edc182]">Não inclua senhas, dados bancários ou informações pessoais sem necessidade comercial.</p>
       </div>
     </aside>

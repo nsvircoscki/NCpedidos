@@ -4,7 +4,7 @@ import { Component, input, output } from '@angular/core';
 @Component({
   selector: 'app-filtro-chips',
   template: `
-    <h3 class="mb-2 mt-5 text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ titulo() }}</h3>
+    <h3 class="mb-2 mt-5 text-[11px] font-bold uppercase tracking-wide text-slate-400">{{ titulo() }}</h3>
     <div class="flex flex-wrap gap-2">
       @for (opcao of opcoes(); track opcao) {
         <button

@@ -1,4 +1,4 @@
-@if (embutido) {
+@if (embutido()) {
   <ng-container *ngTemplateOutlet="conteudo"></ng-container>
 } @else {
   <div class="mx-auto w-full max-w-5xl px-4 pt-3 lg:px-0">
@@ -19,8 +19,8 @@
         </div>
 
         <div class="text-right">
-          <span class="block text-[10px] text-[#64748b] dark:text-noite-suave">Pedido</span>
-          <strong class="text-base font-bold text-[#153860] dark:text-noite-marca">#{{ numeroPedido }}</strong>
+          <span class="block text-[11px] text-[#64748b] dark:text-noite-suave">Pedido</span>
+          <strong class="text-base font-bold text-[#153860] dark:text-noite-marca">#{{ numeroPedido() }}</strong>
         </div>
       </header>
 
@@ -30,17 +30,13 @@
 
 <ng-template #conteudo>
   <!-- Quando embutido, o card de status fica no topo do Pedido enviado (acima das abas) -->
-  @if (!embutido) {
-  <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#FFF9EA] p-4 lg:mt-0 lg:p-5 dark:bg-[#3f3418]">
-    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F3A928] text-base font-medium text-white">
-      ◷
-    </div>
-
+  @if (!embutido() && resumo(); as resumo) {
+  <div class="cartao mt-4 flex items-center justify-between gap-3 p-4 lg:mt-0 lg:p-5">
     <div>
-      <h2 class="text-sm font-semibold text-[#8A5A08] dark:text-[#edc682]">Em análise comercial</h2>
-      <p class="text-[10px] text-[#765F32] dark:text-[#d4c19b]">Seu pedido foi recebido e está sendo validado</p>
-      <p class="text-[11px] text-[#A17B31] dark:text-[#dec492]">Atualizado há 3 minutos</p>
+      <h2 class="text-sm font-semibold text-[#0f172a] dark:text-noite-texto">{{ resumo.titulo }}</h2>
+      <p class="text-[11px] text-slate-500 dark:text-noite-suave">{{ resumo.descricao }}</p>
     </div>
+    <span class="status-pill text-[11px]" [attr.data-status]="pedido()?.status">{{ pedido()?.status }}</span>
   </div>
   }
 
@@ -50,79 +46,34 @@
     </div>
     <p class="-mt-2 text-[11px] text-[#64748B] dark:text-noite-suave">Veja cada etapa até a entrega do pedido</p>
     <div class="cartao mt-2 border border-slate-200 p-4 lg:p-8 dark:border-noite-borda">
-      <div class="flex w-full items-start gap-4">
-        <div class="flex flex-col items-center self-stretch">
-          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#26835A] text-[10px] font-medium text-white">✓</span>
-          <div class="mt-1.5 min-h-[30px] w-[2px] flex-grow rounded-t-sm bg-[#26835A]"></div>
-        </div>
-
-        <div class="flex w-full flex-col pb-4 pt-0.5">
-          <div class="flex w-full items-start justify-between gap-2">
-            <span class="text-[12px] font-semibold text-[#1a202c] dark:text-noite-texto">Pedido enviado</span>
-            <span class="mt-0.5 whitespace-nowrap text-[10px] text-slate-500 dark:text-noite-suave">Hoje, 10:24</span>
+      @for (etapa of etapas(); track $index; let posicao = $index, ultima = $last) {
+        <div class="flex w-full items-start gap-4">
+          <div class="flex flex-col items-center self-stretch">
+            <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px] font-semibold {{ classesBolinha[etapa.estado] }}">
+              @switch (etapa.estado) {
+                @case ('feita') { ✓ }
+                @case ('atual') { • }
+                @case ('recusada') { ✕ }
+                @default { {{ posicao + 1 }} }
+              }
+            </span>
+            @if (!ultima) {
+              <div class="mt-1.5 min-h-[30px] w-[2px] flex-grow rounded-t-sm"
+                [class.bg-[#26835A]]="etapa.estado === 'feita'"
+                [class.bg-[#CBD5E1]]="etapa.estado !== 'feita'"
+                [class.dark:bg-[#404b59]]="etapa.estado !== 'feita'"></div>
+            }
           </div>
-          <p class="m-0 text-[11px] font-normal text-[#718096]">Recebemos o pedido #{{ numeroPedido }}.</p>
-        </div>
-      </div>
 
-      <div class="flex w-full items-start gap-4">
-        <div class="flex flex-col items-center self-stretch">
-          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#F3A928] text-sm font-normal text-white">•</span>
-          <div class="mt-1.5 min-h-[30px] w-[2px] flex-grow rounded-t-sm bg-[#F3A928]"></div>
-        </div>
-
-        <div class="flex w-full flex-col pb-4 pt-0.5">
-          <div class="flex w-full items-start justify-between gap-2">
-            <span class="text-[12px] font-semibold text-[#8A5A08] dark:text-[#edc682]">Análise comercial</span>
-            <span class="mt-0.5 whitespace-nowrap text-[10px] text-[#8A5A08] dark:text-[#edc682]">Em andamento</span>
+          <div class="flex w-full flex-col pb-4 pt-0.5">
+            <div class="flex w-full items-start justify-between gap-2">
+              <span class="text-[12px] font-semibold text-[#1a202c] dark:text-noite-texto">{{ etapa.titulo }}</span>
+              <span class="mt-0.5 whitespace-nowrap text-[11px] text-slate-500 dark:text-noite-suave">{{ etapa.rotulo }}</span>
+            </div>
+            <p class="m-0 text-[11px] text-slate-500 dark:text-noite-suave">{{ etapa.descricao }}</p>
           </div>
-          <p class="m-0 text-[11px] font-normal text-[#718096]">Validação de preços, crédito e estoque.</p>
         </div>
-      </div>
-
-      <div class="flex w-full items-start gap-4">
-        <div class="flex flex-col items-center self-stretch">
-          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border-1 border-[#CBD5E1] bg-[#EDF3F5] text-[10px] font-semibold text-[#94A3B8] dark:border-noite-borda dark:bg-noite-sutil">3</span>
-          <div class="mt-1.5 min-h-[30px] w-[2px] flex-grow rounded-t-sm bg-[#CBD5E1] dark:bg-[#404b59]"></div>
-        </div>
-
-        <div class="flex w-full flex-col pb-4 pt-0.5">
-          <div class="flex w-full items-start justify-between gap-2">
-            <span class="text-[12px] font-semibold text-black dark:text-noite-texto">Produção e faturamento</span>
-            <span class="mt-0.5 whitespace-nowrap text-[10px] text-[#94A3B8]">Próxima etapa</span>
-          </div>
-          <p class="m-0 text-[11px] font-normal text-[#718096]">Os produtos serão produzidos e faturados.</p>
-        </div>
-      </div>
-
-      <div class="flex w-full items-start gap-4">
-        <div class="flex flex-col items-center self-stretch">
-          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border-1 border-[#CBD5E1] bg-[#EDF3F5] text-[10px] font-semibold text-[#94A3B8] dark:border-noite-borda dark:bg-noite-sutil">4</span>
-          <div class="mt-1.5 min-h-[30px] w-[2px] flex-grow rounded-t-sm bg-[#CBD5E1] dark:bg-[#404b59]"></div>
-        </div>
-
-        <div class="flex w-full flex-col pb-4 pt-0.5">
-          <div class="flex w-full items-start justify-between gap-2">
-            <span class="text-[12px] font-semibold text-black dark:text-noite-texto">Saiu para a entrega</span>
-            <span class="mt-0.5 whitespace-nowrap text-[10px] text-[#94A3B8]">Aguardando</span>
-          </div>
-          <p class="m-0 text-[11px] font-normal text-[#718096]">Você receberá os dados da transportadora.</p>
-        </div>
-      </div>
-
-      <div class="flex w-full items-start gap-4">
-        <div class="flex flex-col items-center self-stretch">
-          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border-1 border-[#CBD5E1] bg-[#EDF3F5] text-[10px] font-semibold text-[#94A3B8] dark:border-noite-borda dark:bg-noite-sutil">5</span>
-        </div>
-
-        <div class="flex w-full flex-col pb-4 pt-0.5">
-          <div class="flex w-full items-start justify-between gap-2">
-            <span class="text-[12px] font-semibold text-black dark:text-noite-texto">Entrega concluída</span>
-            <span class="mt-0.5 whitespace-nowrap text-[10px] text-[#94A3B8]">Aguardando</span>
-          </div>
-          <p class="m-0 text-[11px] font-normal text-[#718096]">Confirmação de recebimento pelo cliente.</p>
-        </div>
-      </div>
+      }
     </div>
 
     <div class="mt-6 lg:mt-8">
@@ -135,9 +86,11 @@
           </div>
 
           <div class="flex flex-col">
-            <span class="text-[10px] text-[#718096]">Data informada pela empresa</span>
-            <span class="text-[15px] font-semibold leading-tight text-[#001733] dark:text-noite-texto">A confirmar</span>
-            <span class="text-left text-[11px] text-[#001733] dark:text-noite-texto">Atualizaremos esta previsão após o faturamento.</span>
+            <span class="text-[11px] text-[#718096]">Data informada pela empresa</span>
+            <span class="text-[15px] font-semibold leading-tight text-[#001733] dark:text-noite-texto">{{ pedido()?.previsaoEntrega || 'A confirmar' }}</span>
+            @if (pedido()?.status !== 'Faturado') {
+              <span class="text-left text-[11px] text-[#001733] dark:text-noite-texto">Atualizaremos esta previsão após o faturamento.</span>
+            }
           </div>
         </div>
       </div>
