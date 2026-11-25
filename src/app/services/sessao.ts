@@ -3,12 +3,14 @@ import { Service, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Sessao } from '../models/usuario.model';
+import { Router } from '@angular/router';
 
 const CHAVE_SESSAO = 'sessao';
 
 @Service()
 export class SessaoService {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
   private readonly sessao = signal<Sessao | null>(lerSessaoSalva());
 
   readonly usuario = computed(() => this.sessao()?.usuario ?? null);
@@ -26,6 +28,7 @@ export class SessaoService {
 
   sair(): void {
     this.guardar(null);
+    this.router.navigate(['/login']);
   }
 
   private guardar(sessao: Sessao | null): void {

@@ -105,7 +105,7 @@ export const routes: Routes = [
                     },
                     {
                         path: ':id',
-                        loadComponent: () => import('./pages/cadastro-cliente/cadastro-cliente.component').then(m => m.CadastroClientePageComponent),
+                        loadComponent: () => import('./pages/detalhe-cliente/detalhe-cliente.component').then(m => m.DetalheClienteComponent),
                     },
                     {
                         path: ':id/tabela-precos',

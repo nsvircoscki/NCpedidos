@@ -13,7 +13,7 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
   headers e navegação mobile. As páginas não importam mais esses componentes.
 - **Pedido enviado**: movido de `components/pedido-enviado` para `pages/pedido-enviado`.
 - **Inputs com label flutuante**: classes `.label-input*` em `src/styles.scss`, em todos os campos de texto
-  (desktop e celular), inclusive buscas. Exceções: busca Ctrl+K e o campo de data escondido do Novo pedido.
+  (desktop e celular), inclusive buscas. Exceções: busca Ctrl+K e o campo de data da aprovação (label fixo).
 - **Dashboard**: os cards podem ser reordenados arrastando (ng-motion drag + layout).
 - **Produtos**: o seletor de cliente abre como modal com animação pop-in.
 - **Filtros desktop** (`src/app/components/filtro-modal/`): `app-filtro-modal` (botão hambúrguer
@@ -24,7 +24,7 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
   dashboard, detalhe (`/pedidos/:id`), Novo pedido e Aprovação leem dele. Status:
   Em análise, Aprovado, Recusado, Faturado. Nada é salvo: ao recarregar a página volta ao mock.
 - **Aprovação de pedidos**: `/pedidos/aprovacao` (fila, filtros, resumo) e `/pedidos/aprovacao/:id`
-  (detalhe com Aprovar e Recusar com motivo obrigatório). Acesso pelo botão em Pedidos e pelo Ctrl+K.
+  (detalhe com Aprovar, que exige a previsão de entrega, e Recusar com motivo obrigatório). Acesso pelo botão em Pedidos e pelo Ctrl+K.
 - **PDF do pedido** (`services/pedido-pdf.ts`, jsPDF 4.2.1): botões "Enviar PDF" e "Baixar PDF" no
   Novo pedido (depois de enviar), no detalhe do pedido e na aprovação.
 - **Clientes** (`src/app/components/clientes/clientes-table.component.*`):
@@ -42,28 +42,79 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Pendências
 
-- Commit das etapas 13 e 14.
-- Pedido enviado/Acompanhamento leem o id da rota com `snapshot`: indo de um pedido para outro sem
-  sair da tela (ex.: busca ou notificação), continua mostrando o anterior. Trocar por `paramMap`/
-  `input()` com `withComponentInputBinding` quando houver link entre pedidos.
+- Previsão de entrega: os pedidos guardam o texto já formatado ("20 set."). O ideal é guardar o ISO
+  e formatar só na tela (combinar com o outro dev o formato que a API devolve).
 - Testar o PDF (download no computador, compartilhar no celular): precisa ser feito por quem
   desenvolve, porque baixa arquivo.
 - Pré-cadastro: `PreCadastro` só guarda nome, documento, cidade e UF; telefone, e-mail e perfil se
   perdem. Perguntar ao outro dev (anotar em `docs/API.md`).
 - Quando a API existir: testar as gravações de verdade (com `usarDadosExemplo: false` as listas
   falham antes, então hoje não dá para testar).
-- "Editar cliente" (`/clientes/:id`) abre o pré-cadastro vazio: a página não lê o id. Falta uma
-  tela de detalhe/edição de cliente.
-- Botões sem ação: "+ Adicionar" e "Previsão de entrega" (Novo pedido), "Adicionar produto"
+- Editar cliente: a tela `/clientes/:id` só mostra os dados. Falta `PUT /clientes/:id` na API
+  (perguntar ao outro dev) para ter o botão Editar.
+- Botões sem ação: "+ Adicionar" (Novo pedido), "Adicionar produto"
   (Tabela de preços), "Precisa de ajuda com este pedido?" (Acompanhamento), "Notificações"
-  (header do celular), "Esqueceu sua senha?" (login), paginação fixa "Página 1 de 1" (Pedidos).
+  (header do celular), "Esqueceu sua senha?" (login). A lista de Pedidos no celular não tem paginação.
 - Configurações: tudo fixo no componente e "Salvar" não grava (sem store nem rota na API).
 - `npx ng test` não compila: specs antigos (`app.spec.ts`, `services/produto.spec.ts`,
   `services/sidebar.spec.ts`...) importam nomes que não existem mais. Corrigir ou apagar.
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
-- Botão "Sair" no celular (hoje só na sidebar do desktop). Sugestão: tela de Configurações.
 
 ## Histórico
+
+- 2026-11-25: etapa 27, correção: em Pedidos, `search` e `statusSelecionados` viraram signals;
+  `filteredOrders`, `totalPaginas` e `pedidosDaPagina` são `computed` e `paginaAtual` é um
+  `linkedSignal` que volta para a página 1 quando o filtro muda. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-25: etapa 26, correção: análise de cliente com id inexistente mostra "Pré-cadastro não
+  encontrado." em vez do primeiro pré-cadastro (tirado o `?? preCadastros()[0]`). Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-25: etapa 25, correção: a aprovação envia a previsão de entrega em ISO (`AAAA-MM-DD`) para a
+  API; o `PedidosStore` formata só para a lista local. `docs/API.md` corrigido. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-25: etapa 24, tabela de preços recebe o id do cliente como `input.required` com `alias: 'id'`
+  (`clienteId`). Nenhuma tela lê mais o `:id` da rota por `snapshot`. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-25: etapa 23, cadastro de produto recebe o `id` como `input` opcional (`idProduto` em `computed`);
+  corrigidos o effect que nunca preenchia o formulário na edição e o `idProduto` usado sem `()`
+  (achados da revisão). Ainda usa `snapshot` de rota: tabela-precos. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-24: etapa 22, análise de cliente recebe o `id` como `input.required`. Ainda usam `snapshot`:
+  cadastro-produto e tabela-precos. Build ok. (Claude, com quem desenvolve)
+- 2026-11-24: etapa 21, aprovação de pedido recebe o `id` como `input.required` (sem `snapshot`). Build ok. (Claude, com quem desenvolve)
+- 2026-11-24: etapa 20, previsão de entrega na aprovação: `utils/datas.ts` (`hojeNoFormatoDoInput`,
+  `formatarData`), `PedidosStore.aprovar(id, previsaoEntrega)` envia `{ previsaoEntrega }`, campo de data
+  na tela de aprovação com erro para data vazia ou no passado; `docs/API.md` atualizado. Build ok. (Claude, com quem desenvolve)
+- 2026-11-24: etapa 19, regra de negócio: a previsão de entrega é definida por quem aprova, não pelo
+  representante. Campo removido do Novo pedido (o pedido nasce com "Informado pela empresa").
+  Próximo: escolher a data na aprovação. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-24: detalhe do produto também recebe o `id` como `input.required` (fim do `snapshot`
+  em `detalhe-produto`). Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-24: etapa 18, Pedido enviado e Acompanhamento recebem o `id` da rota como
+  `input.required({ transform: numberAttribute })` em vez de `snapshot` (acompanham a troca de pedido
+  na mesma tela). Embutido, o Pedido enviado passa `[id]="id()"`. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-24: etapa 17, "Sair da conta" no celular (Configurações, `lg:hidden`). `SessaoService.sair()`
+  agora também vai para `/login`; sidebar e `errosApiInterceptor` só chamam `sair()` (antes repetiam
+  a navegação). No celular, as iniciais do `mobile-header` viram link para Configurações (antes não
+  havia caminho até lá). Build ok; falta testar no navegador. (Claude, com quem desenvolve)
+
+- 2026-11-24: etapa 16, detalhe do cliente (`pages/detalhe-cliente/`, rota `/clientes/:id`, antes
+  abria o pré-cadastro vazio): `withComponentInputBinding()` no `app.config.ts`, `id` como
+  `input.required` com `numberAttribute`, cliente por `computed` no `ClientesStore`. Menu da lista:
+  "Ver cliente". Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-23: etapa 15, paginação da lista de Pedidos no desktop (5 por página, `pagina` signal,
+  `paginaAtual()` nunca passa do total ao filtrar, botões com `disabled:` e modo escuro). Corrigido o
+  link da linha da tabela (`'/ pedidos'` com espaço caía no dashboard). Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-23: `AGENTS.md` aponta a skill pessoal `coding-tutor` (instalada fora do projeto) para o
+  modo de ensino. (Claude)
+
+- 2026-11-23: `AGENTS.md` preparado para Cursor e outras ferramentas: regras de commit, "etapa" em vez
+  de "aula", aulas digitadas por quem desenvolve e resumo das skills `enxuto` e `reutilizar`. (Claude)
 
 - 2026-11-23: varredura do workspace: build ok (só o aviso de CommonJS do jsPDF); testes não
   compilam; botões sem ação, "Editar cliente" sem tela e Configurações sem gravar foram para as

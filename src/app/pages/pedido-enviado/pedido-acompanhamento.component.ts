@@ -1,6 +1,6 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, numberAttribute } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { PedidosStore } from '../../services/pedidos-store';
 import { CLASSES_BOLINHA, RESUMO_STATUS, montarEtapas } from './etapas-pedido';
 
@@ -15,10 +15,10 @@ export class PedidoAcompanhamentoComponent {
 
   /** true dentro do Pedido enviado: mostra só o conteúdo, sem o cabeçalho próprio. */
   readonly embutido = input(false);
-  /** Embutido, recebe o número do Pedido enviado; pela rota /pedidos/:id/acompanhamento, lê da URL. */
-  readonly numeroPedido = input(inject(ActivatedRoute).snapshot.paramMap.get('id') ?? '');
+  /** Embutido, recebe o número do Pedido enviado; pela rota /pedidos/:id/acompanhamento, embutido, recebe o id do Pedido enviado; /pedidos/:id/acompanhamento. */
+  readonly id = input.required({ transform: numberAttribute});
 
-  readonly pedido = computed(() => this.pedidosStore.buscar(Number(this.numeroPedido())));
+  readonly pedido = computed(() => this.pedidosStore.buscar(this.id()));
   readonly etapas = computed(() => {
     const pedido = this.pedido();
     return pedido ? montarEtapas(pedido) : [];

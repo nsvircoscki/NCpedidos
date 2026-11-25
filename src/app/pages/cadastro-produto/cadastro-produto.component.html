@@ -2,7 +2,7 @@
 
 
     <div class="mx-auto w-full max-w-[1600px] px-5 py-6 sm:px-6 lg:px-0 lg:py-0">
-      @if (idProduto !== null && carregando()) {
+      @if (idProduto() !== null && carregando()) {
         <div class="cartao"><app-esqueleto-lista texto="Carregando produto..." [linhas]="4" /></div>
       } @else if (produtoNaoEncontrado) {
         <section class="cartao p-8 text-center">

@@ -87,17 +87,6 @@
               }
             </div>
           </fieldset>
-          <label class="mt-5 block">
-            <span class="mb-2 block text-[11px] font-semibold text-slate-600 dark:text-slate-300">Previsão de entrega</span>
-            <div class="relative">
-              <button type="button" class="flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 px-3 text-left text-xs text-slate-700 dark:border-noite-borda dark:text-slate-200">
-                <span>{{ previsaoFormatada }}</span>
-                <span class="text-xl text-slate-500 dark:text-noite-suave">›</span>
-              </button>
-              <input type="date" [formField]="formulario.previsaoEntrega" aria-label="Previsão de entrega" aria-describedby="erro-entrega" class="sr-only">
-            </div>
-            <app-erro-campo [campo]="formulario.previsaoEntrega" id="erro-entrega" />
-          </label>
           <div class="label-input label-input--textarea mt-5 [--label-input-x:0.75rem] [--label-input-size:0.875rem]">
             <label class="label-input__label" for="observacao-faturamento">Observação para o faturamento</label>
             <textarea autocomplete="off" id="observacao-faturamento" [formField]="formulario.observacao" [attr.aria-invalid]="formulario.observacao().invalid()" aria-describedby="erro-observacao" rows="3" placeholder="Ex.: Entregar pela manhã, falar com o Sr. Carlos..." class="label-input__field w-full resize-y rounded-lg border border-slate-200 p-3 text-xs leading-5 outline-none focus:border-[#153860] dark:border-noite-borda dark:focus:border-noite-marca"></textarea>

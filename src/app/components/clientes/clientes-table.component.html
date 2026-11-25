@@ -193,7 +193,7 @@
 
                 @if (menuAcoesAberto === cliente.id) {
                   <div class="absolute right-0 top-10 z-30 w-44 rounded-xl bg-white p-1.5 text-left shadow-xl ring-1 ring-slate-200 dark:bg-noite-card dark:ring-noite-borda">
-                    <button type="button" (click)="$event.stopPropagation(); editarCliente(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-noite-sutil-forte">Editar cliente</button>
+                    <button type="button" (click)="$event.stopPropagation(); editarCliente(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-noite-sutil-forte">Ver cliente</button>
                     <button type="button" (click)="$event.stopPropagation(); verTabelaDePrecos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-noite-sutil-forte">Tabela de preços</button>
                     <button type="button" (click)="$event.stopPropagation(); verPedidos(cliente)" class="block w-full rounded-lg px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-noite-sutil-forte">Pedidos</button>
                   </div>

@@ -5,6 +5,7 @@ import { carregarDados } from './carregar-dados';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { formatarData } from '../utils/datas';
 
 /** Lista de pedidos compartilhada entre Pedidos, dashboard, Novo pedido e Aprovação. */
 @Service()
@@ -32,11 +33,11 @@ export class PedidosStore {
     return novo;
   }
 
-  async aprovar(id: number): Promise<void> {
+  async aprovar(id: number, previsaoEntrega: string): Promise<void> {
     if (!environment.usarDadosExemplo) {
-      await firstValueFrom(this.http.post(`/pedidos/${id}/aprovar`, {}));
+      await firstValueFrom(this.http.post(`/pedidos/${id}/aprovar`, { previsaoEntrega }));
     }
-    this.alterar(id, { status: 'Aprovado', motivoRecusa: undefined});
+    this.alterar(id, { status: 'Aprovado', motivoRecusa: undefined, previsaoEntrega: formatarData(previsaoEntrega) });
   }
 
   async recusar(id: number, motivo: string): Promise<void> {

@@ -3,13 +3,14 @@ import { ErroCarregamentoComponent } from '../../components/erro-carregamento/er
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
+import { Component, computed, inject, linkedSignal, signal, input, numberAttribute } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ItemTabelaPreco } from '../../models/tabela-preco.model';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ClientesStore } from '../../services/clientes-store';
 import { TabelasPrecoStore } from '../../services/tabelas-preco-store';
+import { number } from 'motion-dom';
 
 
 @Component({
@@ -19,14 +20,13 @@ import { TabelasPrecoStore } from '../../services/tabelas-preco-store';
   templateUrl: './tabela-precos.component.html'
 })
 export class TabelaPrecosPageComponent {
-  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly clientesStore = inject(ClientesStore);
   private readonly tabelasStore = inject(TabelasPrecoStore);
   readonly mensagemPreco = signal('');
 
-  clienteId = Number(this.route.snapshot.paramMap.get('id'));
-  clienteNome = computed(() => this.clientesStore.buscar(this.clienteId)?.nome ?? 'Cliente');
+  readonly clienteId =  input.required({ alias: 'id', transform: numberAttribute });
+  clienteNome = computed(() => this.clientesStore.buscar(this.clienteId())?.nome ?? 'Cliente');
   readonly carregando = this.tabelasStore.carregando;
   readonly erro = this.tabelasStore.erro;
 
@@ -34,7 +34,7 @@ export class TabelaPrecosPageComponent {
     this.tabelasStore.recarregar();
   }
   readonly itens = linkedSignal<ItemTabelaPreco[], ItemTabelaPreco[]>({
-    source: () => this.tabelasStore.doCliente(this.clienteId),
+    source: () => this.tabelasStore.doCliente(this.clienteId()),
     computation: (novos, anterior) => novos.map(novo => {
       const editado = anterior?.value.find(item => item.id === novo.id);
       return editado ? { ...novo, preco: editado.preco } : novo;
@@ -56,7 +56,7 @@ export class TabelaPrecosPageComponent {
 
   async salvarPreco(item: ItemTabelaPreco): Promise<void> {
     try {
-      await this.tabelasStore.salvarPreco(this.clienteId, item.id, item.preco);
+      await this.tabelasStore.salvarPreco(this.clienteId(), item.id, item.preco);
       this.mensagemPreco.set(`Preço de ${item.produto} salvo.`);
     } catch {
       this.mensagemPreco.set('Não foi possível salvar o preço. Tente novamente.');

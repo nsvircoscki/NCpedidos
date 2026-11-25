@@ -42,11 +42,11 @@
           />
         </div>
         <app-filtro-modal
-          [totalAtivos]="statusSelecionados.length"
+          [totalAtivos]="statusSelecionados().length"
           [totalResultados]="filteredOrders().length"
           nomeResultados="pedidos"
           (limpar)="limparFiltros()">
-          <app-filtro-chips titulo="Status" [opcoes]="statusPedido" [selecionados]="statusSelecionados" (alternar)="alternarStatus($event)" />
+          <app-filtro-chips titulo="Status" [opcoes]="statusPedido" [selecionados]="statusSelecionados()" (alternar)="alternarStatus($event)" />
         </app-filtro-modal>
 
         @if (totalFiltrosAtivos > 0) {
@@ -72,10 +72,10 @@
         } @else if (erro()) {
           <app-erro-carregamento texto="Não foi possível carregar os pedidos." (tentarDeNovo)="recarregar()" />
         } @else {
-        @for (order of filteredOrders(); track order.id; let last = $last) {
+        @for (order of pedidosDaPagina(); track order.id; let last = $last) {
           <button
             type="button"
-            [routerLink]="['/ pedidos', order.id]"
+            [routerLink]="['/pedidos', order.id]"
             class="grid min-h-[72px] w-full min-w-[950px] grid-cols-[auto_minmax(220px,1.4fr)_minmax(110px,.7fr)_minmax(100px,.6fr)_minmax(130px,.8fr)_minmax(120px,.7fr)] items-center border-b border-slate-100 text-left transition-colors hover:bg-slate-50 dark:hover:bg-noite-sutil"
             [class.border-b]="!last"
             [class.border-[#dbe4ed]]="!last"
@@ -113,10 +113,10 @@
         }
       </div>
       <div class="flex items-center justify-between border-t border-slate-100 px-4 py-4 text-[11px] text-[#64748b] dark:border-noite-borda dark:text-noite-suave">
-        <span>Página 1 de 1</span>
+        <span>Página {{ paginaAtual() }} de {{ totalPaginas() }}</span>
         <div class="flex gap-2">
-          <button type="button" disabled class="rounded-lg border border-slate-200 px-3 py-2 text-slate-300 dark:border-noite-borda">Anterior</button>
-          <button type="button" disabled class="rounded-lg border border-slate-200 px-3 py-2 text-slate-300 dark:border-noite-borda">Próxima</button>
+          <button type="button" (click)="irParaPagina(paginaAtual() - 1)" [disabled]="paginaAtual() === 1" class="rounded-lg border border-slate-200 px-3 py-2 text-slate-700 disabled:text-slate-300 dark:text-noite-texto dark:disabled:text-noite-suave dark:border-noite-borda">Anterior</button>
+          <button type="button" (click)="irParaPagina(paginaAtual() + 1)" [disabled]="paginaAtual() === totalPaginas()" class="rounded-lg border border-slate-200 px-3 py-2 text-slate-700 disabled:text-slate-300 dark:text-noite-texto dark:disabled:text-noite-suave dark:border-noite-borda">Próxima</button>
         </div>
       </div>
     </section>

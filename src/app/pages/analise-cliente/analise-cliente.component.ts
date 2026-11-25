@@ -1,8 +1,8 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, computed, input, numberAttribute, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { PreCadastrosStore } from '../../services/pre-cadastros-store';
 
 type ReviewStatus = 'waiting' | 'approved' | 'rejected';
@@ -20,10 +20,10 @@ interface ClientField {
 })
 export class AnaliseClientePageComponent {
 
-  private readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  readonly id = input.required({ transform: numberAttribute});
   private readonly store = inject(PreCadastrosStore);
   readonly carregando = this.store.carregando;
-  readonly cadastro = computed(() => this.store.buscar(this.id) ?? this.store.preCadastros()[0]);
+  readonly cadastro = computed(() => this.store.buscar(this.id()));
 
   readonly status = computed<ReviewStatus>(() => {
     const atual = this.cadastro()?.status;
@@ -66,14 +66,14 @@ export class AnaliseClientePageComponent {
   }
 
   async aprovar(): Promise<void> {
-    await this.tentar(() => this.store.aprovar(this.id));
+    await this.tentar(() => this.store.aprovar(this.id()));
   }
 
   async recusar(): Promise<void> {
     const motivo = this.motivo().trim();
     this.faltaMotivo.set(!motivo);
     if (!motivo) return;
-    await this.tentar(() => this.store.recusar(this.id, motivo));
+    await this.tentar(() => this.store.recusar(this.id(), motivo));
   }
 
   private async tentar(acao: () => Promise<void>): Promise<void> {

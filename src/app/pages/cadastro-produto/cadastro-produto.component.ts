@@ -1,8 +1,8 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, signal, untracked } from '@angular/core';
+import { Component, effect, inject, signal, input, computed, untracked } from '@angular/core';
 import { FormField, form, max, min, required } from '@angular/forms/signals';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Produto } from '../../models/produto.model';
 import { ProdutoService } from '../../services/produto';
 import { ErroCampoComponent } from '../../components/erro-campo/erro-campo.component';
@@ -25,7 +25,11 @@ export class CadastroProdutoComponent {
   private produtoService = inject(ProdutoService);
   readonly carregando = this.produtoService.carregando;
 
-  idProduto: number | null = null;
+  readonly id = input<string>();
+  readonly idProduto = computed(() => {
+    const id = this.id();
+    return id === undefined ? null : Number(id);
+  });
   modoEdicao = false;
   produtoNaoEncontrado = false;
   abaAtual: AbaCadastroProduto = 'informacoes';
@@ -56,22 +60,12 @@ export class CadastroProdutoComponent {
     max(campo.margem, 100, { message: 'A margem não pode ser maior que 100%.' });
   });
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
-
-    const idDaRota = this.route.snapshot.paramMap.get('id');
-
-    if (idDaRota !== null) {
-      const id = Number(idDaRota);
-      this.idProduto = id;
-      // Só dá para preencher o formulário depois que a lista de produtos chegar.
-      effect(() => {
-        if (this.carregando()) return;
-        untracked(() => this.preencherFormulario(id));
-      });
-    }
+  constructor(private router: Router) {
+    effect(() => {
+      const id = this.idProduto();
+      if (id === null || this.carregando()) return;
+      untracked(() => this.preencherFormulario(id));
+    });
   }
 
   private preencherFormulario(id: number): void {
@@ -119,8 +113,9 @@ export class CadastroProdutoComponent {
     }
 
     try {
-      const produtoSalvo = this.modoEdicao && this.idProduto !== null
-        ? await this.produtoService.atualizar(this.idProduto, this.produto())
+      const id = this.idProduto()
+      const produtoSalvo = this.modoEdicao && id !== null
+        ? await this.produtoService.atualizar(id, this.produto())
         : await this.produtoService.adicionar(this.produto());
       this.router.navigate(['/produtos', produtoSalvo.id]);
     } catch {

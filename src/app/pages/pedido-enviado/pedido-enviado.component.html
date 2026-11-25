@@ -21,7 +21,7 @@
 
     <div class="text-right">
       <span class="block text-[11px] text-[#64748b] dark:text-noite-suave">Pedido</span>
-      <strong class="text-base font-bold text-[#153860] dark:text-noite-marca">#{{ numeroPedido }}</strong>
+      <strong class="text-base font-bold text-[#153860] dark:text-noite-marca">#{{ id() }}</strong>
     </div>
   </header>
 
@@ -155,10 +155,10 @@
     <button type="button" (click)="baixarPdf()" class="botao-acao-secundario flex min-h-12">Baixar PDF</button>
   </div>
   } @else {
-  <p class="cartao mt-6 p-6 text-center text-sm text-slate-500 dark:text-noite-suave">Pedido #{{ numeroPedido }} não encontrado.</p>
+  <p class="cartao mt-6 p-6 text-center text-sm text-slate-500 dark:text-noite-suave">Pedido #{{ id() }} não encontrado.</p>
   }
   } @else {
-    <app-pedido-acompanhamento [embutido]="true" [numeroPedido]="numeroPedido"></app-pedido-acompanhamento>
+    <app-pedido-acompanhamento [embutido]="true" [id]="id()"></app-pedido-acompanhamento>
   }
 
   <!-- Botão Inferior de Ação -->

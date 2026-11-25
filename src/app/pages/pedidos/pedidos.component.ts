@@ -1,9 +1,8 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
-import { PedidoResumo } from '../../models/pedido.model';
 import { PedidosStore } from '../../services/pedidos-store';
-import { Component, inject, signal, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { Component, inject, signal, linkedSignal, ElementRef, ViewChild, AfterViewInit, HostListener, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -40,36 +39,36 @@ export class PedidosComponent implements AfterViewInit {
     }
 
     readonly sent = signal(false);
-    search = '';
-    statusSelecionados: string[] = [];
+    readonly search = signal('');
+    readonly statusSelecionados = signal<string[]>([]);
     filtrosAbertos = false;
     readonly statusPedido = ['Em análise', 'Aprovado', 'Recusado', 'Faturado'];
     readonly statusOptions = ['Todos', ...this.statusPedido];
 
     get totalFiltrosAtivos(): number {
-        return this.statusSelecionados.length + (this.search.trim() ? 1 : 0);
+        return this.statusSelecionados().length + (this.search().trim() ? 1 : 0);
     }
 
     alternarStatus(status: string): void {
-        this.statusSelecionados = this.statusSelecionados.includes(status)
-            ? this.statusSelecionados.filter(item => item !== status)
-            : [...this.statusSelecionados, status];
+        this.statusSelecionados.update(lista => lista.includes(status)
+            ? lista.filter(item => item !== status)
+            : [...lista, status])
     }
 
     // No mobile os chips escolhem um status por vez; "Todos" limpa a escolha.
     escolherStatusMobile(status: string): void {
-        this.statusSelecionados = status === 'Todos' ? [] : [status];
+        this.statusSelecionados.set(status === 'Todos' ? [] : [status]);
     }
 
     statusMobileAtivo(status: string): boolean {
         return status === 'Todos'
-            ? this.statusSelecionados.length === 0
-            : this.statusSelecionados.includes(status);
+            ? this.statusSelecionados().length === 0
+            : this.statusSelecionados().includes(status);
     }
 
     limparFiltros(): void {
-        this.search = '';
-        this.statusSelecionados = [];
+        this.search.set('');
+        this.statusSelecionados.set([]);
     }
 
 
@@ -86,21 +85,39 @@ export class PedidosComponent implements AfterViewInit {
         this.pedidosStore.recarregar();
     }
 
-    // Método (e não computed) porque search/statusSelecionados não são signals:
-    // um computed nunca recalcularia ao digitar ou trocar o status.
-    filteredOrders(): PedidoResumo[] {
-        const termo = this.search.toLowerCase().trim();
+
+     readonly filteredOrders = computed(() => {
+        const termo = this.search().toLowerCase().trim();
         return this.orders().filter((order) => {
             const matchSearch =
                 !termo ||
                 order.client.toLowerCase().includes(termo) ||
                 String(order.id).includes(termo);
             const matchStatus =
-                this.statusSelecionados.length === 0 || this.statusSelecionados.includes(order.status);
+                this.statusSelecionados().length === 0 || this.statusSelecionados().includes(order.status);
             const matchCliente =
                 this.clienteIdFiltro === null || order.clienteId === this.clienteIdFiltro;
             return matchSearch && matchStatus && matchCliente;
         });
+     });     
+    
+
+    readonly itensPorPagina = 5;
+    readonly paginaAtual = linkedSignal({
+        source: this.filteredOrders,
+        computation: () => 1,
+    });
+
+    readonly totalPaginas = computed(() => 
+        Math.max(1, Math.ceil(this.filteredOrders().length / this.itensPorPagina)));
+    
+    readonly pedidosDaPagina = computed(() => {
+        const inicio = (this.paginaAtual() -1)* this.itensPorPagina;
+        return this.filteredOrders().slice(inicio, inicio + this.itensPorPagina);
+    });
+
+    irParaPagina(numero: number): void {
+        this.paginaAtual.set(numero);
     }
 
     @ViewChild('filtersContainer') filtersContainer?: ElementRef<HTMLDivElement>;

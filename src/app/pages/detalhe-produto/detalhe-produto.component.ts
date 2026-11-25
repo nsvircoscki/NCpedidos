@@ -1,7 +1,7 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, computed, inject, numberAttribute, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ProdutoService } from '../../services/produto';
 
 @Component({
@@ -15,12 +15,11 @@ import { ProdutoService } from '../../services/produto';
   templateUrl: './detalhe-produto.component.html',
 })
 export class DetalheProdutoComponent {
-  private readonly route = inject(ActivatedRoute);
   private readonly produtoService = inject(ProdutoService);
 
-  private readonly id = Number(this.route.snapshot.paramMap.get('id'));
+  readonly id = input.required({ transform: numberAttribute });
   readonly carregando = this.produtoService.carregando;
-  readonly produto = computed(() => this.produtoService.buscarPorId(this.id));
+  readonly produto = computed(() => this.produtoService.buscarPorId(this.id()));
 
   get percentualEstoqueDeposito(): number {
     const quantidade = this.produto()?.estoquePorDeposito?.[0]?.quantidade ?? 0;

@@ -38,7 +38,7 @@ Os tipos citados estão em `src/app/models/`.
 | GET | /pedidos?clienteId= | — | `PedidoDetalhado[]` |
 | GET | /pedidos/:id | — | `PedidoDetalhado` |
 | POST | /pedidos | `PedidoDetalhado` sem `id` | `PedidoDetalhado` (201) |
-| POST | /pedidos/:id/aprovar | — | `PedidoDetalhado` |
+| POST | /pedidos/:id/aprovar | `{ previsaoEntrega }` (data `AAAA-MM-DD`) | `PedidoDetalhado` |
 | POST | /pedidos/:id/recusar | `{ motivo }` | `PedidoDetalhado` |
 
 ## Perguntas para o outro dev

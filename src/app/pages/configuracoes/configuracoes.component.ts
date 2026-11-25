@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SessaoService } from '../../services/sessao';
 import {
   Configuracoes,
   ConfiguracoesSelecionadas
@@ -28,6 +29,8 @@ type SettingSection = ConfiguracoesSecao;
   templateUrl: './configuracoes.component.html',
 })
 export class ConfiguracoesComponent {
+
+  private readonly sessao = inject(SessaoService);
 
   activeSection: SettingSection = 'Geral';
   saved = false;
@@ -378,5 +381,9 @@ export class ConfiguracoesComponent {
 
   save(): void {
     this.saved = true;
+  }
+
+  sair(): void {
+    this.sessao.sair();
   }
 }

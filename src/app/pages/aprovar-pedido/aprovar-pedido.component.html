@@ -9,7 +9,7 @@
     </a>
     <div class="min-w-0">
       <span class="sobretitulo">Aprovação de pedidos</span>
-      <h1 class="titulo-pagina max-lg:text-[26px]">Pedido #{{ id }}</h1>
+      <h1 class="titulo-pagina max-lg:text-[26px]">Pedido #{{ id() }}</h1>
     </div>
   </section>
 
@@ -99,6 +99,21 @@
 
           @if (pedido.status === 'Em análise') {
             <p class="mt-1 text-xs text-slate-500 dark:text-noite-suave">Confira itens, valores e condições antes de decidir.</p>
+
+            <div class="mt-5">
+              <label for="previsao-entrega" class="text-xs font-semibold text-slate-700 dark:text-noite-texto">Previsão de entrega</label>
+              <input type="date" autocomplete="off"
+                #campoPrevisao
+                id="previsao-entrega"
+                [value]="previsao()"
+                (input)="previsao.set(campoPrevisao.value)"
+                [attr.aria-invalid]="!!erroPrevisao()"
+                [attr.aria-describedby]="erroPrevisao() ? 'erro-previsao' : null"
+                class="mt-1 w-full rounded-xl border border-slate-200 p-3 text-xs outline-none focus:border-[#153860] dark:border-noite-borda dark:bg-noite-card dark:text-noite-texto dark:focus:border-noite-marca" />
+            </div>
+            @if (erroPrevisao()) {
+              <p id="erro-previsao" class="mt-2 text-xs font-semibold text-rose-700 dark:text-rose-300">{{ erroPrevisao() }}</p>
+            }
 
             <div class="label-input label-input--textarea mt-5 [--label-input-x:0.75rem] [--label-input-size:0.875rem]">
               <label class="label-input__label" for="motivo-recusa">Motivo da recusa</label>

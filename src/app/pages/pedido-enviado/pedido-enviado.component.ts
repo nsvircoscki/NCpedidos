@@ -1,5 +1,5 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
-import { Component, EventEmitter, Output, computed, inject } from '@angular/core';
+import { Component, EventEmitter, Output, computed, inject, input, numberAttribute } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PedidosStore } from '../../services/pedidos-store';
@@ -20,15 +20,14 @@ export class PedidoEnviadoComponent {
   private readonly router = inject(Router);
 
   /** Número do pedido vindo da rota (/pedidos/1047). */
-  readonly numeroPedido = this.route.snapshot.paramMap.get('id') ?? '';
-
+  readonly id = input.required({ transform: numberAttribute });
   /** Spring do indicador deslizante das abas Resumo/Acompanhamento. */
   readonly indicadorTransition: Transition = { type: 'spring', stiffness: 400, damping: 32 };
 
   private readonly pedidoPdf = inject(PedidoPdfService);
   private readonly pedidosStore = inject(PedidosStore);
   readonly carregando = this.pedidosStore.carregando;
-  readonly pedido = computed(() => this.pedidosStore.buscar(Number(this.numeroPedido)));
+  readonly pedido = computed(() => this.pedidosStore.buscar(this.id()));
   readonly resumo = computed(() => {
     const pedido = this.pedido();
     return pedido ? RESUMO_STATUS[pedido.status] : null;
