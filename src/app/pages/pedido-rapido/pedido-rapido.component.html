@@ -1,0 +1,260 @@
+<!-- Mesma tela do Novo pedido do sistema principal (pages/cadastro-pedido), sempre no modo claro e sem preço. -->
+<main class="min-h-screen overflow-x-hidden bg-[#F8F8FF] pb-8 text-[#0f172a] lg:px-8">
+  <div class="mx-auto min-w-0 max-w-6xl">
+
+    <!-- Título (mobile) -->
+    <div class="flex min-w-0 items-center justify-between gap-3 px-4 pt-4 sm:px-5 lg:hidden">
+      <img ngSrc="assets/logo-nc-tintas.svg" width="81" height="28" alt="NC Tintas" priority />
+      <div class="mr-auto min-w-0">
+        <h1 class="truncate text-[16px] font-bold leading-tight">Novo pedido</h1>
+        <p class="truncate text-[11px] text-slate-500">{{ representante() }}</p>
+      </div>
+      @if (admin()) {
+        <a routerLink="/usuarios" class="botao-acao-secundario inline-flex">Usuários</a>
+      }
+      <button type="button" (click)="sair()" class="botao-acao-secundario inline-flex">Sair</button>
+    </div>
+
+    <section class="hidden pt-6 lg:mb-6 lg:flex lg:items-end lg:justify-between lg:gap-6">
+      <div>
+        <span class="sobretitulo">PEDIDOS</span>
+        <h1 class="titulo-pagina my-1">Novo pedido</h1>
+        <p class="subtitulo-pagina">Monte o pedido e envie o PDF para o lançamento no ERP.</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="text-right">
+          <p class="text-[11px] text-slate-500">Representante</p>
+          <strong class="text-sm">{{ representante() }}</strong>
+        </div>
+        @if (admin()) {
+          <a routerLink="/usuarios" class="botao-acao-secundario inline-flex">Usuários</a>
+        }
+        <button type="button" (click)="sair()" class="botao-acao-secundario inline-flex">Sair</button>
+        <img ngSrc="assets/logo-nc-tintas.svg" width="139" height="48" alt="NC Tintas" priority />
+      </div>
+    </section>
+
+    @if (carregandoTabelas()) {
+      <app-esqueleto-lista texto="Carregando suas tabelas de preço..." [linhas]="4" />
+    } @else if (erroTabelas()) {
+      <app-erro-carregamento texto="Não foi possível carregar suas tabelas de preço." (tentarDeNovo)="recarregarTabelas()" />
+    } @else {
+      <form novalidate (submit)="gerarPdf($event)" class="mx-auto grid min-w-0 w-full max-w-full grid-cols-1 items-start gap-0 lg:max-w-6xl lg:gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,1fr)]">
+        <div class="min-w-0 space-y-4">
+          <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
+            <h2 class="titulo-secao">Cliente</h2>
+            <div class="label-input label-input--md mt-4">
+              <label class="label-input__label" for="cliente">Nome do cliente</label>
+              <input id="cliente" autocomplete="off" placeholder=" "
+                [formField]="formulario.cliente"
+                [attr.aria-invalid]="formulario.cliente().touched() && formulario.cliente().invalid()"
+                aria-describedby="erro-cliente"
+                class="label-input__field h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-base outline-none focus:border-[#153860]" />
+            </div>
+            <app-erro-campo [campo]="formulario.cliente" id="erro-cliente" />
+          </section>
+
+          <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
+            <app-seletor-cliente [clientes]="tabelas()" [(selecionado)]="tabelaSelecionada" [textos]="textosTabela" />
+          </section>
+
+          <section class="border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
+            <div class="mb-3 flex items-start justify-between gap-4">
+              <div>
+                <h2 class="titulo-secao">Itens do pedido</h2>
+                <p class="mt-1 text-[11px] text-slate-500">{{ itens().length }} produtos · {{ totalUnidades() }} unidades</p>
+              </div>
+              @if (tabelaSelecionada()) {
+                <button #botaoAdicionar type="button" class="botao-pop text-xs font-bold text-[#153860]"
+                  aria-haspopup="dialog" [attr.aria-expanded]="modalProdutos()" (click)="abrirProdutos()">
+                  + Adicionar
+                </button>
+              }
+            </div>
+
+            <ul class="space-y-1">
+              @for (item of linhasNoPedido(); track item.chave) {
+                <li class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-[12px] border border-[#e2e8f0] bg-white p-2.5 sm:gap-3 sm:p-3">
+                  <ng-container [ngTemplateOutlet]="produtoComContador" [ngTemplateOutletContext]="{ $implicit: item }" />
+                </li>
+              } @empty {
+                <li class="rounded-[12px] border border-dashed border-slate-200 p-4 text-center text-[11px] text-slate-500">
+                  @if (tabelaSelecionada()) {
+                    Nenhum produto ainda. Use "+ Adicionar" para escolher na tabela.
+                  } @else {
+                    Escolha a tabela de preço para adicionar os produtos.
+                  }
+                </li>
+              }
+            </ul>
+          </section>
+
+          <section class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-5 sm:px-5 lg:rounded-2xl lg:px-5 lg:py-5 lg:shadow-sm">
+            <h2 class="titulo-secao">Observações</h2>
+            <div class="label-input label-input--textarea mt-5 [--label-input-x:0.75rem] [--label-input-size:0.875rem]">
+              <label class="label-input__label" for="observacao-faturamento">Observação para o faturamento</label>
+              <textarea autocomplete="off" id="observacao-faturamento" [formField]="formulario.observacao" [attr.aria-invalid]="formulario.observacao().invalid()" aria-describedby="erro-observacao" rows="3" placeholder="Ex.: Entregar pela manhã, prazo combinado..." class="label-input__field w-full resize-y rounded-lg border border-slate-200 bg-white p-3 text-base leading-5 outline-none focus:border-[#153860] lg:text-xs"></textarea>
+              <app-erro-campo [campo]="formulario.observacao" id="erro-observacao" />
+            </div>
+          </section>
+        </div>
+
+        <aside class="min-w-0 border-b-[9px] border-[#f8fafc] bg-white px-4 py-4 sm:px-5 lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0">
+          <section class="bg-transparent lg:rounded-2xl lg:bg-white lg:px-5 lg:py-5 lg:shadow-sm">
+            <div class="flex items-center justify-between">
+              <h2 class="titulo-secao">Resumo do pedido</h2>
+              <span class="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold text-[#153860]">{{ totalUnidades() }} un.</span>
+            </div>
+            <dl class="mt-4">
+              <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Cliente</dt><dd class="ml-4 truncate font-semibold">{{ dados().cliente || '—' }}</dd></div>
+              <div class="flex min-h-10 items-center justify-between border-b border-slate-100 text-xs"><dt class="text-slate-500">Tabela de preço</dt><dd class="ml-4 truncate font-semibold">{{ tabelaEscolhida() ? tabelaEscolhida()!.nome + ' (' + tabelaEscolhida()!.codigoTabela + ')' : '—' }}</dd></div>
+              <div class="flex min-h-10 items-center justify-between text-xs"><dt class="text-slate-500">Produtos</dt><dd class="font-semibold">{{ itens().length }}</dd></div>
+            </dl>
+
+            @if (pedidoGerado(); as pedido) {
+              <div role="status" class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+                <div class="flex items-center gap-3">
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-700 text-xs font-bold text-white" aria-hidden="true">✓</span>
+                  <div class="min-w-0">
+                    <strong class="block text-xs text-emerald-800">Pedido Nº {{ pedido.numero }} gerado</strong>
+                    <span class="text-[11px] text-emerald-800">Se o compartilhar não abriu, o PDF foi baixado.</span>
+                  </div>
+                </div>
+                <div class="mt-3 grid grid-cols-2 gap-2">
+                  <button type="button" (click)="gerarOuReusar('enviar')" [disabled]="gerando()" class="botao-acao-secundario flex">Enviar de novo</button>
+                  <button type="button" (click)="gerarOuReusar('baixar')" [disabled]="gerando()" class="botao-acao-secundario flex">Baixar PDF</button>
+                  <button type="button" (click)="novoPedido()" class="botao-acao botao-pop col-span-2 flex">Novo pedido</button>
+                </div>
+              </div>
+            } @else {
+              <button type="submit" class="botao-acao botao-pop mt-4 flex min-h-12 w-full shadow-lg" [disabled]="gerando()">
+                {{ gerando() ? 'Gerando PDF...' : 'Gerar e enviar PDF' }}
+              </button>
+              <button type="button" (click)="gerarOuReusar('baixar')" [disabled]="gerando()" class="botao-acao-secundario mt-2 flex min-h-12 w-full">
+                Baixar PDF
+              </button>
+            }
+            @if (avisoEnvio()) {
+              <p role="alert" class="mt-2 text-xs font-semibold text-red-600">{{ avisoEnvio() }}</p>
+            }
+          </section>
+          <p class="mx-auto mt-4 max-w-sm text-center text-[11px] leading-4 text-slate-500">O PDF vai sem preço: o faturamento usa a tabela de preço no ERP.</p>
+        </aside>
+      </form>
+    }
+
+    <!-- Mesma linha do produto (nome, código e contador) nos itens do pedido e no modal. -->
+    <ng-template #produtoComContador let-produto>
+      @let chave = produto.chave ?? produto.codigo;
+      <div class="min-w-0">
+        <strong class="block text-xs font-bold">{{ produto.descricao }}</strong>
+        <small class="mt-1 block text-[11px] text-slate-500">{{ produto.codigo }}</small>
+      </div>
+      <div class="grid h-8 w-[6.75rem] shrink-0 grid-cols-[1.75rem_2.75rem_1.75rem] overflow-hidden rounded-lg border border-slate-200 bg-white" role="group" [attr.aria-label]="'Quantidade de ' + produto.descricao">
+        <button type="button" class="grid place-items-center text-sm text-slate-500 transition hover:bg-slate-50 disabled:opacity-40"
+          [attr.aria-label]="quantidade(chave) === 1 ? 'Remover ' + produto.descricao : 'Diminuir quantidade de ' + produto.descricao"
+          [disabled]="quantidade(chave) === 0"
+          (click)="alterarQuantidade(chave, -1)">−</button>
+        <input type="number" inputmode="numeric" min="0" autocomplete="off"
+          class="w-full border-x border-slate-200 bg-transparent text-center text-xs font-bold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+          [attr.aria-label]="'Quantidade de ' + produto.descricao"
+          [value]="quantidade(chave)" (change)="digitarQuantidade(chave, $event)" />
+        <button type="button" class="grid place-items-center bg-[#153860] text-sm text-white transition hover:bg-[#0e2947]"
+          [attr.aria-label]="'Aumentar quantidade de ' + produto.descricao"
+          (click)="alterarQuantidade(chave, 1)">+</button>
+      </div>
+      @if (produto.pedeDescricao && quantidade(chave) > 0) {
+        <div class="label-input label-input--md col-span-2 mt-1">
+          <label class="label-input__label" [for]="'descricao-' + chave">Descrição do produto</label>
+          <input [id]="'descricao-' + chave" autocomplete="off" maxlength="200"
+            placeholder="Ex.: verniz PU fosco 20%, cor mel"
+            [value]="descricao(chave)" (input)="descrever(chave, $event)"
+            [attr.aria-invalid]="tentouGerar() && !descricao(chave).trim()"
+            class="label-input__field h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-base outline-none focus:border-[#153860] lg:text-xs" />
+        </div>
+      }
+    </ng-template>
+
+    <!-- Fica sempre no HTML para o ngmMotion animar a entrada e a saída (como no seletor de cliente). -->
+    <div class="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-4"
+      [class.pointer-events-none]="!modalProdutos()"
+      [attr.inert]="modalProdutos() ? null : ''"
+      [attr.aria-hidden]="!modalProdutos()">
+      <div class="absolute inset-0 bg-black/40" (click)="fecharProdutos()"
+        ngmMotion [initial]="false"
+        [animate]="{ opacity: modalProdutos() ? 1 : 0 }"
+        [transition]="{ duration: 0.2, ease: 'easeOut' }"></div>
+
+      <section role="dialog" aria-modal="true" aria-labelledby="titulo-modal-produtos"
+        ngmMotion [initial]="false"
+        [animate]="{ opacity: modalProdutos() ? 1 : 0, scale: modalProdutos() ? 1 : 0.6 }"
+        [transition]="modalProdutos()
+          ? { type: 'spring', stiffness: 380, damping: 18, mass: 0.8, opacity: { duration: 0.15 } }
+          : { duration: 0.15, ease: 'easeIn' }"
+        class="relative flex max-h-[90vh] w-full max-w-[560px] flex-col rounded-t-2xl bg-white shadow-2xl sm:rounded-2xl">
+        <header class="flex items-start justify-between gap-3 p-5 pb-3">
+          <div class="min-w-0">
+            <h2 id="titulo-modal-produtos" class="titulo-cartao">Adicionar produtos</h2>
+            <p class="mt-0.5 truncate text-[11px] text-slate-500">Tabela {{ tabelaEscolhida()?.nome }} ({{ tabelaEscolhida()?.codigoTabela }})</p>
+          </div>
+          <button type="button" (click)="fecharProdutos()" aria-label="Fechar"
+            class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-[#68788c] hover:bg-[#f2f6fa]">✕</button>
+        </header>
+
+        @if (carregandoProdutos()) {
+          <div class="px-5 pb-5"><app-esqueleto-lista texto="Carregando os produtos da tabela..." [linhas]="5" /></div>
+        } @else if (erroProdutos()) {
+          <div class="px-5 pb-5"><app-erro-carregamento texto="Não foi possível carregar os produtos da tabela." (tentarDeNovo)="recarregarProdutos()" /></div>
+        } @else {
+          <div class="px-5">
+            <div class="label-input label-input--md relative [--label-input-x:2.75rem]">
+              <svg aria-hidden="true" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <circle cx="11" cy="11" r="7" />
+                <path stroke-linecap="round" d="m20 20-4-4" />
+              </svg>
+              <label class="label-input__label" for="busca-produto">Buscar produto por nome ou código</label>
+              <input #campoBusca id="busca-produto" type="search" autocomplete="off" placeholder="Ex.: diluente ou 1000.20"
+                [value]="busca()" (input)="busca.set($any($event.target).value)"
+                aria-describedby="ajuda-busca"
+                class="label-input__field h-12 w-full rounded-lg border border-slate-200 bg-white pl-11 pr-4 text-base outline-none focus:border-[#153860]" />
+            </div>
+            <p id="ajuda-busca" class="mt-2 text-[11px] text-slate-500" aria-live="polite">
+              {{ produtosVisiveis().length }} de {{ produtos().length }} produtos da tabela
+            </p>
+          </div>
+
+          <ul class="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto px-5 pb-2">
+            @for (produto of produtosVisiveis(); track produto.codigo) {
+              <li class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-[12px] border p-2.5 sm:gap-3 sm:p-3"
+                [class.border-[#153860]]="quantidade(produto.codigo) > 0"
+                [class.bg-blue-50]="quantidade(produto.codigo) > 0"
+                [class.border-[#e2e8f0]]="quantidade(produto.codigo) === 0">
+                @if (produto.pedeDescricao) {
+                  <div class="min-w-0">
+                    <strong class="block text-xs font-bold">{{ produto.descricao }}</strong>
+                    <small class="mt-1 block text-[11px] text-slate-500">
+                      {{ produto.codigo }} · {{ linhasDeDesenvolvimento(produto) }} no pedido
+                    </small>
+                  </div>
+                  <button type="button" (click)="adicionarDesenvolvimento(produto)"
+                    class="grid h-8 shrink-0 place-items-center rounded-lg bg-[#153860] px-3 text-[11px] font-bold text-white transition hover:bg-[#0e2947]"
+                    [attr.aria-label]="'Adicionar mais um ' + produto.descricao + ' e descrever'">+ Novo</button>
+                } @else {
+                  <ng-container [ngTemplateOutlet]="produtoComContador" [ngTemplateOutletContext]="{ $implicit: produto }" />
+                }
+              </li>
+            } @empty {
+              <li class="rounded-[12px] border border-dashed border-slate-200 p-4 text-center text-[11px] text-slate-500">Nenhum produto encontrado.</li>
+            }
+          </ul>
+        }
+
+        <footer class="border-t border-slate-100 p-4">
+          <button type="button" (click)="fecharProdutos()" class="botao-acao botao-pop flex min-h-12 w-full">
+            Concluir · {{ itens().length }} produtos, {{ totalUnidades() }} un.
+          </button>
+        </footer>
+      </section>
+    </div>
+  </div>
+</main>

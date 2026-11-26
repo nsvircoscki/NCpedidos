@@ -1,0 +1,33 @@
+{
+  "name": "sistema-pedidos-servidor",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch src/servidor.ts",
+    "build": "tsc",
+    "start": "node dist/src/servidor.js",
+    "test": "tsx --test src/**/*.test.ts",
+    "migrar": "tsx scripts/migrar.ts",
+    "criar-representante": "tsx scripts/criar-representante.ts",
+    "importar-tabelas": "tsx scripts/importar-tabelas.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.6.11",
+    "@types/pg": "^8.23.1",
+    "exceljs": "^4.4.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

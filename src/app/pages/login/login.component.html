@@ -41,7 +41,13 @@
           erroAoEntrar() }}</p>
       } 
       <button class="mx-auto mt-[35px] block h-[65px] w-[360px] cursor-pointer rounded-[20px] border-[0.5px] border-[#64748b] bg-[#153860] text-xl font-semibold text-white hover:bg-[#1d4878] max-[900px]:w-full" type="submit" [disabled]="entrando()">{{ entrando() ? 'Entrando...' : 'Entrar' }}</button>
-      <button class="ml-[14px] mt-[15px] block cursor-pointer border-0 bg-transparent p-0 text-sm font-bold text-black dark:text-noite-texto" type="button">Esqueceu sua senha?</button>
+      <button class="ml-[14px] mt-[15px] block cursor-pointer border-0 bg-transparent p-0 text-sm font-bold text-black dark:text-noite-texto" type="button"
+        aria-controls="ajuda-senha" [attr.aria-expanded]="mostrarAjudaSenha()" (click)="mostrarAjudaSenha.set(!mostrarAjudaSenha())">Esqueceu sua senha?</button>
+      @if (mostrarAjudaSenha()) {
+        <p id="ajuda-senha" role="status" class="ml-[14px] mt-3 max-w-[360px] rounded-lg bg-blue-50 p-3 text-sm text-[#153860]">
+          Para recuperar a senha, fale com o responsável pelo desenvolvimento do sistema para receber uma senha nova.
+        </p>
+      }
     </form>
   </section>
 

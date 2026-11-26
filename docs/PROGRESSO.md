@@ -5,6 +5,20 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Estado atual
 
+> **Branch `mvp/pedido-pdf` (sistema provisório).** Só têm rota: `/login`, `/` (pedido rápido) e
+> `/usuarios` (só admin). Sempre no modo claro (sem `TemaService` nem script de tema no `index.html`).
+> - API própria em `server/` (Express + PostgreSQL), que também serve o Angular compilado. Como rodar,
+>   importar as planilhas e publicar (Render + Neon): `server/README.md`.
+> - O representante digita o nome do cliente (por enquanto) e escolhe a **tabela de preço**
+>   (`app-seletor-cliente` com `[textos]` de tabela; cada planilha do ERP é uma tabela). Os itens
+>   mostram só o que foi escolhido; "+ Adicionar" abre um modal com os produtos da tabela, busca e
+>   quantidades, **sem preço**. O PDF (`services/pedido-rapido-pdf.ts`) vai sem preço, com o cliente
+>   digitado e o nome e nº da tabela. Pedidos não são gravados; o rascunho fica no aparelho
+>   (`rascunho-pedido-<id do usuário>`).
+> - Admin cadastra usuários na tela Usuários (`pages/usuarios/`, `UsuariosStore`). O primeiro admin é
+>   criado pelo script `criar-representante -- --admin`.
+> - As tabelas vêm das planilhas do ERP (`narciso/`, fora do git) pelo script `importar-tabelas`.
+
 - **Rotas** (`src/app/app.routes.ts`): todas com `loadComponent` (lazy), agrupadas em
   `pedidos/`, `produtos/` e `clientes/`. Qualquer rota desconhecida (`**`) vai para o dashboard.
   "Pedido enviado" e "Acompanhamento" leem o pedido da URL no `PedidosStore`; as etapas do
@@ -42,6 +56,10 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Pendências
 
+- MVP (`mvp/pedido-pdf`): publicar no Render + Neon (quem desenvolve cria as contas; passo a passo em
+  `server/README.md`); criar o admin e os representantes reais; testar o compartilhar no celular.
+  Ainda não dá para desativar usuário pela tela, e as tabelas só entram pelo script.
+
 
 - Previsão de entrega: os pedidos guardam o texto já formatado ("20 set."). O ideal é guardar o ISO
   e formatar só na tela (combinar com o outro dev o formato que a API devolve).
@@ -62,6 +80,19 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
 
 ## Histórico
+
+- 2026-11-26: etapa 32 (branch `mvp/pedido-pdf`): sistema provisório com login. API em `server/` (Express,
+  Postgres, JWT, limite de tentativas no login), importação das planilhas do ERP (114 clientes e 2.115
+  produtos do Narciso), tela do pedido com a tabela do cliente sem preço, PDF sem preço, modo claro fixo
+  e tela Usuários para o admin cadastrar representantes. Testes: 3 no servidor e 16 no front. Depois:
+  produtos num modal ("+ Adicionar"), seletor virou "Tabela de preço" e o nome do cliente é digitado;
+  produto "DESENV – PRODUTO DESENVOLVIMENTO" em toda tabela (a API acrescenta, `pedeDescricao`), com
+  descrição obrigatória que vai no PDF; botão "Baixar PDF". Vários produtos de desenvolvimento no mesmo
+  pedido: "+ Novo" no modal cria uma linha por vez (chaves `DESENV#1`, `DESENV#2`, em `utils/pedido-rapido.ts`),
+  cada uma com quantidade e descrição. Testes: 17 no front. A unidade saiu da tela e do PDF (colunas
+  Código | Produto | Qtd.); a API ainda a envia. Admin troca a senha de qualquer usuário na tela Usuários
+  (`PUT /api/usuarios/:id/senha`); "Esqueceu sua senha?" no login manda falar com o responsável pelo
+  desenvolvimento. (Claude)
 
 - 2026-11-25: etapa 28, correção: o filtro de cliente de Pedidos (`?clienteId=`) virou `input()` + `computed`
   (antes era `snapshot` e não limpava ao clicar em Pedidos de novo) e ganhou um chip "Cliente: nome ✕" que

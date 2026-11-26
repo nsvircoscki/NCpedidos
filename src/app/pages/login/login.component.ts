@@ -22,6 +22,7 @@ export class LoginComponent {
 
   readonly entrando = signal(false);
   readonly erroAoEntrar = signal('');
+  readonly mostrarAjudaSenha = signal(false);
 
   async entrar(evento: Event): Promise<void> {
     evento.preventDefault();
@@ -33,7 +34,7 @@ export class LoginComponent {
     try {
       const { email, senha } = this.dados();
       await this.sessao.entrar(email, senha);
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/');
     } catch {
       this.erroAoEntrar.set('E-mail ou senha incorretos.');
     } finally {

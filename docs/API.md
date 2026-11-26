@@ -41,6 +41,19 @@ Os tipos citados estão em `src/app/models/`.
 | POST | /pedidos/:id/aprovar | `{ previsaoEntrega }` (data `AAAA-MM-DD`) | `PedidoDetalhado` |
 | POST | /pedidos/:id/recusar | `{ motivo }` | `PedidoDetalhado` |
 
+## MVP do pedido rápido (branch `mvp/pedido-pdf`, implementado em `server/`)
+
+Todas com `Authorization: Bearer <token>`, menos o login. Erros vêm como `{ "erro": "mensagem" }`.
+
+| Rota | Resposta |
+| --- | --- |
+| `POST /api/auth/login` `{ email, senha }` | `{ token, usuario: { id, nome, email, admin } }`; 401 se errado, 429 após 10 erros em 15 min |
+| `GET /api/clientes` | `[{ id, nome, codigoTabela }]`, só os do usuário do token |
+| `GET /api/clientes/:id/produtos` | `[{ codigo, descricao, unidade, pedeDescricao? }]` (sem preço), começando pelo `DESENV` (produto desenvolvimento, `pedeDescricao: true`); 404 se o cliente não é dele |
+| `GET /api/usuarios` (admin) | `[{ id, nome, email, admin, clientes }]`; 403 se não é admin |
+| `POST /api/usuarios` (admin) `{ nome, email, senha, admin }` | 201 com o usuário; 409 e-mail repetido; 400 senha < 8 |
+| `PUT /api/usuarios/:id/senha` (admin) `{ senha }` | 204; 400 senha < 8; 404 usuário não existe |
+
 ## Perguntas para o outro dev
 1. Preço por cliente: hoje existe em dois lugares (tabela de preços e `precosPorCliente`
    do produto) com valores diferentes. Qual é a fonte única?

@@ -1,4 +1,5 @@
+// MVP: o front e a API ficam no mesmo servidor (server/), então a API é o caminho /api.
 export const environment = {
-    apiUrl: 'http://localhost:3000',
-    usarDadosExemplo: true,
+    apiUrl: '/api',
+    usarDadosExemplo: false,
 };

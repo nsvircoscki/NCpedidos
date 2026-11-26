@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Sessao } from '../models/usuario.model';
 import { Router } from '@angular/router';
+import { apagarSalvo, lerSalvo, salvar } from '../utils/armazenamento';
 
 const CHAVE_SESSAO = 'sessao';
 
@@ -11,11 +12,12 @@ const CHAVE_SESSAO = 'sessao';
 export class SessaoService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly sessao = signal<Sessao | null>(lerSessaoSalva());
+  private readonly sessao = signal<Sessao | null>(lerSalvo<Sessao>(CHAVE_SESSAO));
 
   readonly usuario = computed(() => this.sessao()?.usuario ?? null);
   readonly token = computed(() => this.sessao()?.token ?? null);
   readonly logado = computed(() => this.sessao() !== null);
+  readonly admin = computed(() => this.usuario()?.admin === true);
   readonly iniciais = computed(() => (this.usuario()?.nome ?? '').split(' ').slice(0, 2).map(parte => parte[0]).join('').toUpperCase()
   );
 
@@ -33,21 +35,8 @@ export class SessaoService {
 
   private guardar(sessao: Sessao | null): void {
     this.sessao.set(sessao);
-    try {
-      if (sessao) localStorage.setItem(CHAVE_SESSAO, JSON.stringify(sessao));
-      else localStorage.removeItem(CHAVE_SESSAO);
-    } catch {
-      // Navegação privada: a sessão vale só até recarregar a página.
-    }
-  }
-}
-
-function lerSessaoSalva(): Sessao | null {
-  try {
-    const salva = localStorage.getItem(CHAVE_SESSAO);
-    return salva ? JSON.parse(salva) : null;
-  } catch {
-    return null;
+    if (sessao) salvar(CHAVE_SESSAO, sessao);
+    else apagarSalvo(CHAVE_SESSAO);
   }
 }
 

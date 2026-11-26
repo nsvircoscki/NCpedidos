@@ -3,7 +3,27 @@ import { FormsModule } from '@angular/forms';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ClienteSelecao } from '../../models/cliente.model';
 
-/** Cartão do cliente escolhido + modal para trocar. Usado no novo pedido e em produtos. */
+export interface TextosSeletor {
+  titulo: string;
+  escolher: string;
+  alterar: string;
+  vazio: string;
+  buscar: string;
+  exemplo: string;
+  nenhum: string;
+}
+
+const TEXTOS_CLIENTE: TextosSeletor = {
+  titulo: 'Cliente',
+  escolher: 'Escolher cliente',
+  alterar: 'Alterar cliente',
+  vazio: 'Selecione um cliente',
+  buscar: 'Buscar nome, CPF, CNPJ ou cidade',
+  exemplo: 'Ex.: Casa Almeida',
+  nenhum: 'Nenhum cliente encontrado.',
+};
+
+/** Cartão do cliente escolhido + modal para trocar. Usado no novo pedido, em produtos e (como tabela) no pedido rápido. */
 @Component({
   selector: 'app-seletor-cliente',
   imports: [FormsModule, NgmMotionDirective],
@@ -17,6 +37,7 @@ export class SeletorClienteComponent {
   readonly selecionado = model<ClienteSelecao | null>(null);
   readonly destaque = input('');
   readonly permiteRemover = input(false);
+  readonly textos = input(TEXTOS_CLIENTE);
 
   readonly aberto = signal(false);
   readonly busca = signal('');
@@ -44,8 +65,9 @@ export class SeletorClienteComponent {
     );
   }
 
+  // Sem cidade (clientes do pedido rápido), não mostra a linha de localização.
   localizacao(cliente: ClienteSelecao): string {
-    return `${cliente.bairro}, ${cliente.cidade} - ${cliente.uf}`;
+    return cliente.cidade ? `${cliente.bairro}, ${cliente.cidade} - ${cliente.uf}` : '';
   }
 
   iniciais(nome: string): string {

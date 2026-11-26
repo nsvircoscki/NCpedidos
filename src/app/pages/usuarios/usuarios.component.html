@@ -1,0 +1,117 @@
+<!-- Tela do administrador, no mesmo estilo do pedido rápido (sempre no modo claro). -->
+<main class="min-h-screen bg-[#F8F8FF] px-4 pb-8 pt-4 text-[#0f172a] sm:px-5 lg:px-8 lg:pt-6">
+  <div class="mx-auto max-w-6xl">
+    <a routerLink="/" class="text-xs font-bold text-[#153860] hover:underline">‹ Voltar para o pedido</a>
+
+    <header class="mb-6 mt-3">
+      <span class="sobretitulo">ADMINISTRAÇÃO</span>
+      <h1 class="titulo-pagina max-lg:text-[26px] my-1">Usuários</h1>
+      <p class="subtitulo-pagina">Cadastre os representantes. Depois, importe as tabelas dos clientes de cada um pelo script.</p>
+    </header>
+
+    <div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,24rem)]">
+      <section class="cartao p-4 lg:p-5" aria-labelledby="titulo-lista">
+        <h2 id="titulo-lista" class="titulo-secao mb-3">Cadastrados</h2>
+        @if (carregando()) {
+          <app-esqueleto-lista texto="Carregando usuários..." [linhas]="4" />
+        } @else if (erro()) {
+          <app-erro-carregamento texto="Não foi possível carregar os usuários." (tentarDeNovo)="recarregar()" />
+        } @else {
+          <ul class="divide-y divide-slate-100">
+            @for (usuario of usuarios(); track usuario.id) {
+              <li class="py-3">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="min-w-0">
+                    <strong class="block truncate text-sm">{{ usuario.nome }}</strong>
+                    <small class="block truncate text-[11px] text-slate-500">{{ usuario.email }}</small>
+                  </div>
+                  <div class="flex shrink-0 flex-wrap items-center justify-end gap-2 text-[11px]">
+                    @if (usuario.admin) {
+                      <span class="rounded-full bg-blue-50 px-2 py-0.5 font-bold text-[#153860]">Admin</span>
+                    }
+                    <span class="text-slate-500">{{ usuario.clientes }} {{ usuario.clientes === 1 ? 'tabela' : 'tabelas' }}</span>
+                    <button type="button" class="font-bold text-[#153860] hover:underline"
+                      [attr.aria-expanded]="trocandoSenhaDe()?.id === usuario.id"
+                      [attr.aria-label]="'Alterar a senha de ' + usuario.nome"
+                      (click)="trocandoSenhaDe()?.id === usuario.id ? cancelarTrocaDeSenha() : abrirTrocaDeSenha(usuario)">
+                      Alterar senha
+                    </button>
+                  </div>
+                </div>
+
+                @if (trocandoSenhaDe()?.id === usuario.id) {
+                  <form novalidate (submit)="salvarSenha($event)" class="mt-3 rounded-lg bg-slate-50 p-3">
+                    <div class="label-input label-input--md [--label-input-bg:#f8fafc]">
+                      <label class="label-input__label" [for]="'nova-senha-' + usuario.id">Nova senha</label>
+                      <input [id]="'nova-senha-' + usuario.id" type="password" autocomplete="new-password" placeholder=" "
+                        [formField]="formularioSenha.senha"
+                        [attr.aria-invalid]="formularioSenha.senha().touched() && formularioSenha.senha().invalid()"
+                        aria-describedby="erro-nova-senha"
+                        class="label-input__field h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-base outline-none focus:border-[#153860]" />
+                    </div>
+                    <app-erro-campo [campo]="formularioSenha.senha" id="erro-nova-senha" />
+                    <div class="mt-3 grid grid-cols-2 gap-2">
+                      <button type="button" (click)="cancelarTrocaDeSenha()" class="botao-acao-secundario flex">Cancelar</button>
+                      <button type="submit" [disabled]="salvandoSenha()" class="botao-acao botao-pop flex">
+                        {{ salvandoSenha() ? 'Salvando...' : 'Salvar senha' }}
+                      </button>
+                    </div>
+                    @if (erroSenha()) {
+                      <p role="alert" class="mt-2 text-xs font-semibold text-red-600">{{ erroSenha() }}</p>
+                    }
+                  </form>
+                }
+              </li>
+            }
+          </ul>
+          @if (senhaAlterada()) {
+            <p role="status" class="mt-2 text-xs font-semibold text-emerald-700">✓ {{ senhaAlterada() }}</p>
+          }
+        }
+      </section>
+
+      <form novalidate (submit)="criar($event)" class="cartao p-4 lg:sticky lg:top-6 lg:p-5" aria-labelledby="titulo-novo">
+        <h2 id="titulo-novo" class="titulo-secao">Novo usuário</h2>
+
+        <div class="label-input label-input--md mt-4">
+          <label class="label-input__label" for="nome">Nome</label>
+          <input id="nome" autocomplete="off" placeholder="Ex.: Narciso Silva" [formField]="formulario.nome"
+            [attr.aria-invalid]="formulario.nome().touched() && formulario.nome().invalid()" aria-describedby="erro-nome"
+            class="label-input__field h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-base outline-none focus:border-[#153860]" />
+        </div>
+        <app-erro-campo [campo]="formulario.nome" id="erro-nome" />
+
+        <div class="label-input label-input--md mt-4">
+          <label class="label-input__label" for="email">E-mail (login)</label>
+          <input id="email" type="email" autocomplete="off" placeholder="nome@nctintas.com.br" [formField]="formulario.email"
+            [attr.aria-invalid]="formulario.email().touched() && formulario.email().invalid()" aria-describedby="erro-email"
+            class="label-input__field h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-base outline-none focus:border-[#153860]" />
+        </div>
+        <app-erro-campo [campo]="formulario.email" id="erro-email" />
+
+        <div class="label-input label-input--md mt-4">
+          <label class="label-input__label" for="senha">Senha inicial</label>
+          <input id="senha" type="password" autocomplete="new-password" placeholder=" " [formField]="formulario.senha"
+            [attr.aria-invalid]="formulario.senha().touched() && formulario.senha().invalid()" aria-describedby="erro-senha"
+            class="label-input__field h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-base outline-none focus:border-[#153860]" />
+        </div>
+        <app-erro-campo [campo]="formulario.senha" id="erro-senha" />
+
+        <label class="mt-4 flex items-start gap-3 rounded-lg bg-slate-50 p-3 text-[11px] leading-4 text-slate-500">
+          <input type="checkbox" [formField]="formulario.admin" class="mt-0.5 h-4 w-4 accent-[#153860]" />
+          <span>Administrador: também pode cadastrar usuários.</span>
+        </label>
+
+        <button type="submit" class="botao-acao botao-pop mt-4 flex min-h-12 w-full" [disabled]="salvando()">
+          {{ salvando() ? 'Criando...' : 'Criar usuário' }}
+        </button>
+        @if (erroAoSalvar()) {
+          <p role="alert" class="mt-2 text-xs font-semibold text-red-600">{{ erroAoSalvar() }}</p>
+        }
+        @if (criado()) {
+          <p role="status" class="mt-2 text-xs font-semibold text-emerald-700">✓ {{ criado() }}</p>
+        }
+      </form>
+    </div>
+  </div>
+</main>

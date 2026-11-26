@@ -48,3 +48,13 @@ Thumbs.db
 
 # Regras dos agentes (local, com o modo de ensino)
 AGENTS.md
+
+# Planilhas do ERP com preços reais de clientes: nunca vão para o git
+narciso/
+*.xlsx
+
+# Servidor do MVP
+server/node_modules/
+server/dist/
+server/.env
+server/usuarios-teste.txt
