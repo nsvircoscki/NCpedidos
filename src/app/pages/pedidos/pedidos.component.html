@@ -10,6 +10,15 @@
         <div>
           <h1 class="titulo-pagina my-1">Pedidos</h1>
           <p class="subtitulo-pagina">Acompanhe os pedidos realizados e seus status.</p>
+          @if (nomeClienteFiltro(); as nome) {
+            <a
+              routerLink="/pedidos"
+              class="mt-2 flex w-fit items-center gap-2 rounded-full border border-[#e0e7ed] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#153860] dark:border-noite-borda dark:bg-noite-card dark:text-noite-marca"
+              [attr.aria-label]="'Remover filtro do cliente ' + nome">
+              Cliente: {{ nome }}
+              <span aria-hidden="true">✕</span>
+            </a>
+          }
         </div>
         <div class="flex gap-3 self-end">
         <a routerLink="/pedidos/aprovacao" class="botao-acao-secundario flex">Aprovar pedidos</a>
@@ -137,6 +146,15 @@
             <span class="sobretitulo block">Pedidos</span>
             <h1 class="titulo-pagina mt-0.5 max-lg:text-[26px]">Pedidos</h1>
             <p class="subtitulo-pagina mt-0.5">Acompanhe os pedidos realizados e seus status.</p>
+            @if (nomeClienteFiltro(); as nome) {
+              <a
+              routerLink="/pedidos"
+              class="mt-2 flex w-fit items-center gap-2 rounded-full border border-[#e0e7ed] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#153860] dark:border-noite-borda dark:bg-noite-card dark:text-noite-marca"
+              [attr.aria-label]="'Remover filtro do cliente ' + nome">
+              Cliente: {{ nome }}
+              <span aria-hidden="true">✕</span>
+            </a>
+            }
             <a routerLink="/pedidos/aprovacao" class="mt-2 inline-block text-[13px] font-semibold text-[#153860] underline dark:text-noite-marca">Aprovar pedidos</a>
           </div>
           <a

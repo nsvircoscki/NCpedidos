@@ -2,10 +2,10 @@ import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esquel
 import { FiltroModalComponent } from '../../components/filtro-modal/filtro-modal.component';
 import { FiltroChipsComponent } from '../../components/filtro-modal/filtro-chips.component';
 import { PedidosStore } from '../../services/pedidos-store';
-import { Component, inject, signal, linkedSignal, ElementRef, ViewChild, AfterViewInit, HostListener, computed } from '@angular/core';
+import { Component, inject, input, signal, linkedSignal, ElementRef, ViewChild, AfterViewInit, HostListener, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 
@@ -25,18 +25,16 @@ import { ErroCarregamentoComponent } from '../../components/erro-carregamento/er
     templateUrl: './pedidos.component.html',
 })
 export class PedidosComponent implements AfterViewInit {
-    private route = inject(ActivatedRoute);
-
     /**
      * Filtro vindo da tela de clientes (/pedidos?clienteId=3).
      * null = sem filtro, mostra os pedidos de todos os clientes.
      */
-    readonly clienteIdFiltro: number | null = this.lerClienteIdFiltro();
+    readonly clienteId = input<string>();
 
-    private lerClienteIdFiltro(): number | null {
-        const valor = this.route.snapshot.queryParamMap.get('clienteId');
+    readonly clienteIdFiltro = computed(() => {
+        const valor = this.clienteId();
         return valor ? Number(valor) : null;
-    }
+    });
 
     readonly sent = signal(false);
     readonly search = signal('');
@@ -96,10 +94,15 @@ export class PedidosComponent implements AfterViewInit {
             const matchStatus =
                 this.statusSelecionados().length === 0 || this.statusSelecionados().includes(order.status);
             const matchCliente =
-                this.clienteIdFiltro === null || order.clienteId === this.clienteIdFiltro;
+                this.clienteIdFiltro() === null || order.clienteId === this.clienteIdFiltro();
             return matchSearch && matchStatus && matchCliente;
         });
-     });     
+     });
+
+    readonly nomeClienteFiltro = computed(() => {
+        const id = this.clienteIdFiltro();
+        return id === null ? null : this.orders().find((order) => order.clienteId === id)?.client;
+    });
     
 
     readonly itensPorPagina = 5;

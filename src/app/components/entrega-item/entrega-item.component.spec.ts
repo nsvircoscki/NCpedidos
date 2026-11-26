@@ -12,6 +12,13 @@ describe('EntregaItem', () => {
 
     fixture = TestBed.createComponent(EntregaItem);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('entrega', {
+      horario: '09:00',
+      cliente: 'Casa Almeida',
+      endereco: 'Rua das Flores, 120',
+      status: 'Em rota',
+      cor: 'azul',
+    });
     await fixture.whenStable();
   });
 

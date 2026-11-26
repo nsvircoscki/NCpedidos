@@ -1,6 +1,6 @@
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
-import { Component, EventEmitter, Output, computed, inject, input, numberAttribute } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, EventEmitter, Output, computed, inject, input, linkedSignal, numberAttribute } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PedidosStore } from '../../services/pedidos-store';
 import { PedidoPdfService } from '../../services/pedido-pdf';
@@ -16,11 +16,15 @@ import { NgmMotionDirective, type Transition } from '@scripttype/ng-motion';
   templateUrl: './pedido-enviado.component.html',
 })
 export class PedidoEnviadoComponent {
-  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   /** Número do pedido vindo da rota (/pedidos/1047). */
   readonly id = input.required({ transform: numberAttribute });
+  /** Aba inicial vinda da URL (?aba=acompanhamento); depois muda pelos cliques. */
+  readonly aba = input<string>();
+  readonly abaAtiva = linkedSignal<'resumo' | 'acompanhamento'>(() =>
+    this.aba() === 'acompanhamento' ? 'acompanhamento' : 'resumo',
+  );
   /** Spring do indicador deslizante das abas Resumo/Acompanhamento. */
   readonly indicadorTransition: Transition = { type: 'spring', stiffness: 400, damping: 32 };
 
@@ -48,7 +52,7 @@ export class PedidoEnviadoComponent {
   }
 
   selecionarAba(aba: 'resumo' | 'acompanhamento'): void {
-    this.abaAtiva = aba;
+    this.abaAtiva.set(aba);
 
     if (aba === 'acompanhamento') {
       this.verAcompanhamento.emit();
@@ -57,8 +61,9 @@ export class PedidoEnviadoComponent {
   }
 
   alternarAba(): void {
-    const proximaAba = this.abaAtiva === 'resumo' ? 'acompanhamento' : 'resumo';
+    const proximaAba = this.abaAtiva() === 'resumo' ? 'acompanhamento' : 'resumo';
     this.selecionarAba(proximaAba);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   voltarParaPedido(): void {
@@ -71,8 +76,6 @@ export class PedidoEnviadoComponent {
 
   }
 
-  abaAtiva: 'resumo' | 'acompanhamento' =
-    this.route.snapshot.queryParamMap.get('aba') === 'acompanhamento' ? 'acompanhamento' : 'resumo';
 
   @Output() voltar = new EventEmitter<void>();
   @Output() verAcompanhamento = new EventEmitter<void>(); 

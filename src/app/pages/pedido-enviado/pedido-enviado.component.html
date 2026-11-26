@@ -12,10 +12,10 @@
 
     <div class="ml-3 flex-1 lg:ml-3">
       <h1 class="titulo-pagina max-lg:text-xl">
-        {{ abaAtiva === 'resumo' ? 'Pedido enviado' : 'Acompanhamento do pedido' }}
+        {{ abaAtiva() === 'resumo' ? 'Pedido enviado' : 'Acompanhamento do pedido' }}
       </h1>
       <p class="subtitulo-pagina max-lg:text-xs lg:mt-1">
-        {{ abaAtiva === 'resumo' ? 'Resumo e acompanhamento' : 'Acompanhe as etapas até a entrega' }}
+        {{ abaAtiva() === 'resumo' ? 'Resumo e acompanhamento' : 'Acompanhe as etapas até a entrega' }}
       </p>
     </div>
 
@@ -26,7 +26,7 @@
   </header>
 
   <!-- Card de Sucesso -->
-  @if (abaAtiva === 'resumo') {
+  @if (abaAtiva() === 'resumo') {
   <div class="mt-4 flex items-center gap-3 rounded-2xl bg-[#f1faf5] p-4 lg:mt-0 lg:p-5 dark:bg-noite-sutil">
     <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#26835a] text-base font-bold text-white">
       ✓
@@ -55,17 +55,17 @@
     aria-hidden="true"
     class="pointer-events-none absolute bottom-1.5 left-1.5 top-1.5 w-[calc(50%-6px)] rounded-xl bg-[#153860] shadow-sm"
     [initial]="false"
-    [animate]="{ x: abaAtiva === 'resumo' ? '0%' : '100%' }"
+    [animate]="{ x: abaAtiva() === 'resumo' ? '0%' : '100%' }"
     [transition]="indicadorTransition"
   ></div>
 
   <button
     type="button"
     role="tab"
-    [attr.aria-selected]="abaAtiva === 'resumo'"
+    [attr.aria-selected]="abaAtiva() === 'resumo'"
     (click)="selecionarAba('resumo')"
     class="relative z-10 flex-1 rounded-xl py-3 text-center text-sm transition-colors duration-300 lg:py-4 lg:text-base"
-    [ngClass]="abaAtiva === 'resumo'
+    [ngClass]="abaAtiva() === 'resumo'
       ? 'font-semibold text-white'
       : 'font-medium text-[#64748b] hover:text-[#153860] dark:text-noite-suave dark:hover:text-noite-marca'"
   >
@@ -75,10 +75,10 @@
   <button
     type="button"
     role="tab"
-    [attr.aria-selected]="abaAtiva === 'acompanhamento'"
+    [attr.aria-selected]="abaAtiva() === 'acompanhamento'"
     (click)="selecionarAba('acompanhamento')"
     class="relative z-10 flex-1 rounded-xl py-3 text-center text-sm transition-colors duration-300 lg:py-4 lg:text-base"
-    [ngClass]="abaAtiva === 'acompanhamento'
+    [ngClass]="abaAtiva() === 'acompanhamento'
       ? 'font-semibold text-white'
       : 'font-medium text-[#64748b] hover:text-[#153860] dark:text-noite-suave dark:hover:text-noite-marca'"
   >
@@ -86,7 +86,7 @@
   </button>
 </div>
 
-  @if (abaAtiva === 'resumo') {
+  @if (abaAtiva() === 'resumo') {
   @if (carregando()) {
   <div class="cartao mt-6"><app-esqueleto-lista texto="Carregando pedido..." [linhas]="4" /></div>
   } @else if (pedido(); as pedido) {
@@ -167,6 +167,6 @@
     (click)="alternarAba()"
     class="botao-acao botao-pop mx-auto mt-6 flex min-h-12 w-full shadow-sm lg:mt-8 lg:min-h-14 lg:max-w-300 lg:text-base!"
   >
-    {{ abaAtiva === 'resumo' ? 'Ver acompanhamento' : 'Ver resumo do pedido' }}
+    {{ abaAtiva() === 'resumo' ? 'Ver acompanhamento' : 'Ver resumo do pedido' }}
   </button>
 </div>

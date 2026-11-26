@@ -42,6 +42,7 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Pendências
 
+
 - Previsão de entrega: os pedidos guardam o texto já formatado ("20 set."). O ideal é guardar o ISO
   e formatar só na tela (combinar com o outro dev o formato que a API devolve).
 - Testar o PDF (download no computador, compartilhar no celular): precisa ser feito por quem
@@ -56,11 +57,26 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
   (Tabela de preços), "Precisa de ajuda com este pedido?" (Acompanhamento), "Notificações"
   (header do celular), "Esqueceu sua senha?" (login). A lista de Pedidos no celular não tem paginação.
 - Configurações: tudo fixo no componente e "Salvar" não grava (sem store nem rota na API).
-- `npx ng test` não compila: specs antigos (`app.spec.ts`, `services/produto.spec.ts`,
-  `services/sidebar.spec.ts`...) importam nomes que não existem mais. Corrigir ou apagar.
+- Testes: os specs gerados pelo CLI só conferem "foi criado". Próximos testes úteis: `PedidosStore`
+  (`aprovar`, `recusar`) e `validarCPF`/`validarCNPJ` (precisam de `form()` no teste).
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
 
 ## Histórico
+
+- 2026-11-25: etapa 28, correção: o filtro de cliente de Pedidos (`?clienteId=`) virou `input()` + `computed`
+  (antes era `snapshot` e não limpava ao clicar em Pedidos de novo) e ganhou um chip "Cliente: nome ✕" que
+  limpa o filtro. Build ok. (Claude, com quem desenvolve)
+
+- 2026-11-25: etapa 29, correções: pedido-enviado lê `?aba=` por `input` + `linkedSignal` (sem `snapshot`);
+  título do `filtro-chips` com `text-slate-500` (contraste AA) e `dark:`; ícones da sidebar e da navegação
+  mobile com `alt=""`, porque o texto do link já dá o nome. Build ok. (Claude)
+
+- 2026-11-26: etapa 30, pedido enviado: o botão de baixo ("Ver acompanhamento" / "Ver resumo do pedido")
+  troca a aba e rola a tela para o topo. Build ok. (Claude)
+
+- 2026-11-26: etapa 31, testes: `npx ng test --watch=false` volta a rodar (nomes antigos nos specs,
+  `provideRouter([])` e `setInput` para inputs obrigatórios). Novo `etapas-pedido.spec.ts` testa
+  `montarEtapas` (em análise, recusado, faturado). 12 testes passando. (Claude, com quem desenvolve)
 
 - 2026-11-25: etapa 27, correção: em Pedidos, `search` e `statusSelecionados` viraram signals;
   `filteredOrders`, `totalPaginas` e `pedidosDaPagina` são `computed` e `paginaAtual` é um
