@@ -24,11 +24,13 @@ Código novo só quando nada do projeto resolve. Repetir lógica é o que mais s
 
 ## O que já existe (confira antes de criar)
 - **Componentes:** `seletor-cliente`, `esqueleto-lista` (lista e grade), `amostra-tinta` (KPI),
-  `filtro-modal` + `filtro-chips`, `erro-campo` (erro de Signal Forms).
+  `filtro-modal` + `filtro-chips`, `erro-campo` (erro de Signal Forms), `abas-admin` (abas das telas do admin),
+  `formulario-cliente` (cliente no admin, para cadastrar e editar), `botao-ver-senha` (olho em todo campo de senha).
 - **Stores:** `ClientesStore` (`paraSelecao`), `PreCadastrosStore`, `TabelasPrecoStore`,
   `ProdutoService`, `PedidosStore`. Ler e alterar dados sempre por eles.
 - **Funções:** `carregarDados(caminho, dadosExemplo)` (`services/carregar-dados.ts`), `validarCPF`/`validarCNPJ`
-  (`validacoes/documentos.ts`), `PedidoPdfService` (`enviarAoCliente`, `baixar`).
+  (`validacoes/documentos.ts`), `PedidoPdfService` (`enviarAoCliente`, `baixar`),
+  `semAcento`/`filtrarPorTexto` (busca sem acento, `utils/texto.ts`), `motivoDoErro` (mensagem da API, `utils/erros.ts`).
 - **Classes CSS:** `cartao`, `botao-acao`, `botao-acao-secundario`, `botao-pop`, `label-input`,
   `status-pill`, `sobretitulo`, `titulo-pagina`, `subtitulo-pagina`, `titulo-secao`, `titulo-cartao`.
 

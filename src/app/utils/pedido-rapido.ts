@@ -1,5 +1,8 @@
 import { ProdutoDaTabela } from '../models/pedido-rapido.model';
-import { semAcento } from './texto';
+import { filtrarPorTexto, semAcento } from './texto';
+
+/** Pedido em andamento guardado no navegador (um por usuário). Vale só até sair ou entrar de novo. */
+export const PREFIXO_RASCUNHO = 'rascunho-pedido-';
 
 /** Número pela data e hora (AAAAMMDD-HHMM): sem gravar pedido, é o que garante que não se repete. */
 export function numeroDoPedido(data: Date): string {
@@ -16,9 +19,7 @@ export function nomeDoArquivo(cliente: string, numero: string): string {
 
 /** Busca por descrição ou código, sem diferença de maiúscula ou acento. */
 export function filtrarProdutos(produtos: ProdutoDaTabela[], termo: string): ProdutoDaTabela[] {
-    const busca = semAcento(termo.trim());
-    if (!busca) return produtos;
-    return produtos.filter(produto => semAcento(`${produto.descricao} ${produto.codigo}`).includes(busca));
+    return filtrarPorTexto(produtos, termo, produto => `${produto.descricao} ${produto.codigo}`);
 }
 
 /**

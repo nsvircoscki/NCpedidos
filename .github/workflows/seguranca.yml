@@ -1,0 +1,23 @@
+# Confere as dependências do site e do servidor no banco de vulnerabilidades do npm:
+# a cada push, a cada pull request e toda segunda-feira (falhas novas aparecem sem o código mudar).
+name: Segurança das dependências
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 11 * * 1'
+permissions:
+  contents: read
+jobs:
+  auditar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Site
+        run: npm audit --omit=dev --audit-level=high
+      - name: Servidor
+        run: npm audit --omit=dev --audit-level=high
+        working-directory: server

@@ -17,7 +17,7 @@ const dataHora = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyl
 @Service()
 export class PedidoRapidoPdfService {
   async enviar(pedido: PedidoRapido): Promise<void> {
-    await compartilharOuBaixar(await this.gerar(pedido), `Pedido ${pedido.numero} - ${pedido.cliente}`);
+    await compartilharOuBaixar(await this.gerar(pedido), `Pedido ${pedido.numero} - ${pedido.cliente.nome}`);
   }
 
   async baixar(pedido: PedidoRapido): Promise<void> {
@@ -33,7 +33,7 @@ export class PedidoRapidoPdfService {
     this.observacao(pdf, pedido.observacao, y);
     this.rodapes(pdf);
 
-    return arquivoPdf(pdf, nomeDoArquivo(pedido.cliente, pedido.numero));
+    return arquivoPdf(pdf, nomeDoArquivo(pedido.cliente.nome, pedido.numero));
   }
 
   private cabecalho(pdf: JsPdf, pedido: PedidoRapido, logo: string | null): number {
@@ -54,13 +54,16 @@ export class PedidoRapidoPdfService {
     rotulo(pdf, 'CLIENTE', MARGEM, y);
     rotulo(pdf, 'REPRESENTANTE', 125, y);
     pdf.setTextColor(...TEXTO).setFont('helvetica', 'bold').setFontSize(12);
-    const linhasCliente: string[] = pdf.splitTextToSize(pedido.cliente, 105);
+    const linhasCliente: string[] = pdf.splitTextToSize(pedido.cliente.nome, 105);
     pdf.text(linhasCliente, MARGEM, y + 6);
     pdf.text(pdf.splitTextToSize(pedido.representante, DIREITA - 125), 125, y + 6);
 
     const abaixoDoNome = y + 6 + linhasCliente.length * 5;
     pdf.setTextColor(...CINZA).setFont('helvetica', 'normal').setFontSize(10);
-    const linhasTabela: string[] = pdf.splitTextToSize(`Tabela de preço: ${pedido.tabela.nome} (nº ${pedido.tabela.codigoTabela})`, 105);
+    const { codigo, tabela, codigoTabela } = pedido.cliente;
+    const linhasTabela: string[] = pdf.splitTextToSize(
+      [codigo && `Cód. ${codigo}`, `Tabela de preço: ${tabela} (nº ${codigoTabela})`].filter(Boolean).join('\n'), 105,
+    );
     pdf.text(linhasTabela, MARGEM, abaixoDoNome + 1);
     return abaixoDoNome + linhasTabela.length * 5 + 9;
   }

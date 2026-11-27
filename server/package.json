@@ -12,7 +12,8 @@
     "test": "tsx --test src/**/*.test.ts",
     "migrar": "tsx scripts/migrar.ts",
     "criar-representante": "tsx scripts/criar-representante.ts",
-    "importar-tabelas": "tsx scripts/importar-tabelas.ts"
+    "importar-erp": "tsx scripts/importar-erp.ts",
+    "novas-senhas": "tsx scripts/novas-senhas.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

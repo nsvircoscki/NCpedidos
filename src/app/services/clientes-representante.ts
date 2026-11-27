@@ -3,7 +3,7 @@ import { Injectable, Signal, computed } from '@angular/core';
 import { ClienteDoRepresentante, ProdutoDaTabela } from '../models/pedido-rapido.model';
 import { carregarDados } from './carregar-dados';
 
-/** Clientes do representante logado (a API filtra pelo token) e a tabela de cada um. */
+/** Clientes do representante logado (a API filtra pelo token), cada um com a sua tabela de preço. */
 // Fica nos providers da tela, e não na raiz: cada login cria um store novo e não sobra a lista de outro representante.
 @Injectable()
 export class ClientesRepresentanteStore {
@@ -16,7 +16,7 @@ export class ClientesRepresentanteStore {
     this.recurso.reload();
   }
 
-  /** Recarrega sozinho quando o cliente escolhido muda; sem cliente, não busca nada. */
+  /** Produtos da tabela do cliente. Recarrega sozinho quando o cliente muda; sem cliente, não busca nada. */
   produtosDoCliente(clienteId: Signal<number | null>) {
     return httpResource<ProdutoDaTabela[]>(() => {
       const id = clienteId();

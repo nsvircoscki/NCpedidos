@@ -7,7 +7,6 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errosApiInterceptor } from './interceptors/erros-api.interceptor';
 import { urlApiInterceptor } from './interceptors/url-api.interceptor';
-import { tokenInterceptor } from './interceptors/token.interceptor';
 
 
 registerLocaleData(localePt);
@@ -17,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(),
-    provideHttpClient(withInterceptors([urlApiInterceptor, tokenInterceptor, errosApiInterceptor])),
+    provideHttpClient(withInterceptors([urlApiInterceptor, errosApiInterceptor])),
 
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ]

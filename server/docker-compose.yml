@@ -1,4 +1,4 @@
-# Postgres só para desenvolvimento local. Em produção o banco é o do Neon (DATABASE_URL).
+# Postgres só para desenvolvimento local, aberto só para esta máquina (127.0.0.1). Em produção o banco é o do Neon.
 services:
   banco:
     image: postgres:17
@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: pedidos
       POSTGRES_DB: pedidos
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - dados:/var/lib/postgresql/data
 

@@ -25,3 +25,11 @@ export function apagarSalvo(chave: string): void {
         // Ver o comentário do topo.
     }
 }
+
+export function apagarSalvosQueComecamCom(prefixo: string): void {
+    try {
+        Object.keys(localStorage).filter(chave => chave.startsWith(prefixo)).forEach(chave => localStorage.removeItem(chave));
+    } catch {
+        // Ver o comentário do topo.
+    }
+}

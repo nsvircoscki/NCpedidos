@@ -5,19 +5,30 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 
 ## Estado atual
 
-> **Branch `mvp/pedido-pdf` (sistema provisório).** Só têm rota: `/login`, `/` (pedido rápido) e
-> `/usuarios` (só admin). Sempre no modo claro (sem `TemaService` nem script de tema no `index.html`).
+> **Branch `mvp/pedido-pdf` (sistema provisório).** Só têm rota: `/login`, `/` (pedido rápido) e as telas
+> do admin `/clientes`, `/usuarios` e `/tabelas` (abas em `components/abas-admin/`; o botão "Administração" do
+> pedido abre na aba Clientes). Sempre no modo claro (sem `TemaService` nem script de tema no `index.html`).
 > - API própria em `server/` (Express + PostgreSQL), que também serve o Angular compilado. Como rodar,
 >   importar as planilhas e publicar (Render + Neon): `server/README.md`.
-> - O representante digita o nome do cliente (por enquanto) e escolhe a **tabela de preço**
->   (`app-seletor-cliente` com `[textos]` de tabela; cada planilha do ERP é uma tabela). Os itens
->   mostram só o que foi escolhido; "+ Adicionar" abre um modal com os produtos da tabela, busca e
->   quantidades, **sem preço**. O PDF (`services/pedido-rapido-pdf.ts`) vai sem preço, com o cliente
->   digitado e o nome e nº da tabela. Pedidos não são gravados; o rascunho fica no aparelho
->   (`rascunho-pedido-<id do usuário>`).
-> - Admin cadastra usuários na tela Usuários (`pages/usuarios/`, `UsuariosStore`). O primeiro admin é
->   criado pelo script `criar-representante -- --admin`.
-> - As tabelas vêm das planilhas do ERP (`narciso/`, fora do git) pelo script `importar-tabelas`.
+> - O representante **escolhe o cliente** (`app-seletor-cliente`) e a **tabela de preço vem do cadastro**
+>   dele (aparece no destaque do seletor). Os itens mostram só o que foi escolhido; o botão "+" abre um
+>   modal com os produtos da tabela, busca e quantidades, **sem preço**. O PDF
+>   (`services/pedido-rapido-pdf.ts`) vai sem preço, com o cliente (código e CNPJ/CPF) e o nome e nº da
+>   tabela. Pedidos não são gravados; o rascunho fica no aparelho (`rascunho-pedido-<id do usuário>`).
+>   Sair é um ícone no topo.
+> - **Login pelo nome de usuário** (`rafael`), não mais pelo e-mail (migração 006).
+> - Admin: **Usuários** (cadastra, edita nome, usuário, admin e senha, e exclui; os clientes vão junto); **Clientes** (`pages/clientes-admin/`,
+>   `ClientesAdminStore`, formulário em `components/formulario-cliente/`: cadastra, edita, troca tabela e
+>   representante, inativa e reativa); **Tabelas** (`pages/tabelas-admin/`, `TabelasAdminStore`: tira e põe produtos, vale
+>   para todos os clientes da tabela). O que o admin muda a importação não desfaz (`editado_em`, `editada_em`,
+>   `inativo`, migrações 005 e 007).
+> - `npm run importar-erp` (sem argumentos) lê `INFORMAÇÕES/Clientes 12 meses - importação.xlsx` (fora do git)
+>   e importa todos os representantes: o cliente vai para o usuário ligado ao **código** do representante no
+>   ERP (`representantes_erp`); quem não tem usuário ganha um (primeiro nome, senha em
+>   `server/senhas-novos-usuarios.txt`). Hoje: 15 representantes (alvenaria, andre e paulo foram excluídos pela tela). Banco: `clientes` → `tabelas_erp` ←
+>   `itens_tabela`; cliente sem tabela fica com a RECEPCAO (500) da base.
+> - Segurança para hospedar: SQL só com parâmetros, ids validados, cabeçalhos de segurança,
+>   `JWT_SEGREDO` forte com `NODE_ENV=production`, Postgres local só em 127.0.0.1 (`server/README.md`, "Segurança").
 
 - **Rotas** (`src/app/app.routes.ts`): todas com `loadComponent` (lazy), agrupadas em
   `pedidos/`, `produtos/` e `clientes/`. Qualquer rota desconhecida (`**`) vai para o dashboard.
@@ -48,17 +59,25 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
     (giro, inclinação e esticar guiados pela velocidade do arrasto) e volta ao centro ao soltar
     (`dragSnapToOrigin`). Os limites (`limitesArrasto`) impedem que ele saia da tela;
   - no mobile, o modal de opções também abre com pop-in.
-- **Login** (`services/sessao.ts`, `guards/sessao.guard.ts`): `SessaoService` guarda a sessão no `localStorage`;
-  `sessaoGuard` protege as telas internas e `visitanteGuard` tira quem já entrou do login;
-  `tokenInterceptor` manda `Authorization: Bearer` só para a nossa API. Com dados de exemplo, qualquer
-  e-mail válido entra como "Camila Moreira". Rota da API suposta: `POST /auth/login` (pergunta 6).
+- **Login** (`services/sessao.ts`, `guards/sessao.guard.ts`): a sessão é um cookie HttpOnly gravado pela API; o
+  `SessaoService` guarda no `localStorage` só o nome e as permissões. `sessaoGuard` protege as telas internas,
+  `visitanteGuard` tira quem já entrou do login e `adminGuard` manda o admin sem verificação em duas etapas
+  para Minha conta. Com dados de exemplo, qualquer usuário entra como "Camila Moreira".
 - Todos os dados são mock (sem backend).
 
 ## Pendências
 
 - MVP (`mvp/pedido-pdf`): publicar no Render + Neon (quem desenvolve cria as contas; passo a passo em
   `server/README.md`); criar o admin e os representantes reais; testar o compartilhar no celular.
-  Ainda não dá para desativar usuário pela tela, e as tabelas só entram pelo script.
+  Passar a cada representante o usuário e a senha de
+  `server/senhas-novos-usuarios.txt` e apagar o arquivo. ALVENARIA ganhou usuário (tem clientes); se não for
+  uma pessoa, decidir o que fazer. No Neon, ativar IP Allow (se o plano tiver) e `NODE_ENV=production` no Render.
+- Segurança: falta, ao publicar, o papel `pedidos_app` no Neon e o backup semanal (`server/README.md`, "Segurança").
+  Os representantes recebem a senha `NcNome0000` provisória e criam a sua no primeiro login.
+  O admin precisa ativar a verificação em duas etapas (Minha conta) antes de usar a Administração.
+  Falta servir a fonte Manrope do próprio site (hoje o Google recebe o IP de quem abre o sistema): precisa de
+  `npm install @fontsource/manrope`, que o agente não pôde rodar sem autorização.
+- A pasta `narciso/` (planilhas antigas, uma por tabela) não é mais usada pela importação.
 
 
 - Previsão de entrega: os pedidos guardam o texto já formatado ("20 set."). O ideal é guardar o ISO
@@ -80,6 +99,23 @@ atualize ao terminar cada tarefa. As regras ficam em `AGENTS.md`; aqui fica só 
 - Item 3 da revisão de design (identidade visual mais marcante: fonte, cores de tinta) vai ser feito na branch `design/identidade-visual`, depois que o trabalho atual for commitado no main.
 
 ## Histórico
+
+- 2026-11-27: etapa 44 (branch `mvp/pedido-pdf`): todo login (e o sair) apaga os rascunhos de pedido do navegador (`PREFIXO_RASCUNHO` em `utils/pedido-rapido.ts`, `apagarSalvosQueComecamCom` em `utils/armazenamento.ts`): o pedido começa em branco e não sobra pedido de outra pessoa no aparelho. Recarregar a página continua mantendo o pedido. (Claude)
+- 2026-11-27: etapa 43 (branch `mvp/pedido-pdf`): dropdowns (`<select>`) com seta própria e lista aberta estilizada (`appearance: base-select` no Chrome e Edge), uma regra só em `src/styles.scss`; correções do teste no navegador: localização do cliente sem vírgula sobrando, busca sem CPF/CNPJ, aviso de senha e edição na linha do usuário, contagem de clientes por representante atualizada depois de cadastrar, editar ou inativar. (Claude)
+- 2026-11-27: etapa 42 (branch `mvp/pedido-pdf`): sessão em cookie HttpOnly/SameSite=Strict com checagem de origem (saiu o `tokenInterceptor`); verificação em duas etapas com app autenticador (migração 013, `server/src/totp.ts` e `cifra.ts`), obrigatória para o admin; tela Minha conta (senha + verificação) no lugar de Trocar senha; passos de publicação com o domínio nctintaspedidos e o Cloudflare. (Claude)
+- 2026-11-27: etapa 41 (branch `mvp/pedido-pdf`): CNPJ/CPF do cliente removido (migração 012): não é importado, não aparece nas telas nem no PDF e saiu do cadastro do admin. (Claude)
+- 2026-11-27: etapa 40 (branch `mvp/pedido-pdf`): senha provisória (migração 010): no primeiro login a pessoa cria a sua (tela `trocar-senha`, `PUT /api/auth/senha`), e qualquer um troca a própria senha pelo botão da chave; registro de auditoria (migração 011, aba Registro do admin); Content-Security-Policy no site. (Claude)
+- 2026-11-27: etapa 39 (branch `mvp/pedido-pdf`): `.npmrc` com `legacy-peer-deps` (o `npm ci` do build falhava), `npm audit` semanal no GitHub Actions, testes de acesso entre representantes, guia de banco com permissão mínima, backup e hospedagem no `server/README.md`. (Claude)
+- 2026-11-27: etapa 38 (branch `mvp/pedido-pdf`): usuário excluído não volta na importação (migração 008); `server/` saiu do `.git/info/exclude` e o `.gitignore` foi limpo; segurança: token cai ao excluir o usuário ou trocar a senha (migração 009, `sessao_desde`) e limite de 5 tentativas por usuário além de 10 por endereço (`server/src/tentativas.ts`). (Claude)
+- 2026-11-27: etapa 37 (branch `mvp/pedido-pdf`): olho para mostrar a senha em todos os campos de senha (`components/botao-ver-senha/`); senhas no padrão da empresa Nc + primeiro nome + 4 números (`server/src/senhas.ts`, script `novas-senhas`), já trocadas para os 15 representantes. (Claude)
+- 2026-11-27: etapa 36 (branch `mvp/pedido-pdf`): cliente inativo em vez de removido (migração 007), excluir usuário na tela Usuários, botão "Administração" no pedido; no banco local, usuários de teste excluídos e admin virou "desenvolvedor". (Claude)
+- 2026-11-27: etapa 35 (branch `mvp/pedido-pdf`): telas do admin Clientes e Tabelas (abas), login pelo nome de usuário, importação de todos os representantes de uma vez ligando pelo código do ERP e criando os usuários; o que o admin edita a importação não desfaz. (Claude)
+- 2026-11-27: etapa 34 (branch `mvp/pedido-pdf`): o pedido rápido escolhe o cliente do ERP e a tabela vem do cadastro (RECEPCAO quando não tem); importação lê só a planilha "Clientes 12 meses"; migração 004; Sair em ícone, botão "+" nos itens e "Observações gerais". (Claude)
+- 2026-11-27: etapa 33 (branch `mvp/pedido-pdf`): importação das planilhas do ERP Bem-Empresa
+  (`importar-erp`, migração 003 com `tabelas_erp` e preço opcional; regra do nome da Principal; 6 testes no
+  servidor), edição de usuários na tela Usuários (`PUT /api/usuarios/:id`) e reforço de segurança para
+  hospedar (ids validados, senha até 72, token só HS256, cabeçalhos, Postgres local em 127.0.0.1). Saiu o
+  `importar-tabelas` (pasta `narciso/`). Narciso de teste: 116 tabelas, 4.553 itens. (Claude)
 
 - 2026-11-26: etapa 32 (branch `mvp/pedido-pdf`): sistema provisório com login. API em `server/` (Express,
   Postgres, JWT, limite de tentativas no login), importação das planilhas do ERP (114 clientes e 2.115

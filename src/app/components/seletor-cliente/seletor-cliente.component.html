@@ -17,7 +17,9 @@
     </span>
     <span class="flex min-w-0 flex-col">
       <strong class="truncate text-sm text-[#101b2b] dark:text-noite-texto">{{ cliente.nome }}</strong>
-      <small class="mt-1 hidden text-[11px] text-slate-500 lg:block dark:text-noite-suave">{{ cliente.documento }}</small>
+      @if (cliente.documento) {
+        <small class="mt-1 hidden text-[11px] text-slate-500 lg:block dark:text-noite-suave">{{ cliente.documento }}</small>
+      }
       @if (localizacao(cliente)) {
         <small class="mt-0.5 flex items-center gap-1 truncate text-[11px] text-slate-500 dark:text-noite-suave">
           <svg aria-hidden="true" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -105,7 +107,9 @@
           </span>
           <span class="min-w-0 flex-1">
             <strong class="block truncate text-[13px] text-[#101b2b] dark:text-noite-texto">{{ cliente.nome }}</strong>
-            <small class="block text-[11px] text-slate-500 dark:text-noite-suave">{{ cliente.documento }}</small>
+            @if (cliente.documento) {
+              <small class="block text-[11px] text-slate-500 dark:text-noite-suave">{{ cliente.documento }}</small>
+            }
             @if (localizacao(cliente)) {
               <small class="block truncate text-[11px] text-slate-500 dark:text-noite-suave">{{ localizacao(cliente) }}</small>
             }

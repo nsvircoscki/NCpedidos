@@ -18,7 +18,7 @@ const TEXTOS_CLIENTE: TextosSeletor = {
   escolher: 'Escolher cliente',
   alterar: 'Alterar cliente',
   vazio: 'Selecione um cliente',
-  buscar: 'Buscar nome, CPF, CNPJ ou cidade',
+  buscar: 'Buscar nome ou cidade',
   exemplo: 'Ex.: Casa Almeida',
   nenhum: 'Nenhum cliente encontrado.',
 };
@@ -65,9 +65,10 @@ export class SeletorClienteComponent {
     );
   }
 
-  // Sem cidade (clientes do pedido rápido), não mostra a linha de localização.
+  // Sem cidade, não mostra a linha de localização. Os clientes do ERP não têm bairro.
   localizacao(cliente: ClienteSelecao): string {
-    return cliente.cidade ? `${cliente.bairro}, ${cliente.cidade} - ${cliente.uf}` : '';
+    const lugar = [cliente.bairro, cliente.cidade].filter(Boolean).join(', ');
+    return cliente.cidade ? `${lugar} - ${cliente.uf}` : '';
   }
 
   iniciais(nome: string): string {

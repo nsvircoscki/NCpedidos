@@ -1,12 +1,12 @@
 import { DOCUMENT, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { Component, ElementRef, Injector, afterNextRender, computed, effect, inject, linkedSignal, signal, viewChild } from '@angular/core';
-import { FormField, form, maxLength, required } from '@angular/forms/signals';
+import { FormField, form, maxLength } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ErroCampoComponent } from '../../components/erro-campo/erro-campo.component';
 import { ErroCarregamentoComponent } from '../../components/erro-carregamento/erro-carregamento.component';
 import { EsqueletoListaComponent } from '../../components/esqueleto-lista/esqueleto-lista.component';
-import { SeletorClienteComponent, TextosSeletor } from '../../components/seletor-cliente/seletor-cliente.component';
+import { SeletorClienteComponent } from '../../components/seletor-cliente/seletor-cliente.component';
 import { ClienteSelecao } from '../../models/cliente.model';
 import { PedidoRapido, ProdutoDaTabela } from '../../models/pedido-rapido.model';
 import { ClientesRepresentanteStore } from '../../services/clientes-representante';
@@ -15,12 +15,11 @@ import { SessaoService } from '../../services/sessao';
 import { lerSalvo, salvar } from '../../utils/armazenamento';
 import {
   Descricoes, Quantidades, faltamDescricoes, filtrarProdutos, itensDoPedido, linhasDoPedido, novaChave, numeroDoPedido,
-  totalDeUnidades,
+  PREFIXO_RASCUNHO, totalDeUnidades,
 } from '../../utils/pedido-rapido';
 
 interface Rascunho {
-  tabelaId: number | null;
-  cliente: string;
+  clienteId: number | null;
   quantidades: Quantidades;
   descricoes: Descricoes;
   observacao: string;
@@ -28,16 +27,6 @@ interface Rascunho {
 
 /** Enviar abre o compartilhar do celular (no computador, baixa); baixar sempre salva o arquivo. */
 type ModoPdf = 'enviar' | 'baixar';
-
-const TEXTOS_TABELA: TextosSeletor = {
-  titulo: 'Tabela de preço',
-  escolher: 'Escolher tabela',
-  alterar: 'Alterar tabela',
-  vazio: 'Selecione uma tabela',
-  buscar: 'Buscar nome ou código da tabela',
-  exemplo: 'Ex.: ALGI ou 155',
-  nenhum: 'Nenhuma tabela encontrada.',
-};
 
 @Component({
   selector: 'app-pedido-rapido',
@@ -60,46 +49,46 @@ export class PedidoRapidoComponent {
 
   readonly representante = computed(() => this.sessao.usuario()?.nome ?? '');
   readonly admin = this.sessao.admin;
-  private readonly chaveRascunho = `rascunho-pedido-${this.sessao.usuario()?.id}`;
+  private readonly chaveRascunho = `${PREFIXO_RASCUNHO}${this.sessao.usuario()?.id}`;
   private readonly rascunho = lerSalvo<Rascunho>(this.chaveRascunho);
 
-  readonly textosTabela = TEXTOS_TABELA;
-  readonly carregandoTabelas = this.store.carregando;
-  readonly erroTabelas = this.store.erro;
+  readonly carregandoClientes = this.store.carregando;
+  readonly erroClientes = this.store.erro;
 
-  // Cada planilha do ERP é a tabela de um cliente; o seletor de cliente serve para escolher a tabela.
-  readonly tabelas = computed<ClienteSelecao[]>(() =>
-    this.store.clientes().map(tabela => ({
-      id: tabela.id, nome: tabela.nome, documento: `Código ${tabela.codigoTabela}`,
-      limite: 0, bairro: '', cidade: '', uf: '',
-    })),
+  readonly clientes = computed<ClienteSelecao[]>(() =>
+    this.store.clientes().map(({ id, nome, cidade, uf }) => ({ id, nome, documento: '', cidade, uf, limite: 0, bairro: '' })),
   );
-  readonly tabelaSelecionada = linkedSignal<ClienteSelecao[], ClienteSelecao | null>({
-    source: this.tabelas,
+  readonly clienteSelecionado = linkedSignal<ClienteSelecao[], ClienteSelecao | null>({
+    source: this.clientes,
     computation: (lista, anterior) =>
-      lista.find(tabela => tabela.id === (anterior?.value?.id ?? this.rascunho?.tabelaId)) ?? null,
+      lista.find(cliente => cliente.id === (anterior?.value?.id ?? this.rascunho?.clienteId)) ?? null,
   });
-  private readonly tabelaId = computed(() => this.tabelaSelecionada()?.id ?? null);
-  readonly tabelaEscolhida = computed(() => this.store.clientes().find(tabela => tabela.id === this.tabelaId()));
+  private readonly clienteId = computed(() => this.clienteSelecionado()?.id ?? null);
+  // A tabela de preço vem do cadastro do cliente no ERP: o representante não escolhe.
+  readonly clienteEscolhido = computed(() => this.store.clientes().find(cliente => cliente.id === this.clienteId()));
+  readonly tabelaDoCliente = computed(() => {
+    const cliente = this.clienteEscolhido();
+    return cliente ? `Tabela ${cliente.tabela} (${cliente.codigoTabela})` : '';
+  });
 
-  private readonly produtosDaTabela = this.store.produtosDoCliente(this.tabelaId);
+  private readonly produtosDaTabela = this.store.produtosDoCliente(this.clienteId);
   readonly produtos = computed(() => (this.produtosDaTabela.hasValue() ? this.produtosDaTabela.value() : []));
   readonly carregandoProdutos = this.produtosDaTabela.isLoading;
   readonly erroProdutos = this.produtosDaTabela.error;
 
-  // Trocou de tabela, os produtos são outros: as quantidades zeram (menos ao voltar o rascunho salvo).
+  // Trocou de cliente, a tabela pode ser outra: as quantidades zeram (menos ao voltar o rascunho salvo).
   readonly quantidades = linkedSignal<number | null, Quantidades>({
-    source: this.tabelaId,
+    source: this.clienteId,
     computation: id => {
       const salvo = lerSalvo<Rascunho>(this.chaveRascunho);
-      return id !== null && salvo?.tabelaId === id ? salvo.quantidades : {};
+      return id !== null && salvo?.clienteId === id ? salvo.quantidades : {};
     },
   });
   readonly descricoes = linkedSignal<number | null, Descricoes>({
-    source: this.tabelaId,
+    source: this.clienteId,
     computation: id => {
       const salvo = lerSalvo<Rascunho>(this.chaveRascunho);
-      return id !== null && salvo?.tabelaId === id ? salvo.descricoes ?? {} : {};
+      return id !== null && salvo?.clienteId === id ? salvo.descricoes ?? {} : {};
     },
   });
   readonly itens = computed(() => itensDoPedido(this.produtos(), this.quantidades(), this.descricoes()));
@@ -114,10 +103,8 @@ export class PedidoRapidoComponent {
   private readonly campoBusca = viewChild<ElementRef<HTMLInputElement>>('campoBusca');
   private readonly botaoAdicionar = viewChild<ElementRef<HTMLButtonElement>>('botaoAdicionar');
 
-  readonly dados = signal({ cliente: this.rascunho?.cliente ?? '', observacao: this.rascunho?.observacao ?? '' });
+  readonly dados = signal({ observacao: this.rascunho?.observacao ?? '' });
   readonly formulario = form(this.dados, campo => {
-    required(campo.cliente, { message: 'Informe o nome do cliente.' });
-    maxLength(campo.cliente, 120, { message: 'Use no máximo 120 caracteres.' });
     maxLength(campo.observacao, 500, { message: 'Use no máximo 500 caracteres.' });
   });
 
@@ -125,7 +112,7 @@ export class PedidoRapidoComponent {
   readonly gerando = signal(false);
   readonly erroAoGerar = signal('');
   readonly avisoEnvio = computed(() => {
-    if (this.tentouGerar() && !this.tabelaSelecionada()) return 'Escolha a tabela de preço.';
+    if (this.tentouGerar() && !this.clienteSelecionado()) return 'Escolha o cliente.';
     if (this.tentouGerar() && this.itens().length === 0) return 'Informe a quantidade de pelo menos 1 produto.';
     if (this.tentouGerar() && this.faltaDescricao()) return 'Descreva o produto de desenvolvimento.';
     return this.erroAoGerar();
@@ -133,17 +120,16 @@ export class PedidoRapidoComponent {
 
   // Mexeu no pedido depois de gerar? O PDF antigo não vale mais e o botão de gerar volta.
   readonly pedidoGerado = linkedSignal<unknown, PedidoRapido | null>({
-    source: () => [this.quantidades(), this.descricoes(), this.tabelaId(), this.dados()],
+    source: () => [this.quantidades(), this.descricoes(), this.clienteId(), this.dados()],
     computation: () => null,
   });
 
   constructor() {
     effect(() => {
-      // Enquanto as tabelas carregam, a tabela ainda é null: salvar agora apagaria o rascunho.
-      if (this.carregandoTabelas()) return;
+      // Enquanto os clientes carregam, o cliente ainda é null: salvar agora apagaria o rascunho.
+      if (this.carregandoClientes()) return;
       salvar(this.chaveRascunho, {
-        tabelaId: this.tabelaId(),
-        cliente: this.dados().cliente,
+        clienteId: this.clienteId(),
         quantidades: this.quantidades(),
         descricoes: this.descricoes(),
         observacao: this.dados().observacao,
@@ -218,16 +204,15 @@ export class PedidoRapidoComponent {
   private async gerar(modo: ModoPdf): Promise<void> {
     this.tentouGerar.set(true);
     this.formulario().markAsTouched();
-    const tabela = this.tabelaEscolhida();
-    if (!tabela || this.itens().length === 0 || this.faltaDescricao() || this.formulario().invalid()) return;
+    const cliente = this.clienteEscolhido();
+    if (!cliente || this.itens().length === 0 || this.faltaDescricao() || this.formulario().invalid()) return;
 
     const emitidoEm = new Date();
     const pedido: PedidoRapido = {
       numero: numeroDoPedido(emitidoEm),
       emitidoEm,
       representante: this.representante(),
-      cliente: this.dados().cliente.trim(),
-      tabela,
+      cliente,
       observacao: this.dados().observacao.trim(),
       itens: this.itens(),
     };
@@ -237,16 +222,16 @@ export class PedidoRapidoComponent {
   }
 
   novoPedido(): void {
-    this.tabelaSelecionada.set(null);
+    this.clienteSelecionado.set(null);
     this.quantidades.set({});
     this.descricoes.set({});
-    this.dados.set({ cliente: '', observacao: '' });
+    this.dados.set({ observacao: '' });
     this.formulario().reset();
     this.busca.set('');
     this.tentouGerar.set(false);
   }
 
-  recarregarTabelas(): void {
+  recarregarClientes(): void {
     this.store.recarregar();
   }
 

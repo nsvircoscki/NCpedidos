@@ -53,8 +53,14 @@ AGENTS.md
 narciso/
 *.xlsx
 
-# Servidor do MVP
+# Servidor
 server/node_modules/
 server/dist/
+
+# Segredos e dados locais: nunca no git
+.env
 server/.env
 server/usuarios-teste.txt
+server/senhas-novos-usuarios.txt
+server/backups/
+INFORMAÇÕES/

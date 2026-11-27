@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { NovoUsuario, UsuarioCadastrado } from '../models/usuario.model';
+import { DadosUsuario, NovoUsuario, UsuarioCadastrado } from '../models/usuario.model';
 import { carregarDados } from './carregar-dados';
 
 /** Usuários do sistema, para o administrador. A API recusa (403) quem não é admin. */
@@ -20,11 +20,26 @@ export class UsuariosStore {
 
   async criar(usuario: NovoUsuario): Promise<UsuarioCadastrado> {
     const criado = await firstValueFrom(this.http.post<UsuarioCadastrado>('/usuarios', usuario));
-    this.recurso.update(lista => [...(lista ?? []), criado].sort((a, b) => a.nome.localeCompare(b.nome)));
+    this.recurso.update(lista => [...(lista ?? []), criado].sort(porNome));
     return criado;
+  }
+
+  async editar(id: number, dados: DadosUsuario): Promise<UsuarioCadastrado> {
+    const alterado = await firstValueFrom(this.http.put<UsuarioCadastrado>(`/usuarios/${id}`, dados));
+    this.recurso.update(lista => (lista ?? []).map(usuario => (usuario.id === id ? alterado : usuario)).sort(porNome));
+    return alterado;
+  }
+
+  async excluir(id: number): Promise<void> {
+    await firstValueFrom(this.http.delete<void>(`/usuarios/${id}`));
+    this.recurso.update(lista => (lista ?? []).filter(usuario => usuario.id !== id));
   }
 
   async alterarSenha(id: number, senha: string): Promise<void> {
     await firstValueFrom(this.http.put<void>(`/usuarios/${id}/senha`, { senha }));
   }
+}
+
+function porNome(a: UsuarioCadastrado, b: UsuarioCadastrado): number {
+  return a.nome.localeCompare(b.nome);
 }
